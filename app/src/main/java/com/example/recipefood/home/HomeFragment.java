@@ -1,7 +1,11 @@
-package com.example.recipefood.views;
+package com.example.recipefood.home;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,19 +15,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Spinner;
-import android.widget.Toast;
-
-import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.MainActivity;
+import com.example.recipefood.R;
+import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.firebaseDatabase;
-import com.example.recipefood.R;
-import com.example.recipefood.viewmodel.HomeFragmentViewModel;
+import com.example.recipefood.views.Detail_Recipe;
 
 import java.util.ArrayList;
 import java.util.List;

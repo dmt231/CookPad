@@ -1,10 +1,9 @@
-package com.example.recipefood.viewmodel;
+package com.example.recipefood.home;
 
 import androidx.lifecycle.ViewModel;
 
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.firebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
