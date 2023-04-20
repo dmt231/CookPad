@@ -1,4 +1,4 @@
-package com.example.recipefood.Adapter;
+package com.example.recipefood.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -6,9 +6,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 
-import com.example.recipefood.Views.HomeFragment;
-import com.example.recipefood.Views.RecipeFragment;
-import com.example.recipefood.Views.SearchFragment;
+import com.example.recipefood.views.HomeFragment;
+import com.example.recipefood.views.RecipeFragment;
+import com.example.recipefood.views.SearchFragment;
 
 public class FragmentAdapterViews extends FragmentStatePagerAdapter {
 

@@ -1,4 +1,4 @@
-package com.example.recipefood.Views;
+package com.example.recipefood.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,9 +25,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.recipefood.Adapter.FavoriteRecipeAdapter;
-import com.example.recipefood.Model.Database_Helper;
-import com.example.recipefood.Model.Recipe_Favorite;
+import com.example.recipefood.adapter.FavoriteRecipeAdapter;
+import com.example.recipefood.model.Database_Helper;
+import com.example.recipefood.model.Recipe_Favorite;
 import com.example.recipefood.R;
 
 import java.util.ArrayList;

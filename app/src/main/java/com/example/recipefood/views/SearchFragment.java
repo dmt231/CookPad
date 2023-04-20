@@ -1,6 +1,5 @@
-package com.example.recipefood.Views;
+package com.example.recipefood.views;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
@@ -11,10 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.recipefood.Adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.MainActivity;
-import com.example.recipefood.Model.RecipeInstrument;
-import com.example.recipefood.Model.firebaseDatabase;
+import com.example.recipefood.model.firebaseDatabase;
 import com.example.recipefood.R;
 
 import java.util.ArrayList;

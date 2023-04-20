@@ -1,4 +1,4 @@
-package com.example.recipefood.Views;
+package com.example.recipefood.views;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -6,21 +6,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.recipefood.Adapter.RandomRecipeRycAdapter;
+import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.MainActivity;
-import com.example.recipefood.Model.RecipeInstrument;
-import com.example.recipefood.Model.firebaseDatabase;
+import com.example.recipefood.model.RecipeInstrument;
+import com.example.recipefood.model.firebaseDatabase;
 import com.example.recipefood.R;
+import com.example.recipefood.viewmodel.HomeFragmentViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +38,13 @@ public class HomeFragment extends Fragment {
     private List<RecipeInstrument> recipeList; //List các món ăn
     private MainActivity mActivity ;
 
-    private Spinner spinner;
+    //private Spinner spinner;
     ProgressDialog progressDialog;
 
     private firebaseDatabase database;
+
+    //khai bao homefragmentviewmodel
+    private HomeFragmentViewModel homeFragmentViewModel;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -53,12 +59,12 @@ public class HomeFragment extends Fragment {
         database = new firebaseDatabase();
         progressDialog = new ProgressDialog(mActivity);
         progressDialog.show();
-        database.getDataFromFirestore(count ,count+10 , new firebaseDatabase.FirebaseCallback() {
-            @Override
-            public void onCallback(ArrayList<RecipeInstrument> listRecipe) {
-                if (listRecipe != null) {
-                    recipeList = listRecipe;
-                    recyclerView.setHasFixedSize(true);
+        homeFragmentViewModel= new HomeFragmentViewModel(count,count+10);
+        //homeFragmentViewModel= new ViewModelProvider(this).get(HomeFragmentViewModel.class);
+        recipeList=homeFragmentViewModel.getRecipeList();
+        Log.d("infor", recipeList.get(0).getName());
+        if(recipeList!=null){
+            recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 1));
                     randomRecipeRycAdapter = new RandomRecipeRycAdapter(mActivity, recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
                         @Override
@@ -77,11 +83,39 @@ public class HomeFragment extends Fragment {
                     });
                     recyclerView.setAdapter(randomRecipeRycAdapter);
                     progressDialog.dismiss();
-                } else {
+        } else {
                     Toast.makeText(mActivity, "Error connect", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+
+//        database.getDataFromFirestore(count ,count+10 , new firebaseDatabase.FirebaseCallback() {
+//            @Override
+//            public void onCallback(ArrayList<RecipeInstrument> listRecipe) {
+//                if (listRecipe != null) {
+//                    recipeList = listRecipe;
+//                    recyclerView.setHasFixedSize(true);
+//                    recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 1));
+//                    randomRecipeRycAdapter = new RandomRecipeRycAdapter(mActivity, recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
+//                        @Override
+//                        public void OnClickRecipe(RecipeInstrument recipe) {
+//                            Fragment detail_recipe = new Detail_Recipe();
+//                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+//
+//
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable("recipe", recipe);
+//                            detail_recipe.setArguments(bundle);
+//                            fragmentTransaction.replace(R.id.fragment_home, detail_recipe);
+//                            fragmentTransaction.addToBackStack(detail_recipe.getTag());
+//                            fragmentTransaction.commit();
+//                        }
+//                    });
+//                    recyclerView.setAdapter(randomRecipeRycAdapter);
+//                    progressDialog.dismiss();
+//                } else {
+//                    Toast.makeText(mActivity, "Error connect", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
         recyclerView.addOnScrollListener(addRecipeToRyc);
 
         return views;

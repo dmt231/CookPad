@@ -1,4 +1,4 @@
-package com.example.recipefood.Views;
+package com.example.recipefood.views;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.recipefood.Model.Recipe_Favorite;
+import com.example.recipefood.model.Recipe_Favorite;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
 

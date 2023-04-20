@@ -1,4 +1,4 @@
-package com.example.recipefood.Model;
+package com.example.recipefood.model;
 
 import android.content.ContentValues;
 import android.content.Context;

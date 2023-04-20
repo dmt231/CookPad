@@ -1,4 +1,4 @@
-package com.example.recipefood.Views;
+package com.example.recipefood.views;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.recipefood.Model.Database_Helper;
-import com.example.recipefood.Model.RecipeInstrument;
+import com.example.recipefood.model.Database_Helper;
+import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
 
