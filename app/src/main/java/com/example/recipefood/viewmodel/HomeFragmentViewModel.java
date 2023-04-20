@@ -17,21 +17,20 @@ public class HomeFragmentViewModel extends ViewModel {
         return recipeList;
     }
 
-    public void setRecipeList(ArrayList<RecipeInstrument> recipeList) {
-        this.recipeList = recipeList;
-    }
-
-    public HomeFragmentViewModel(int y1,int y2){
-
+    public  void GetData(int y1,int y2, OnGetResult onGetResult){
         database= new firebaseDatabase();
         database.getDataFromFirestore(y1, y2, new firebaseDatabase.FirebaseCallback() {
             @Override
             public void onCallback(ArrayList<RecipeInstrument> listRecipe) {
-                if(recipeList!=null){
+                if(listRecipe!=null){
                     recipeList=listRecipe;
+                    onGetResult.OnResult(recipeList);
                 }
             }
         });
     }
-
+//
+    public interface OnGetResult{
+        void OnResult(ArrayList<RecipeInstrument> listRecipe);
+    }
 }

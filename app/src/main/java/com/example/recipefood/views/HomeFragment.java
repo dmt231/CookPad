@@ -59,12 +59,13 @@ public class HomeFragment extends Fragment {
         database = new firebaseDatabase();
         progressDialog = new ProgressDialog(mActivity);
         progressDialog.show();
-        homeFragmentViewModel= new HomeFragmentViewModel(count,count+10);
-        //homeFragmentViewModel= new ViewModelProvider(this).get(HomeFragmentViewModel.class);
-        recipeList=homeFragmentViewModel.getRecipeList();
-        Log.d("infor", recipeList.get(0).getName());
-        if(recipeList!=null){
-            recyclerView.setHasFixedSize(true);
+        homeFragmentViewModel=new ViewModelProvider(this).get(HomeFragmentViewModel.class);
+        homeFragmentViewModel.GetData(count, count + 10, new HomeFragmentViewModel.OnGetResult() {
+            @Override
+            public void OnResult(ArrayList<RecipeInstrument> listRecipe) {
+                if (listRecipe != null) {
+                    recipeList = listRecipe;
+                    recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 1));
                     randomRecipeRycAdapter = new RandomRecipeRycAdapter(mActivity, recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
                         @Override
@@ -83,9 +84,12 @@ public class HomeFragment extends Fragment {
                     });
                     recyclerView.setAdapter(randomRecipeRycAdapter);
                     progressDialog.dismiss();
-        } else {
+                } else {
                     Toast.makeText(mActivity, "Error connect", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
 
 //        database.getDataFromFirestore(count ,count+10 , new firebaseDatabase.FirebaseCallback() {
 //            @Override
@@ -135,14 +139,22 @@ public class HomeFragment extends Fragment {
                         count+=10;
                     }
                     progressDialog.show();
-                    database.getDataFromFirestore(count, count + 10, new firebaseDatabase.FirebaseCallback() {
+                    homeFragmentViewModel.GetData(count, count + 10, new HomeFragmentViewModel.OnGetResult() {
                         @Override
-                        public void onCallback(ArrayList<RecipeInstrument> listRecipe) {
+                        public void OnResult(ArrayList<RecipeInstrument> listRecipe) {
                             recipeList.addAll(listRecipe);
                             randomRecipeRycAdapter.notifyDataSetChanged();
                             progressDialog.dismiss();
                         }
                     });
+//                    database.getDataFromFirestore(count, count + 10, new firebaseDatabase.FirebaseCallback() {
+//                        @Override
+//                        public void onCallback(ArrayList<RecipeInstrument> listRecipe) {
+//                            recipeList.addAll(listRecipe);
+//                            randomRecipeRycAdapter.notifyDataSetChanged();
+//                            progressDialog.dismiss();
+//                        }
+//                    });
                 }
             }
         }
