@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Food Recipe</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="tags">
+        <item>main course</item>
+        <item>side dish</item>
+        <item>dessert</item>
+        <item>appetizer</item>
+        <item>salad</item>
+        <item>bread</item>
+        <item>breakfast</item>
+        <item>soup</item>
+        <item>beverage</item>
+        <item>snack</item>
+    </string-array>
+
+    <string-array name="tagsVN">
+        <item>món chính</item>
+        <item>món ăn phụ</item>
+        <item>món tráng miệng</item>
+        <item>Món khai vị</item>
+        <item>xa lát</item>
+        <item>bánh mỳ</item>
+        <item>bữa sáng</item>
+        <item>canh</item>
+        <item>đồ uống</item>
+        <item>đồ ăn vặt</item>
+    </string-array>
+</resources>
