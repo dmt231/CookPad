@@ -20,7 +20,7 @@ import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
 
-public class Detail_Recipe extends Fragment {
+public class DetailRecipe extends Fragment {
 
     Activity mactivity;
     RecipeInstrument recipe;

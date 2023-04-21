@@ -21,8 +21,7 @@ import com.example.recipefood.MainActivity;
 import com.example.recipefood.R;
 import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.model.RecipeInstrument;
-import com.example.recipefood.model.firebaseDatabase;
-import com.example.recipefood.views.Detail_Recipe;
+import com.example.recipefood.views.DetailRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +79,7 @@ public class HomeFragment extends Fragment {
         randomRecipeRycAdapter = new RandomRecipeRycAdapter(mActivity, recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
                         @Override
                         public void OnClickRecipe(RecipeInstrument recipe) {
-                            Fragment detail_recipe = new Detail_Recipe();
+                            Fragment detail_recipe = new DetailRecipe();
                             FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
 
@@ -104,21 +103,18 @@ public class HomeFragment extends Fragment {
                 int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 if (lastVisibleItemPosition == itemCount - 1) {
-                    if(count<90){
+                    if(count<=90){
                         count+=10;
-                    }
-                    Log.d("Count : ", count + "");
-                    progressDialog.show();
-                    homeFragmentViewModel.getRecipeListLiveData(count, count+10).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
-                        @Override
-                        public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
-                            if(recipeInstruments != null){
-                                recipeList.addAll(recipeInstruments);
-                                randomRecipeRycAdapter.notifyDataSetChanged();
-                                progressDialog.dismiss();
+                        homeFragmentViewModel.getRecipeListLiveData(count, count+10).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
+                            @Override
+                            public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
+                                if(recipeInstruments != null){
+                                    recipeList.addAll(recipeInstruments);
+                                    randomRecipeRycAdapter.notifyDataSetChanged();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         }

@@ -48,12 +48,15 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        // Inflate the layout for this fragment
         recyclerView = view.findViewById(R.id.recyclerview_favorite);
+        setupRecyclerview();
+        return view;
+    }
+    private void setupRecyclerview() {
         favoriteRecipeAdapter = new FavoriteRecipeAdapter(mActivity, list, new FavoriteRecipeAdapter.Detail_ClickListener_Favorite() {
             @Override
             public void OnClickRecipe(Recipe_Favorite recipeFavorite) {
-                Fragment detail_favorite = new Detail_Favorite();
+                Fragment detail_favorite = new DetailFavorite();
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("recipe_favorite", recipeFavorite);
@@ -65,14 +68,17 @@ public class RecipeFragment extends Fragment {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(favoriteRecipeAdapter);
-        return view;
     }
-    //Gắn hoạt động với Activity khi khởi tạo
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (Activity) context;
         database_helper = new Database_Helper(this.getContext());
+        querydata();
+    }
+
+    public void querydata() {
         Cursor cursor = database_helper.getData("Select * from Recipe ");
         while(cursor.moveToNext()){
             String name = cursor.getString(1);
