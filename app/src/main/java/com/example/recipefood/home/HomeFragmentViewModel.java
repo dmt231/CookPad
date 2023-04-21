@@ -1,35 +1,38 @@
 package com.example.recipefood.home;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.firebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragmentViewModel extends ViewModel {
-
-    private ArrayList<RecipeInstrument> recipeList;
+    public MutableLiveData<ArrayList<RecipeInstrument>> recipeListLiveData;
     private firebaseDatabase database;
 
-    public ArrayList<RecipeInstrument> getRecipeList() {
-        return recipeList;
+    public LiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData(int i1, int i2) {
+
+        recipeListLiveData = new MutableLiveData<>(); // 0 : null
+        loadData(i1, i2);
+        return recipeListLiveData;
     }
 
-    public  void GetData(int y1,int y2, OnGetResult onGetResult){
-        database= new firebaseDatabase();
-        database.getDataFromFirestore(y1, y2, new firebaseDatabase.FirebaseCallback() {
+    private void loadData(int i1, int i2) {
+        database = new firebaseDatabase();
+        database.getRecipeListLiveData().observeForever(new Observer<ArrayList<RecipeInstrument>>() {
             @Override
-            public void onCallback(ArrayList<RecipeInstrument> listRecipe) {
-                if(listRecipe!=null){
-                    recipeList=listRecipe;
-                    onGetResult.OnResult(recipeList);
+            public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
+                if (recipeInstruments != null && !recipeInstruments.isEmpty()) {
+                    recipeListLiveData.setValue(recipeInstruments); //0 -> 10
                 }
             }
         });
+        database.getDataFromFirestore(i1, i2);
     }
-//
-    public interface OnGetResult{
-        void OnResult(ArrayList<RecipeInstrument> listRecipe);
-    }
+
 }

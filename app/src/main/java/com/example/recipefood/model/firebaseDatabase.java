@@ -3,6 +3,7 @@ package com.example.recipefood.model;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -11,16 +12,21 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class firebaseDatabase {
+    private MutableLiveData<ArrayList<RecipeInstrument>> recipeListLiveData = new MutableLiveData<>();
 
+    public MutableLiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData() {
+        return recipeListLiveData;
+    }
     FirebaseFirestore firestore;
     public firebaseDatabase(){
         firestore = FirebaseFirestore.getInstance();
     }
 
 
-    public void getDataFromFirestore(int i1, int i2, FirebaseCallback firebaseCallback) { //(0,10)
+    public void getDataFromFirestore(int i1, int i2) { //(0,10)
         String food = "food";
         firestore.collection("foods")
                 .orderBy("foodId")
@@ -48,16 +54,13 @@ public class firebaseDatabase {
                                 RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon);
                                 listRecipe.add(recipeInstrument);
                             }
-                           firebaseCallback.onCallback(listRecipe);
+                            recipeListLiveData.setValue(listRecipe);
 
                         } else {
-                            firebaseCallback.onCallback(new ArrayList<>());
+                            recipeListLiveData.setValue(new ArrayList<>());
                             Log.d("Info : ", "Error getting documents: ", task.getException());
                         }
                     }
                 });
-    }
-    public interface FirebaseCallback {
-        void onCallback(ArrayList<RecipeInstrument> listRecipe);
     }
 }

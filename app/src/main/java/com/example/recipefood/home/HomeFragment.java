@@ -2,6 +2,7 @@ package com.example.recipefood.home;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,8 +40,6 @@ public class HomeFragment extends Fragment {
     //private Spinner spinner;
     ProgressDialog progressDialog;
 
-    private firebaseDatabase database;
-
     //khai bao homefragmentviewmodel
     private HomeFragmentViewModel homeFragmentViewModel;
     public HomeFragment() {
@@ -53,18 +53,31 @@ public class HomeFragment extends Fragment {
         mActivity = (MainActivity) getActivity();
         View views = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = views.findViewById(R.id.recyclerView);
-        database = new firebaseDatabase();
         progressDialog = new ProgressDialog(mActivity);
         progressDialog.show();
         homeFragmentViewModel=new ViewModelProvider(this).get(HomeFragmentViewModel.class);
-        homeFragmentViewModel.GetData(count, count + 10, new HomeFragmentViewModel.OnGetResult() {
+        homeFragmentViewModel.getRecipeListLiveData(count, count + 10).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
             @Override
-            public void OnResult(ArrayList<RecipeInstrument> listRecipe) {
-                if (listRecipe != null) {
-                    recipeList = listRecipe;
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 1));
-                    randomRecipeRycAdapter = new RandomRecipeRycAdapter(mActivity, recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
+            public void onChanged(ArrayList<RecipeInstrument> listrecipe) {
+                if(listrecipe != null){
+                    recipeList = listrecipe;
+                    onSetUpRecyclerView();
+                    progressDialog.dismiss();
+                }
+                else{
+                    Toast.makeText(mActivity, "Error connect", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        recyclerView.addOnScrollListener(addRecipeToRyc);
+
+        return views;
+
+    }
+    public void onSetUpRecyclerView(){
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 1));
+        randomRecipeRycAdapter = new RandomRecipeRycAdapter(mActivity, recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
                         @Override
                         public void OnClickRecipe(RecipeInstrument recipe) {
                             Fragment detail_recipe = new Detail_Recipe();
@@ -79,49 +92,8 @@ public class HomeFragment extends Fragment {
                             fragmentTransaction.commit();
                         }
                     });
-                    recyclerView.setAdapter(randomRecipeRycAdapter);
-                    progressDialog.dismiss();
-                } else {
-                    Toast.makeText(mActivity, "Error connect", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-//        database.getDataFromFirestore(count ,count+10 , new firebaseDatabase.FirebaseCallback() {
-//            @Override
-//            public void onCallback(ArrayList<RecipeInstrument> listRecipe) {
-//                if (listRecipe != null) {
-//                    recipeList = listRecipe;
-//                    recyclerView.setHasFixedSize(true);
-//                    recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 1));
-//                    randomRecipeRycAdapter = new RandomRecipeRycAdapter(mActivity, recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
-//                        @Override
-//                        public void OnClickRecipe(RecipeInstrument recipe) {
-//                            Fragment detail_recipe = new Detail_Recipe();
-//                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-//
-//
-//                            Bundle bundle = new Bundle();
-//                            bundle.putSerializable("recipe", recipe);
-//                            detail_recipe.setArguments(bundle);
-//                            fragmentTransaction.replace(R.id.fragment_home, detail_recipe);
-//                            fragmentTransaction.addToBackStack(detail_recipe.getTag());
-//                            fragmentTransaction.commit();
-//                        }
-//                    });
-//                    recyclerView.setAdapter(randomRecipeRycAdapter);
-//                    progressDialog.dismiss();
-//                } else {
-//                    Toast.makeText(mActivity, "Error connect", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-        recyclerView.addOnScrollListener(addRecipeToRyc);
-
-        return views;
+        recyclerView.setAdapter(randomRecipeRycAdapter);
     }
-
 
     private RecyclerView.OnScrollListener addRecipeToRyc = new RecyclerView.OnScrollListener() {
         @Override
@@ -135,27 +107,20 @@ public class HomeFragment extends Fragment {
                     if(count<90){
                         count+=10;
                     }
+                    Log.d("Count : ", count + "");
                     progressDialog.show();
-                    homeFragmentViewModel.GetData(count, count + 10, new HomeFragmentViewModel.OnGetResult() {
+                    homeFragmentViewModel.getRecipeListLiveData(count, count+10).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
                         @Override
-                        public void OnResult(ArrayList<RecipeInstrument> listRecipe) {
-                            recipeList.addAll(listRecipe);
-                            randomRecipeRycAdapter.notifyDataSetChanged();
-                            progressDialog.dismiss();
+                        public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
+                            if(recipeInstruments != null){
+                                recipeList.addAll(recipeInstruments);
+                                randomRecipeRycAdapter.notifyDataSetChanged();
+                                progressDialog.dismiss();
+                            }
                         }
                     });
-//                    database.getDataFromFirestore(count, count + 10, new firebaseDatabase.FirebaseCallback() {
-//                        @Override
-//                        public void onCallback(ArrayList<RecipeInstrument> listRecipe) {
-//                            recipeList.addAll(listRecipe);
-//                            randomRecipeRycAdapter.notifyDataSetChanged();
-//                            progressDialog.dismiss();
-//                        }
-//                    });
                 }
             }
         }
     };
-
-
 }
