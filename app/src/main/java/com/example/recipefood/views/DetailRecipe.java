@@ -15,7 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.recipefood.model.Database_Helper;
+import com.example.recipefood.model.DatabaseHelper;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
@@ -44,7 +44,7 @@ public class DetailRecipe extends Fragment {
     private ScrollView layout_contraint;
 
     //Khai báo Database để lưu trữ dữ liệu
-    Database_Helper database_helper;
+    DatabaseHelper database_helper;
 
 
     @Override
@@ -53,7 +53,7 @@ public class DetailRecipe extends Fragment {
         // Inflate the layout for this fragment
         View views = inflater.inflate(R.layout.fragment_detail__recipe, container, false);
         //Database.
-        database_helper = new Database_Helper(this.getContext());
+        database_helper = new DatabaseHelper(this.getContext());
         //Ánh xạ
         mactivity = getActivity();
         layout_contraint = views.findViewById(R.id.layout_constraint);

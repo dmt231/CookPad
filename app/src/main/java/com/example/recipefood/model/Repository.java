@@ -12,16 +12,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class firebaseDatabase {
+public class Repository {
     private MutableLiveData<ArrayList<RecipeInstrument>> recipeListLiveData = new MutableLiveData<>();
 
     public MutableLiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData() {
         return recipeListLiveData;
     }
     FirebaseFirestore firestore;
-    public firebaseDatabase(){
+    public Repository(){
         firestore = FirebaseFirestore.getInstance();
     }
 
@@ -54,6 +53,7 @@ public class firebaseDatabase {
                                 RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon);
                                 listRecipe.add(recipeInstrument);
                             }
+                            Log.d("Thread : " , Thread.currentThread().getName());
                             recipeListLiveData.setValue(listRecipe);
 
                         } else {

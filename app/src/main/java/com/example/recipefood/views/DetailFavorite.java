@@ -13,12 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.recipefood.model.Recipe_Favorite;
+import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
 
 public class DetailFavorite extends Fragment {
-    Recipe_Favorite recipe_favorite;
+    RecipeFavorite recipe_favorite;
     //Khai báo các view
     ImageButton button;
 
@@ -47,7 +47,7 @@ public class DetailFavorite extends Fragment {
         scrollView = views.findViewById(R.id.layout_scrollview);
         Bundle bundle  = getArguments();
         if(bundle != null){
-            recipe_favorite = (Recipe_Favorite) bundle.get("recipe_favorite");
+            recipe_favorite = (RecipeFavorite) bundle.get("recipe_favorite");
             if(recipe_favorite != null){
                 Picasso.get().load(recipe_favorite.getImage()).into(img_recipe);
                 title.setText(recipe_favorite.getName());

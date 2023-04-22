@@ -2,7 +2,7 @@ package com.example.recipefood.model;
 
 import java.io.Serializable;
 
-public class Recipe_Favorite implements Serializable {
+public class RecipeFavorite implements Serializable {
     private String Name;
     private String Image;
     private int Time;
@@ -67,7 +67,7 @@ public class Recipe_Favorite implements Serializable {
     private int Serving;
     private String Ingredients;
 
-    public Recipe_Favorite(String name, String image, int time, int likes, int serving, String ingredients, String instruction) {
+    public RecipeFavorite(String name, String image, int time, int likes, int serving, String ingredients, String instruction) {
         Name = name;
         Image = image;
         Time = time;

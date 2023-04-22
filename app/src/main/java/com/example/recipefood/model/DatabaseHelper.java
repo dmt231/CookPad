@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-public class Database_Helper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String database_name = "recipe.db";
-    public Database_Helper(@Nullable Context context) {
+    public DatabaseHelper(@Nullable Context context) {
         super(context, database_name, null, 1);
     }
     public Cursor getData(String sql){

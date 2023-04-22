@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.example.recipefood.adapter.FragmentAdapterViews;
 import com.example.recipefood.model.RecipeInstrument;
-import com.example.recipefood.model.firebaseDatabase;
+import com.example.recipefood.model.Repository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottombar;
 
-    firebaseDatabase database;
+    Repository database;
     ArrayList<RecipeInstrument> listRecipe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

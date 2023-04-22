@@ -26,8 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipefood.adapter.FavoriteRecipeAdapter;
-import com.example.recipefood.model.Database_Helper;
-import com.example.recipefood.model.Recipe_Favorite;
+import com.example.recipefood.model.DatabaseHelper;
+import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
 
 import java.util.ArrayList;
@@ -38,9 +38,9 @@ public class RecipeFragment extends Fragment {
     private RecyclerView recyclerView;
     private Activity mActivity ;
     //Database.
-    private Database_Helper database_helper;
+    private DatabaseHelper database_helper;
     private static int selectedID = 0;
-    private List<Recipe_Favorite> list = new ArrayList<>();
+    private List<RecipeFavorite> list = new ArrayList<>();
 
     AlertDialog.Builder dialog_builder;
 
@@ -55,7 +55,7 @@ public class RecipeFragment extends Fragment {
     private void setupRecyclerview() {
         favoriteRecipeAdapter = new FavoriteRecipeAdapter(mActivity, list, new FavoriteRecipeAdapter.Detail_ClickListener_Favorite() {
             @Override
-            public void OnClickRecipe(Recipe_Favorite recipeFavorite) {
+            public void OnClickRecipe(RecipeFavorite recipeFavorite) {
                 Fragment detail_favorite = new DetailFavorite();
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                 Bundle bundle = new Bundle();
@@ -74,7 +74,7 @@ public class RecipeFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (Activity) context;
-        database_helper = new Database_Helper(this.getContext());
+        database_helper = new DatabaseHelper(this.getContext());
         querydata();
     }
 
@@ -88,7 +88,7 @@ public class RecipeFragment extends Fragment {
             int serving = cursor.getInt(5);
             String ingredients = cursor.getString(6);
             String instructions = cursor.getString(7);
-            list.add(new Recipe_Favorite(name, image,time,like,serving,ingredients,instructions));
+            list.add(new RecipeFavorite(name, image,time,like,serving,ingredients,instructions));
             Log.d("Favorite : " , list.get(0).getName() + list.get(0).getTime());
         }
     }
@@ -102,7 +102,7 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        Recipe_Favorite recipe_favorite = list.get(selectedID);
+        RecipeFavorite recipe_favorite = list.get(selectedID);
         switch(item.getItemId()){
             case R.id.delete:
                 dialog_builder = new AlertDialog.Builder(mActivity);

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.recipefood.model.Recipe_Favorite;
+import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
 
@@ -20,10 +20,10 @@ import java.util.List;
 public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavorite> {
 
     private Activity mContext;
-    private List<Recipe_Favorite> recipeList;
+    private List<RecipeFavorite> recipeList;
     private Detail_ClickListener_Favorite detail_clickListener_favorite;
 
-    public FavoriteRecipeAdapter(Activity mContext, List<Recipe_Favorite> recipeList, Detail_ClickListener_Favorite detail_clickListener_favorite){
+    public FavoriteRecipeAdapter(Activity mContext, List<RecipeFavorite> recipeList, Detail_ClickListener_Favorite detail_clickListener_favorite){
         this.mContext = mContext;
         this.recipeList = recipeList;
         this.detail_clickListener_favorite = detail_clickListener_favorite;
@@ -37,7 +37,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderFavorite holder, int position) {
-        Recipe_Favorite dataModel = recipeList.get(position);
+        RecipeFavorite dataModel = recipeList.get(position);
         holder.Ryc_TextView_title.setText(dataModel.getName());
         holder.Ryc_TextView_title.setSelected(true);
         holder.Ryc_textfavorite.setText(dataModel.getLikes() + " Likes");
@@ -57,7 +57,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
         return recipeList.size();
     }
     public interface  Detail_ClickListener_Favorite{
-        void OnClickRecipe(Recipe_Favorite recipeFavorite);
+        void OnClickRecipe(RecipeFavorite recipeFavorite);
     }
 }
 class ViewHolderFavorite extends RecyclerView.ViewHolder{
