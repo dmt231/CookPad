@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                     case 2:
                         bottombar.getMenu().findItem(R.id.recipe).setChecked(true);
                         break;
+                    case 3 :
+                        bottombar.getMenu().findItem(R.id.user).setChecked(true);
                 }
             }
 
@@ -81,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.recipe:
                         viewpager.setCurrentItem(2);
+                        return true;
+                    case R.id.user:
+                        viewpager.setCurrentItem(3);
                         return true;
                 }
                 return false;

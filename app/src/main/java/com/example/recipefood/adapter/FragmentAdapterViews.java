@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 
 import com.example.recipefood.home.HomeFragment;
+import com.example.recipefood.user.UserFragment;
 import com.example.recipefood.views.RecipeFragment;
 import com.example.recipefood.views.SearchFragment;
 
@@ -28,12 +29,14 @@ public class FragmentAdapterViews extends FragmentStatePagerAdapter {
                 return new SearchFragment();
             case 2:
                 return new RecipeFragment();
+            case 3 :
+                return new UserFragment();
         }
         return new HomeFragment();
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 }
