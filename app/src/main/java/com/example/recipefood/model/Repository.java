@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -26,7 +28,6 @@ public class Repository {
 
 
     public void getDataFromFirestore(int i1, int i2) { //(0,10)
-        String food = "food";
         firestore.collection("foods")
                 .orderBy("foodId")
                 .whereGreaterThanOrEqualTo("foodId", i1)
@@ -53,7 +54,6 @@ public class Repository {
                                 RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon);
                                 listRecipe.add(recipeInstrument);
                             }
-                            Log.d("Thread : " , Thread.currentThread().getName());
                             recipeListLiveData.setValue(listRecipe);
 
                         } else {
@@ -62,5 +62,38 @@ public class Repository {
                         }
                     }
                 });
+    }
+    public void getDataByIngredients(ArrayList<String> ingredients){
+        CollectionReference collection= firestore.collection("foods");
+        Query query = collection.whereArrayContainsAny("ingredients", ingredients);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<RecipeInstrument> listRecipe = new ArrayList<>();
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        int id = documentSnapshot.get("foodId", Integer.class);
+                        String name = documentSnapshot.getString("foodName");
+                        String ingredients = documentSnapshot.getString("ingredients");
+                        String instructions = documentSnapshot.getString("instructions");
+                        String image = documentSnapshot.getString("foodImage");
+                        int times = documentSnapshot.get("time", Integer.class);
+                        int likes = documentSnapshot.get("foodLikes", Integer.class);
+                        int serving = documentSnapshot.get("serving", Integer.class);
+                        String sourceName = documentSnapshot.getString("sourcefoodName");
+                        String sourceUrl = documentSnapshot.getString("sourcefoodUrl");
+                        String spoon = documentSnapshot.getString("spoonacularSourceUrl");
+                        Log.d("Object : " ,name + String.valueOf(id));
+                        RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon);
+                        listRecipe.add(recipeInstrument);
+                    }
+                    recipeListLiveData.setValue(listRecipe);
+
+                } else {
+                    recipeListLiveData.setValue(new ArrayList<>());
+                    Log.d("Info : ", "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 }

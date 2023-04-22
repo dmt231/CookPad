@@ -68,6 +68,9 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+
+
         recyclerView.addOnScrollListener(addRecipeToRyc);
 
         return views;
