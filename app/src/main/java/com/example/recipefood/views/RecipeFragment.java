@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipefood.adapter.FavoriteRecipeAdapter;
+import com.example.recipefood.model.DataBase.DbHelper;
 import com.example.recipefood.model.DatabaseHelper;
 import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
@@ -79,18 +80,7 @@ public class RecipeFragment extends Fragment {
     }
 
     public void querydata() {
-        Cursor cursor = database_helper.getData("Select * from Recipe ");
-        while(cursor.moveToNext()){
-            String name = cursor.getString(1);
-            String image = cursor.getString(2);
-            int time = cursor.getInt(3);
-            int like = cursor.getInt(4);
-            int serving = cursor.getInt(5);
-            String ingredients = cursor.getString(6);
-            String instructions = cursor.getString(7);
-            list.add(new RecipeFavorite(name, image,time,like,serving,ingredients,instructions));
-            Log.d("Favorite : " , list.get(0).getName() + list.get(0).getTime());
-        }
+        list= DbHelper.getInstance(mActivity).recipeDAO().getAllRecipe();
     }
 
     @Override
@@ -112,7 +102,7 @@ public class RecipeFragment extends Fragment {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 list.remove(selectedID);
-                                                database_helper.delete(recipe_favorite.getName());
+                                                  DbHelper.getInstance(mActivity).recipeDAO().deleteRecipeByName(recipe_favorite.getName());
                                                 favoriteRecipeAdapter.notifyDataSetChanged();
                                                 Toast toast = new Toast(mActivity);
                                                 LayoutInflater inflater = getLayoutInflater();

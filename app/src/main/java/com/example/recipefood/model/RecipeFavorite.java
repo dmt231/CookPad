@@ -1,11 +1,46 @@
 package com.example.recipefood.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity(tableName = "RecipeFavorite")
 public class RecipeFavorite implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "Id")
+    private int id;
+
     private String Name;
     private String Image;
     private int Time;
+    private int Likes;
+    private int Serving;
+    private String Ingredients;
+    private String Instruction;
+
+     public RecipeFavorite(String name, String image, int time, int likes, int serving, String ingredients, String instruction) {
+        Name = name;
+        Image = image;
+        Time = time;
+        Likes = likes;
+        Serving = serving;
+        Ingredients = ingredients;
+        Instruction = instruction;
+    }
+
+    public RecipeFavorite() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return Name;
@@ -62,20 +97,4 @@ public class RecipeFavorite implements Serializable {
     public void setInstruction(String instruction) {
         Instruction = instruction;
     }
-
-    private int Likes;
-    private int Serving;
-    private String Ingredients;
-
-    public RecipeFavorite(String name, String image, int time, int likes, int serving, String ingredients, String instruction) {
-        Name = name;
-        Image = image;
-        Time = time;
-        Likes = likes;
-        Serving = serving;
-        Ingredients = ingredients;
-        Instruction = instruction;
-    }
-
-    private String Instruction;
 }

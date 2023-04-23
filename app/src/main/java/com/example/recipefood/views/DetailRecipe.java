@@ -15,10 +15,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recipefood.model.DataBase.DbHelper;
 import com.example.recipefood.model.DatabaseHelper;
+import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class DetailRecipe extends Fragment {
 
@@ -100,19 +104,21 @@ public class DetailRecipe extends Fragment {
         button_Download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(database_helper.checkName(recipe.getName())){
+                List<RecipeFavorite> favoriteList= DbHelper.getInstance(mactivity).recipeDAO().getRecipeByName(recipe.getName());
+                if(favoriteList.size()!=0){
                     Toast toast = new Toast(mactivity);
                     LayoutInflater inflater = getLayoutInflater();
                     View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));
                     TextView text_message = view_inflate.findViewById(R.id.text_toast);
                     text_message.setText("This Recipe has already exits");
+                    Toast.makeText(mactivity, String.valueOf(favoriteList.size()), Toast.LENGTH_SHORT).show();
                     toast.setView(view_inflate);
                     toast.setGravity(Gravity.BOTTOM, 0,25);
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.show();
                 }else {
-                    database_helper.insertData(recipe.getName(), recipe.getImages(), recipe.getTime(), recipe.getLikes(), recipe.getServing(),
-                            result, result_2);
+                    RecipeFavorite favorite=new RecipeFavorite(recipe.getName(), recipe.getImages(), recipe.getTime(), recipe.getLikes(), recipe.getServing(), result, result_2);
+                    DbHelper.getInstance(mactivity).recipeDAO().insert(favorite);
                     Toast toast = new Toast(mactivity);
                     LayoutInflater inflater = getLayoutInflater();
                     View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));
