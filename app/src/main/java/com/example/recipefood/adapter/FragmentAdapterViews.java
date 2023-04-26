@@ -13,9 +13,11 @@ import com.example.recipefood.views.RecipeFragment;
 
 public class FragmentAdapterViews extends FragmentStatePagerAdapter {
 
+    String username;
 
-    public FragmentAdapterViews(@NonNull FragmentManager fm, int behavior) {
+    public FragmentAdapterViews(@NonNull FragmentManager fm, int behavior, String username) {
         super(fm, behavior);
+        this.username = username;
     }
 
     @NonNull
