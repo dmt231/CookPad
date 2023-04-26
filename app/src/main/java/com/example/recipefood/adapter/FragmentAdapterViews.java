@@ -7,15 +7,17 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 
 import com.example.recipefood.home.HomeFragment;
+import com.example.recipefood.search.SearchFragment;
 import com.example.recipefood.user.UserFragment;
 import com.example.recipefood.views.RecipeFragment;
-import com.example.recipefood.views.SearchFragment;
 
 public class FragmentAdapterViews extends FragmentStatePagerAdapter {
 
+    String username;
 
-    public FragmentAdapterViews(@NonNull FragmentManager fm, int behavior) {
+    public FragmentAdapterViews(@NonNull FragmentManager fm, int behavior, String username) {
         super(fm, behavior);
+        this.username = username;
     }
 
     @NonNull
@@ -24,7 +26,6 @@ public class FragmentAdapterViews extends FragmentStatePagerAdapter {
         switch (position){
             case 0:
                 return new HomeFragment();
-
             case 1:
                 return new SearchFragment();
             case 2:

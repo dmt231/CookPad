@@ -34,7 +34,6 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     private RandomRecipeRycAdapter randomRecipeRycAdapter;
     private List<RecipeInstrument> recipeList; //List các món ăn
-    private MainActivity mActivity ;
 
     //private Spinner spinner;
     ProgressDialog progressDialog;
@@ -48,11 +47,10 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
-        mActivity = (MainActivity) getActivity();
+
         View views = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = views.findViewById(R.id.recyclerView);
-        progressDialog = new ProgressDialog(mActivity);
+        progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
         homeFragmentViewModel=new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         homeFragmentViewModel.getRecipeListLiveData(count, count + 10).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
@@ -64,10 +62,13 @@ public class HomeFragment extends Fragment {
                     progressDialog.dismiss();
                 }
                 else{
-                    Toast.makeText(mActivity, "Error connect", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Error connect", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+
+
         recyclerView.addOnScrollListener(addRecipeToRyc);
 
         return views;
@@ -75,8 +76,8 @@ public class HomeFragment extends Fragment {
     }
     public void onSetUpRecyclerView(){
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 1));
-        randomRecipeRycAdapter = new RandomRecipeRycAdapter(mActivity, recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        randomRecipeRycAdapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
                         @Override
                         public void OnClickRecipe(RecipeInstrument recipe) {
                             Fragment detail_recipe = new DetailRecipe();
