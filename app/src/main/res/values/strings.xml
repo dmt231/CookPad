@@ -2,6 +2,8 @@
     <string name="app_name">Food Recipe</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="channel_name">NewCookPad</string>
+    <string name="channel_description">new cook pad</string>
 
     <string-array name="tags">
         <item>main course</item>
