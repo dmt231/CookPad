@@ -25,13 +25,14 @@ public class RecipeFavoriteDownloadViewModel extends AndroidViewModel {
       return repositoryRoom.getRecipeByName(name);
     };
 
-    public void insertRecipeFavorite(String name, String images, int time, int likes, int serving, String result, String result_2) {
-        RecipeFavoriteDownload download=new RecipeFavoriteDownload(name,images,time,likes,serving,result,result_2);
+    public void insertRecipeFavorite(int id,String name, String images, int time, int likes, int serving, String result, String result_2,String sourceUrl,String spoonacularSourceUrl) {
+        RecipeFavoriteDownload download=new RecipeFavoriteDownload(id,name,images,time,likes,serving,result,result_2,sourceUrl,spoonacularSourceUrl);
         repositoryRoom.insertRecipeFavoriteDownload(download);
     }
     public List<RecipeFavoriteDownload> getRecipeFavorite(){
         return repositoryRoom.getAllNormal();
     }
+
     public  void DeleteByName(String Name){
         repositoryRoom.DeleteByName(Name);
     }

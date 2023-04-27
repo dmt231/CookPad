@@ -112,7 +112,7 @@ public class RecipeFragment extends Fragment {
 //                                                list.remove(selectedID);
 //                                                database_helper.delete(recipe_favorite.getName());
 //                                                favoriteRecipeAdapter.notifyDataSetChanged();
-                                                //
+                                                //sua
                                                 viewModel.DeleteByName(recipe_favorite.getName());
                                                 viewModel.getAllRecipeFavorite().observeForever(new Observer<List<RecipeFavoriteDownload>>() {
                                                     @Override

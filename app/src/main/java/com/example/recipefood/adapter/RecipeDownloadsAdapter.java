@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class RecipeDownloadsAdapter extends RecyclerView.Adapter<ViewHolderFavorite> {
-
+    //them adapter
     private Activity mContext;
     private List<RecipeFavoriteDownload> recipeList;
     private Detail_ClickListener_Favorite detail_clickListener_favorite;

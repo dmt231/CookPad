@@ -9,6 +9,7 @@ import java.util.List;
 
 @Dao
 public interface RecipeFavoriteDao {
+   //cau lenh truy van
    @Insert
     public  void insert(RecipeFavoriteDownload recipe_favorite);
 

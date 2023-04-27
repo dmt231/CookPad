@@ -6,7 +6,7 @@ public class RecipeFavorite implements Serializable {
     private String Name;
     private String Image;
     private int Time;
-
+    //cu
     public RecipeFavorite() {
 
     }

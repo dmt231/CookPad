@@ -131,7 +131,7 @@ public class DetailRecipe extends Fragment {
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.show();
                 }else {
-                    viewModel.insertRecipeFavorite(recipe.getName(), recipe.getImages(), recipe.getTime(), recipe.getLikes(), recipe.getServing(), result, result_2);
+                    viewModel.insertRecipeFavorite(recipe.getId(),recipe.getName(), recipe.getImages(), recipe.getTime(), recipe.getLikes(), recipe.getServing(), result, result_2,recipe.getSourceUrl(),recipe.getSpoonacularSourceUrl());
                     Toast toast = new Toast(mactivity);
                     LayoutInflater inflater = getLayoutInflater();
                     View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));

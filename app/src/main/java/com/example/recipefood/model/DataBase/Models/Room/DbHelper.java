@@ -8,6 +8,7 @@ import com.example.recipefood.model.DataBase.Models.RecipeFavoriteDownload;
 
 @Database(entities = {RecipeFavoriteDownload.class},version = 1)
 public abstract class DbHelper extends RoomDatabase {
+    //them db
     public static  final  String NAME_DATA_BASE ="RecipeFavorite.db";
     public  static  DbHelper instance;
 
