@@ -1,9 +1,13 @@
 package com.example.recipefood.views;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,10 +19,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recipefood.model.DataBase.Models.RecipeFavoriteDownload;
+import com.example.recipefood.model.DataBase.ViewModel.RecipeFavoriteDownloadViewModel;
 import com.example.recipefood.model.DatabaseHelper;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
+import java.util.Objects;
 
 public class DetailRecipe extends Fragment {
 
@@ -43,9 +52,17 @@ public class DetailRecipe extends Fragment {
     //Khai báo layout
     private ScrollView layout_contraint;
 
+    private  RecipeFavoriteDownloadViewModel viewModel;
+
     //Khai báo Database để lưu trữ dữ liệu
     DatabaseHelper database_helper;
 
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel=new RecipeFavoriteDownloadViewModel(requireActivity().getApplication());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,6 +108,7 @@ public class DetailRecipe extends Fragment {
                 instructions.setText(result_2);
             }
         }
+
         layout_contraint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,7 +118,9 @@ public class DetailRecipe extends Fragment {
         button_Download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(database_helper.checkName(recipe.getName())){
+
+                List<RecipeFavoriteDownload> list=viewModel.getRecipeByName(recipe.getName());
+                if(list.size()!=0){
                     Toast toast = new Toast(mactivity);
                     LayoutInflater inflater = getLayoutInflater();
                     View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));
@@ -111,8 +131,7 @@ public class DetailRecipe extends Fragment {
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.show();
                 }else {
-                    database_helper.insertData(recipe.getName(), recipe.getImages(), recipe.getTime(), recipe.getLikes(), recipe.getServing(),
-                            result, result_2);
+                    viewModel.insertRecipeFavorite(recipe.getName(), recipe.getImages(), recipe.getTime(), recipe.getLikes(), recipe.getServing(), result, result_2);
                     Toast toast = new Toast(mactivity);
                     LayoutInflater inflater = getLayoutInflater();
                     View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));

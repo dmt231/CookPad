@@ -2,6 +2,7 @@ package com.example.recipefood.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,21 +29,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipefood.adapter.FavoriteRecipeAdapter;
+import com.example.recipefood.adapter.RecipeDownloadsAdapter;
+import com.example.recipefood.model.DataBase.Models.RecipeFavoriteDownload;
+import com.example.recipefood.model.DataBase.ViewModel.RecipeFavoriteDownloadViewModel;
 import com.example.recipefood.model.DatabaseHelper;
 import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RecipeFragment extends Fragment {
-    private FavoriteRecipeAdapter favoriteRecipeAdapter;//Recycle Adapter
+    private RecipeDownloadsAdapter favoriteRecipeAdapter;//Recycle Adapter
     private RecyclerView recyclerView;
     private Activity mActivity ;
     //Database.
     private DatabaseHelper database_helper;
+
+    private  RecipeFavoriteDownloadViewModel viewModel;
     private static int selectedID = 0;
-    private List<RecipeFavorite> list = new ArrayList<>();
+    private List<RecipeFavoriteDownload> list = new ArrayList<>();
 
     AlertDialog.Builder dialog_builder;
 
@@ -53,7 +62,7 @@ public class RecipeFragment extends Fragment {
         return view;
     }
     private void setupRecyclerview() {
-        favoriteRecipeAdapter = new FavoriteRecipeAdapter(mActivity, list, new FavoriteRecipeAdapter.Detail_ClickListener_Favorite() {
+        favoriteRecipeAdapter = new RecipeDownloadsAdapter(mActivity, list, new RecipeDownloadsAdapter.Detail_ClickListener_Favorite() {
             @Override
             public void OnClickRecipe(RecipeFavorite recipeFavorite) {
                 Fragment detail_favorite = new DetailFavorite();
@@ -74,23 +83,12 @@ public class RecipeFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (Activity) context;
-        database_helper = new DatabaseHelper(this.getContext());
+        viewModel=new RecipeFavoriteDownloadViewModel(requireActivity().getApplication());
         querydata();
     }
 
     public void querydata() {
-        Cursor cursor = database_helper.getData("Select * from Recipe ");
-        while(cursor.moveToNext()){
-            String name = cursor.getString(1);
-            String image = cursor.getString(2);
-            int time = cursor.getInt(3);
-            int like = cursor.getInt(4);
-            int serving = cursor.getInt(5);
-            String ingredients = cursor.getString(6);
-            String instructions = cursor.getString(7);
-            list.add(new RecipeFavorite(name, image,time,like,serving,ingredients,instructions));
-            Log.d("Favorite : " , list.get(0).getName() + list.get(0).getTime());
-        }
+        list=viewModel.getRecipeFavorite();
     }
 
     @Override
@@ -102,7 +100,7 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        RecipeFavorite recipe_favorite = list.get(selectedID);
+        RecipeFavoriteDownload recipe_favorite = list.get(selectedID);
         switch(item.getItemId()){
             case R.id.delete:
                 dialog_builder = new AlertDialog.Builder(mActivity);
@@ -111,9 +109,19 @@ public class RecipeFragment extends Fragment {
                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                list.remove(selectedID);
-                                                database_helper.delete(recipe_favorite.getName());
-                                                favoriteRecipeAdapter.notifyDataSetChanged();
+//                                                list.remove(selectedID);
+//                                                database_helper.delete(recipe_favorite.getName());
+//                                                favoriteRecipeAdapter.notifyDataSetChanged();
+                                                //
+                                                viewModel.DeleteByName(recipe_favorite.getName());
+                                                viewModel.getAllRecipeFavorite().observeForever(new Observer<List<RecipeFavoriteDownload>>() {
+                                                    @Override
+                                                    public void onChanged(List<RecipeFavoriteDownload> recipeFavoriteDownloads) {
+                                                        list=recipeFavoriteDownloads;
+                                                        favoriteRecipeAdapter.notifyDataSetChanged();
+                                                    }
+                                                });
+                                                //
                                                 Toast toast = new Toast(mActivity);
                                                 LayoutInflater inflater = getLayoutInflater();
                                                 View view = inflater.inflate(R.layout.layout_custom_toast, (ViewGroup) mActivity.findViewById(R.id.custom_toast));
