@@ -6,11 +6,13 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.recipefood.adapter.FragmentAdapterViews;
+import com.example.recipefood.home.HomeFragment;
 import com.example.recipefood.login.LoginFragment;
 import com.example.recipefood.login.LoginPageFragment;
 import com.example.recipefood.main.MainFragment;
@@ -27,7 +29,14 @@ public class MainActivity extends AppCompatActivity implements LoginPageFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.layout_main, new LoginFragment());
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("UserId", -1);
+
+        if (id == -1) {
+            fragmentTransaction.add(R.id.layout_main, new LoginFragment());
+        } else {
+            fragmentTransaction.add(R.id.layout_main, new MainFragment());
+        }
         fragmentTransaction.commit();
     }
 

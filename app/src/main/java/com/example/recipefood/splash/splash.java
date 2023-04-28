@@ -8,6 +8,8 @@ import android.os.Handler;
 
 import com.example.recipefood.MainActivity;
 import com.example.recipefood.R;
+import com.example.recipefood.user.userDatabase.UserDatabase;
+import com.example.recipefood.user.userDatabase.UserLogin;
 
 public class splash extends AppCompatActivity {
     private final int DELAY_TIME = 1500;
@@ -16,13 +18,17 @@ public class splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        new Handler().postDelayed(() -> {
+            UserLogin userLogin = UserDatabase.getInstance(this).daoUser().GetUserLogin();
+            if (userLogin == null){
                 Intent intent = new Intent(splash.this, MainActivity.class);
                 startActivity(intent);
-                finish();
+            }else {
+                Intent intent = new Intent(splash.this, MainActivity.class);
+                intent.putExtra("UserId", userLogin.getUserId());
+                startActivity(intent);
             }
+            finish();
         }, DELAY_TIME);
     }
 }
