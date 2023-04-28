@@ -1,21 +1,32 @@
 package com.example.recipefood.model;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Repository {
+    public MutableLiveData<ArrayList<User>> getUserLiveData() {
+        return userLiveData;
+    }
+
+    private MutableLiveData<ArrayList<User>> userLiveData = new MutableLiveData<>();
     private MutableLiveData<ArrayList<RecipeInstrument>> recipeListLiveData = new MutableLiveData<>();
 
     public MutableLiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData() {
@@ -101,5 +112,77 @@ public class Repository {
                     }
                 });
     }
+    public void Register(User user){
+        CollectionReference ref = firestore.collection("User");
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("username", user.getUsername());
+        userMap.put("email",user.getEmail());
+        userMap.put("password", user.getPassword());
+
+        //Lấy tất cả document trong collections "users"
+        ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            long newUserId = 1;
+            if (!queryDocumentSnapshots.isEmpty()) {
+                // Nếu có tài liệu, tìm giá trị UserId lớn nhất
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    long userId = documentSnapshot.getLong("userId");
+                    if (userId > newUserId) {
+                        newUserId = userId;
+                    }
+                }
+                // Tăng giá trị UserId lên 1 để tạo giá trị mới cho trường UserId
+                newUserId++;
+            }
+            userMap.put("userId", newUserId);
+            ref.document(user.getUsername()).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Log.d("Info : ", "Add Success");
+                }
+            });
+        });
+    }
+    public void checkUser(){
+        firestore.collection("User")
+                  .orderBy("userId")
+                  .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            ArrayList<User> listUser = new ArrayList<>();
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                String username = documentSnapshot.getString("username");
+                                String email = documentSnapshot.getString("email");
+                                String password = documentSnapshot.getString("password");
+                                User user = new User(username, password, email);
+                                Log.d("User", user.getUsername() + user.getEmail());
+                                listUser.add(user);
+                            }
+                            userLiveData.setValue(listUser);
+                        }
+                        else {
+                            userLiveData.setValue(new ArrayList<>());
+                            Log.d("Error : " , "Not found any user");
+                        }
+                    }
+                });
+    }
+    public interface OnUserExistListener {
+        void onUserExist(boolean exists);
+    }
+
+    public void checkUserExist(OnUserExistListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection("User");
+        usersRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                listener.onUserExist(true);
+            } else {
+                listener.onUserExist(false);
+            }
+        });
+    }
+
 
 }
