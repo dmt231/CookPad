@@ -58,14 +58,13 @@ public class SignUpFragment extends Fragment {
                 String usernameValue = username.getText().toString();
                 String emailValue = email.getText().toString();
                 String password = pass.getText().toString();
-                User user = new User(usernameValue, password, emailValue);
 
                 repository.checkUserExist(new Repository.OnUserExistListener() {
                     @Override
                     public void onUserExist(boolean exists) {
                         if(!exists){
                             progressDialog.dismiss();
-                            repository.Register(user);
+                            repository.Register(usernameValue, emailValue, password);
                             customToast("Thêm Thành Công");
                         }
                         else if(exists){
@@ -89,7 +88,7 @@ public class SignUpFragment extends Fragment {
                                     }
                                 }
                                 if (!exists) {
-                                    repository.Register(user);
+                                    repository.Register(usernameValue, emailValue, password);
                                     customToast("Thêm Thành Công");
                                 }
                             }

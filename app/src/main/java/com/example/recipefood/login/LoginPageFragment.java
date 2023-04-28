@@ -3,6 +3,7 @@ package com.example.recipefood.login;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,9 @@ public class LoginPageFragment  extends Fragment {
                 if(users != null){
                     for ( User user : users) {
                         if(checkLogin(user, usernameValue, passwordValue)){
+                            //Chỗ này là tìm thấy user trùng với input thì break này, chỗ này m lấy được id để làm gì đó.
+                            // user.getUserId()
+
                             check = true;
                             break;
                         }

@@ -112,12 +112,12 @@ public class Repository {
                     }
                 });
     }
-    public void Register(User user){
+    public void Register(String username, String email, String pasword){
         CollectionReference ref = firestore.collection("User");
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put("username", user.getUsername());
-        userMap.put("email",user.getEmail());
-        userMap.put("password", user.getPassword());
+        userMap.put("username",username );
+        userMap.put("email",email);
+        userMap.put("password",pasword );
 
         //Lấy tất cả document trong collections "users"
         ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -134,7 +134,7 @@ public class Repository {
                 newUserId++;
             }
             userMap.put("userId", newUserId);
-            ref.document(user.getUsername()).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            ref.document(username).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     Log.d("Info : ", "Add Success");
@@ -155,8 +155,9 @@ public class Repository {
                                 String username = documentSnapshot.getString("username");
                                 String email = documentSnapshot.getString("email");
                                 String password = documentSnapshot.getString("password");
-                                User user = new User(username, password, email);
-                                Log.d("User", user.getUsername() + user.getEmail());
+                                long id = documentSnapshot.get("userId", Long.class);
+                                User user = new User(username, password, email, id);
+                                Log.d("User", user.getUsername() + user.getEmail() + user.getUserId());
                                 listUser.add(user);
                             }
                             userLiveData.setValue(listUser);
