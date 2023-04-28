@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,8 @@ import com.example.recipefood.MainActivity;
 import com.example.recipefood.R;
 import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.model.RecipeInstrument;
+import com.example.recipefood.user.userDatabase.UserLogin;
+import com.example.recipefood.user.userModel.UserModel;
 import com.example.recipefood.views.DetailRecipe;
 
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
+    private Button btnLogout;
     static int count = 0 ;
     RecyclerView recyclerView;
     private RandomRecipeRycAdapter randomRecipeRycAdapter;
@@ -50,6 +54,7 @@ public class HomeFragment extends Fragment {
 
         View views = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = views.findViewById(R.id.recyclerView);
+        btnLogout = views.findViewById(R.id.btnlogout);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
         homeFragmentViewModel=new ViewModelProvider(this).get(HomeFragmentViewModel.class);
@@ -70,10 +75,21 @@ public class HomeFragment extends Fragment {
 
 
         recyclerView.addOnScrollListener(addRecipeToRyc);
+        btnLogout.setOnClickListener(evenLogout);
 
         return views;
 
     }
+
+    private final View.OnClickListener evenLogout = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            UserLogin Current = new UserModel().CurrentUser(getContext());
+            Current.setIsLogin(0);
+            new UserModel().logoutUser(Current.getUserId(), getContext());
+        }
+    };
     public void onSetUpRecyclerView(){
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
