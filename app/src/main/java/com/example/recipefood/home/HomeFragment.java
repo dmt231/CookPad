@@ -2,7 +2,6 @@ package com.example.recipefood.home;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.recipefood.MainActivity;
 import com.example.recipefood.R;
 import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.model.RecipeInstrument;
-import com.example.recipefood.user.userDatabase.UserLogin;
-import com.example.recipefood.user.userModel.UserModel;
+import com.example.recipefood.model.Repository;
 import com.example.recipefood.views.DetailRecipe;
 
 import java.util.ArrayList;
@@ -84,10 +81,8 @@ public class HomeFragment extends Fragment {
     private final View.OnClickListener evenLogout = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            UserLogin Current = new UserModel().CurrentUser(getContext());
-            Current.setIsLogin(0);
-            new UserModel().logoutUser(Current.getUserId(), getContext());
+            new Repository().deleteUser(getContext());
+            Toast.makeText(getContext(), "loggout user ", Toast.LENGTH_SHORT).show();
         }
     };
     public void onSetUpRecyclerView(){
