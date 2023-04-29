@@ -18,7 +18,7 @@ public class UserLogin {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }git
+    }
 
     public int getIsLogin() {
         return isLogin;
