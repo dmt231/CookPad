@@ -62,16 +62,18 @@ public class LoginPageFragment extends Fragment {
             public void onChanged(ArrayList<User> users) {
                 progressDialog.dismiss();
                 boolean check = false;
+                long id = 0;
                 if (users != null) {
                     for (User user : users) {
                         if (checkLogin(user, usernameValue, passwordValue)) {
+                            id = user.getUserId();
                             new Repository().keepLoggedInUser((int) user.getUserId(), requireContext());
                             check = true;
                             break;
                         }
                     }
                     if (check) {
-                        changedScreen.onChanged(usernameValue);
+                        changedScreen.onChanged(id);
                     } else {
                         customToast("Tên đăng nhập hoặc mật khẩu không đúng");
                     }
@@ -81,7 +83,7 @@ public class LoginPageFragment extends Fragment {
     }
 
     public interface onChangedScreen {
-        void onChanged(String username);
+        void onChanged(Long id);
     }
 
     @Override

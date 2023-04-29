@@ -17,7 +17,7 @@ import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
 
-public class DetailFavorite extends Fragment {
+public class DetailDownload extends Fragment {
     RecipeFavorite recipe_favorite;
     //Khai báo các view
     ImageButton button;

@@ -1,6 +1,7 @@
 package com.example.recipefood.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +22,13 @@ public class MainFragment extends Fragment {
     FragmentAdapterViews fragmentAdapterViews;
 
     BottomNavigationView bottomBar;
-    String username = "";
 
+    private long id;
+
+
+    public MainFragment(long id){
+        this.id = id;
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -30,8 +36,9 @@ public class MainFragment extends Fragment {
         bottomBar = view.findViewById(R.id.bottombar);
         viewpager = view.findViewById(R.id.recyclerView_Random);
         //getData();
-        fragmentAdapterViews = new FragmentAdapterViews(getActivity().getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, username);
+        fragmentAdapterViews = new FragmentAdapterViews(getActivity().getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, id);
         viewpager.setAdapter(fragmentAdapterViews);
+        Log.d("Id: ", id + "");
         Init();
         return view;
     }

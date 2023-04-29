@@ -177,6 +177,35 @@ public class Repository {
                     }
                 });
     }
+    public void getUserLogin(long id){
+        firestore.collection("User")
+                .orderBy("userId")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            ArrayList<User> listUser = new ArrayList<>();
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                String username = documentSnapshot.getString("username");
+                                String email = documentSnapshot.getString("email");
+                                String password = documentSnapshot.getString("password");
+                                long idUser = documentSnapshot.get("userId", Long.class);
+                                if(idUser == id) {
+                                    User user = new User(username, password, email, idUser);
+                                    Log.d("User", user.getUsername() + user.getEmail() + user.getUserId());
+                                    listUser.add(user);
+                                }
+                            }
+                            userLiveData.setValue(listUser);
+                        } else {
+                            userLiveData.setValue(new ArrayList<>());
+                            Log.d("Error : ", "Not found any user");
+                        }
+                    }
+                });
+    }
+
 
     public interface OnUserExistListener {
         void onUserExist(boolean exists);
@@ -193,6 +222,11 @@ public class Repository {
             }
         });
     }
+
+
+
+
+
 
     // remember user and delete user
     public int checkLogged(Context context) {
