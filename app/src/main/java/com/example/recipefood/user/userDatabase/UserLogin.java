@@ -1,8 +1,6 @@
 package com.example.recipefood.user.userDatabase;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 @Entity
 public class UserLogin {
     @PrimaryKey
@@ -20,7 +18,7 @@ public class UserLogin {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
+    }git
 
     public int getIsLogin() {
         return isLogin;
