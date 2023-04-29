@@ -1,5 +1,9 @@
 package com.example.recipefood.model;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,8 +36,10 @@ public class Repository {
     public MutableLiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData() {
         return recipeListLiveData;
     }
+
     FirebaseFirestore firestore;
-    public Repository(){
+
+    public Repository() {
         firestore = FirebaseFirestore.getInstance();
     }
 
@@ -61,7 +67,7 @@ public class Repository {
                                 String sourceName = documentSnapshot.getString("sourcefoodName");
                                 String sourceUrl = documentSnapshot.getString("sourcefoodUrl");
                                 String spoon = documentSnapshot.getString("spoonacularSourceUrl");
-                                Log.d("Object : " ,name + String.valueOf(id));
+                                Log.d("Object : ", name + String.valueOf(id));
                                 RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon);
                                 listRecipe.add(recipeInstrument);
                             }
@@ -74,6 +80,7 @@ public class Repository {
                     }
                 });
     }
+
     public void getDataByIngredients(int i1, int i2, String ingredient) {
         firestore.collection("foods")
                 .orderBy("foodId")
@@ -86,7 +93,7 @@ public class Repository {
                         if (task.isSuccessful()) {
                             ArrayList<RecipeInstrument> listRecipe = new ArrayList<>();
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                if(documentSnapshot.getString("ingredients").contains(ingredient)) {
+                                if (documentSnapshot.getString("ingredients").contains(ingredient)) {
                                     int id = documentSnapshot.get("foodId", Integer.class);
                                     String name = documentSnapshot.getString("foodName");
                                     String ingredients = documentSnapshot.getString("ingredients");
@@ -112,12 +119,13 @@ public class Repository {
                     }
                 });
     }
-    public void Register(String username, String email, String pasword){
+
+    public void Register(String username, String email, String pasword) {
         CollectionReference ref = firestore.collection("User");
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put("username",username );
-        userMap.put("email",email);
-        userMap.put("password",pasword );
+        userMap.put("username", username);
+        userMap.put("email", email);
+        userMap.put("password", pasword);
 
         //Lấy tất cả document trong collections "users"
         ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -142,10 +150,11 @@ public class Repository {
             });
         });
     }
-    public void checkUser(){
+
+    public void checkUser() {
         firestore.collection("User")
-                  .orderBy("userId")
-                  .get()
+                .orderBy("userId")
+                .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -161,14 +170,43 @@ public class Repository {
                                 listUser.add(user);
                             }
                             userLiveData.setValue(listUser);
-                        }
-                        else {
+                        } else {
                             userLiveData.setValue(new ArrayList<>());
-                            Log.d("Error : " , "Not found any user");
+                            Log.d("Error : ", "Not found any user");
                         }
                     }
                 });
     }
+    public void getUserLogin(long id){
+        firestore.collection("User")
+                .orderBy("userId")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            ArrayList<User> listUser = new ArrayList<>();
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                String username = documentSnapshot.getString("username");
+                                String email = documentSnapshot.getString("email");
+                                String password = documentSnapshot.getString("password");
+                                long idUser = documentSnapshot.get("userId", Long.class);
+                                if(idUser == id) {
+                                    User user = new User(username, password, email, idUser);
+                                    Log.d("User", user.getUsername() + user.getEmail() + user.getUserId());
+                                    listUser.add(user);
+                                }
+                            }
+                            userLiveData.setValue(listUser);
+                        } else {
+                            userLiveData.setValue(new ArrayList<>());
+                            Log.d("Error : ", "Not found any user");
+                        }
+                    }
+                });
+    }
+
+
     public interface OnUserExistListener {
         void onUserExist(boolean exists);
     }
@@ -185,5 +223,29 @@ public class Repository {
         });
     }
 
+
+
+
+
+
+    // remember user and delete user
+    public int checkLogged(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("login", Context.MODE_PRIVATE);
+        return sharedPreferences.getInt("userId", -1);
+    }
+
+    public void deleteUser(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("login", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("userId");
+        editor.apply();
+    }
+
+    public void keepLoggedInUser(int id, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("login", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("userId", id);
+        editor.apply();
+    }
 
 }

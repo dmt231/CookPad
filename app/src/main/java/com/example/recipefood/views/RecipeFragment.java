@@ -56,7 +56,7 @@ public class RecipeFragment extends Fragment {
         favoriteRecipeAdapter = new FavoriteRecipeAdapter(mActivity, list, new FavoriteRecipeAdapter.Detail_ClickListener_Favorite() {
             @Override
             public void OnClickRecipe(RecipeFavorite recipeFavorite) {
-                Fragment detail_favorite = new DetailFavorite();
+                Fragment detail_favorite = new DetailDownload();
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("recipe_favorite", recipeFavorite);

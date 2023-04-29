@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 public class ViewModelSignUpLogin extends ViewModel {
     public MutableLiveData<ArrayList<User>> listUser;
+
+    private MutableLiveData<ArrayList<User>> userAccount;
     private Repository repository;
 
     public MutableLiveData<ArrayList<User>> getListUser() {
@@ -19,7 +21,12 @@ public class ViewModelSignUpLogin extends ViewModel {
         loadData();
         return listUser;
     }
-
+    public MutableLiveData<ArrayList<User>> getUserAccount(long id) {
+        userAccount = new MutableLiveData<>();
+        repository = new Repository();
+        loadAccount(id);
+        return userAccount;
+    }
     public void loadData() {
         repository.getUserLiveData().observeForever(new Observer<ArrayList<User>>() {
             @Override
@@ -29,5 +36,15 @@ public class ViewModelSignUpLogin extends ViewModel {
             }
         });
         repository.checkUser();
+    }
+    public void loadAccount(long id) {
+        repository.getUserLiveData().observeForever(new Observer<ArrayList<User>>() {
+            @Override
+            public void onChanged(ArrayList<User> users) {
+                if (users != null && !users.isEmpty())
+                    userAccount.setValue(users);
+            }
+        });
+        repository.getUserLogin(id);
     }
 }

@@ -18,10 +18,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.recipefood.R;
+import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.User;
-import com.example.recipefood.user.userDatabase.UserDatabase;
-import com.example.recipefood.user.userDatabase.UserLogin;
-import com.example.recipefood.user.userModel.UserModel;
 
 import java.util.ArrayList;
 
@@ -64,22 +62,18 @@ public class LoginPageFragment extends Fragment {
             public void onChanged(ArrayList<User> users) {
                 progressDialog.dismiss();
                 boolean check = false;
+                long id = 0;
                 if (users != null) {
                     for (User user : users) {
                         if (checkLogin(user, usernameValue, passwordValue)) {
-                            if (!new UserModel().checkUser((int) user.getUserId(), getContext())) {
-                                UserLogin userLogin = new UserLogin((int) user.getUserId(), 1);
-                                UserDatabase.getInstance(getContext()).daoUser().InsertUser(userLogin);
-                            } else {
-                                UserLogin userLogin = new UserLogin((int) user.getUserId(), 1);
-                                UserDatabase.getInstance(getContext()).daoUser().UpdateUser(userLogin);
-                            }
+                            id = user.getUserId();
+                            new Repository().keepLoggedInUser((int) user.getUserId(), requireContext());
                             check = true;
                             break;
                         }
                     }
                     if (check) {
-                        changedScreen.onChanged(usernameValue);
+                        changedScreen.onChanged(id);
                     } else {
                         customToast("Tên đăng nhập hoặc mật khẩu không đúng");
                     }
@@ -89,7 +83,7 @@ public class LoginPageFragment extends Fragment {
     }
 
     public interface onChangedScreen {
-        void onChanged(String username);
+        void onChanged(Long id);
     }
 
     @Override

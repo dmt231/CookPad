@@ -1,8 +1,6 @@
 package com.example.recipefood.user.userDatabase;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 @Entity
 public class UserLogin {
     @PrimaryKey
