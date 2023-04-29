@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
         @Override
         public void onClick(View v) {
             new Repository().deleteUser(getContext());
-            Toast.makeText(getContext(), "loggout user ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Logout user ", Toast.LENGTH_SHORT).show();
         }
     };
     public void onSetUpRecyclerView(){
