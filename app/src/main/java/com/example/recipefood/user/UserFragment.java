@@ -1,14 +1,17 @@
 package com.example.recipefood.user;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,10 +19,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.recipefood.R;
 import com.example.recipefood.login.ViewModelSignUpLogin;
 import com.example.recipefood.model.User;
+import com.example.recipefood.user.create.CreateRecipe;
 
 import java.util.ArrayList;
 
 public class UserFragment extends Fragment {
+    private ImageView favorite;
+    private ImageView create;
+    private ImageView myFood;
     private TextView username;
     private TextView email;
 
@@ -36,8 +43,17 @@ public class UserFragment extends Fragment {
         Log.d("ID User Fragment : " , id + "");
         username = view.findViewById(R.id.account_username);
         email = view.findViewById(R.id.account_email);
+        favorite = view.findViewById(R.id.account_favorite);
+        create = view.findViewById(R.id.account_create);
+        myFood = view.findViewById(R.id.account_my_food);
         viewModel = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
         setDataAccount();
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onChangedToCreate();
+            }
+        });
         return view;
     }
     public void setDataAccount(){
@@ -54,5 +70,11 @@ public class UserFragment extends Fragment {
                 }
             }
         });
+    }
+    public void onChangedToCreate(){
+        Fragment create = new CreateRecipe();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_user, create);
+        fragmentTransaction.commit();
     }
 }

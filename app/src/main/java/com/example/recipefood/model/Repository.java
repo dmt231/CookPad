@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,7 +120,41 @@ public class Repository {
                     }
                 });
     }
+    public void addRecipe(RecipeInstrument recipe){
+        CollectionReference ref = firestore.collection("foods");
+        Map<String, Object> food = new HashMap<>();
+        food.put("foodImage", recipe.getImages());
+        food.put("foodLikes", recipe.getLikes());
+        food.put("foodName", recipe.getName());
+        food.put("ingredients", recipe.getIngredients());
+        food.put("instructions", recipe.getInstructions());
+        food.put("serving", recipe.getServing());
+        food.put("sourcefoodName", recipe.getSourceName());
+        food.put("sourcefoodUrl", recipe.getSourceUrl());
+        food.put("spoonacularSourceUrl", recipe.getSpoonacularSourceUrl());
+        ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            long newFoodId = 1;
+            if (!queryDocumentSnapshots.isEmpty()) {
+                // Nếu có tài liệu, tìm giá trị UserId lớn nhất
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    int foodId = (int) documentSnapshot.get("foodId");
+                    if (foodId > newFoodId) {
+                        newFoodId = foodId;
+                    }
+                }
+                // Tăng giá trị UserId lên 1 để tạo giá trị mới cho trường UserId
+                newFoodId++;
+            }
+            food.put("foodId", newFoodId);
+            ref.document("food" + String.valueOf(newFoodId)).set(food).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Log.d("Info : ", "Add Success");
+                }
+            });
+        });
 
+    }
     public void Register(String username, String email, String pasword) {
         CollectionReference ref = firestore.collection("User");
         Map<String, Object> userMap = new HashMap<>();
