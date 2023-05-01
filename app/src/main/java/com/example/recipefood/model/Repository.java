@@ -1,28 +1,20 @@
 package com.example.recipefood.model;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +37,7 @@ public class Repository {
     }
 
 
-    public void getDataFromFirestore(int i1, int i2) { //(0,10)
+    public void getFoodFromFirestore(int i1, int i2) { //(0,10)
         firestore.collection("foods")
                 .orderBy("foodId")
                 .whereGreaterThanOrEqualTo("foodId", i1)
@@ -68,8 +60,10 @@ public class Repository {
                                 String sourceName = documentSnapshot.getString("sourcefoodName");
                                 String sourceUrl = documentSnapshot.getString("sourcefoodUrl");
                                 String spoon = documentSnapshot.getString("spoonacularSourceUrl");
+                                int Userid = documentSnapshot.get("userId", Integer.class);
+
                                 Log.d("Object : ", name + String.valueOf(id));
-                                RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon);
+                                RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon, Userid);
                                 listRecipe.add(recipeInstrument);
                             }
                             recipeListLiveData.setValue(listRecipe);
@@ -82,7 +76,7 @@ public class Repository {
                 });
     }
 
-    public void getDataByIngredients(int i1, int i2, String ingredient) {
+    public void getFoodByIngredients(int i1, int i2, String ingredient) {
         firestore.collection("foods")
                 .orderBy("foodId")
                 .whereGreaterThanOrEqualTo("foodId", i1)
@@ -106,8 +100,10 @@ public class Repository {
                                     String sourceName = documentSnapshot.getString("sourcefoodName");
                                     String sourceUrl = documentSnapshot.getString("sourcefoodUrl");
                                     String spoon = documentSnapshot.getString("spoonacularSourceUrl");
+                                    int Userid = documentSnapshot.get("userId", Integer.class);
+
                                     Log.d("Object : ", name + String.valueOf(id));
-                                    RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon);
+                                    RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon, Userid);
                                     listRecipe.add(recipeInstrument);
                                 }
                             }
@@ -120,7 +116,7 @@ public class Repository {
                     }
                 });
     }
-    public void addRecipe(RecipeInstrument recipe){
+    public void addRecipe(RecipeInstrument recipe, onAddSuccess addSuccess){
         CollectionReference ref = firestore.collection("foods");
         Map<String, Object> food = new HashMap<>();
         food.put("foodImage", recipe.getImages());
@@ -129,15 +125,17 @@ public class Repository {
         food.put("ingredients", recipe.getIngredients());
         food.put("instructions", recipe.getInstructions());
         food.put("serving", recipe.getServing());
+        food.put("time",recipe.getTime());
         food.put("sourcefoodName", recipe.getSourceName());
         food.put("sourcefoodUrl", recipe.getSourceUrl());
         food.put("spoonacularSourceUrl", recipe.getSpoonacularSourceUrl());
+        food.put("userId", recipe.getUserid());
         ref.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            long newFoodId = 1;
+            int newFoodId = 1;
             if (!queryDocumentSnapshots.isEmpty()) {
                 // Nếu có tài liệu, tìm giá trị UserId lớn nhất
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    int foodId = (int) documentSnapshot.get("foodId");
+                    int foodId =  documentSnapshot.get("foodId", Integer.class);
                     if (foodId > newFoodId) {
                         newFoodId = foodId;
                     }
@@ -150,11 +148,20 @@ public class Repository {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     Log.d("Info : ", "Add Success");
+                    addSuccess.onSuccess();
                 }
             });
         });
 
     }
+    public interface onAddSuccess{
+        void onSuccess();
+    }
+
+
+
+
+    //User
     public void Register(String username, String email, String pasword) {
         CollectionReference ref = firestore.collection("User");
         Map<String, Object> userMap = new HashMap<>();
@@ -257,9 +264,6 @@ public class Repository {
             }
         });
     }
-
-
-
 
 
 

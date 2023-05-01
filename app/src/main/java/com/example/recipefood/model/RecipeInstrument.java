@@ -15,7 +15,13 @@ public class RecipeInstrument implements Serializable {
     private String sourceUrl;
     private String spoonacularSourceUrl;
 
-    public RecipeInstrument(int id, String name, String ingredients, String instructions, String images, int likes, int serving, int time, String sourceName, String sourceUrl, String spoonacularSourceUrl) {
+    public int getUserid() {
+        return Userid;
+    }
+
+    private int Userid;
+
+    public RecipeInstrument(int id, String name, String ingredients, String instructions, String images, int likes, int serving, int time, String sourceName, String sourceUrl, String spoonacularSourceUrl, int Userid) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
@@ -27,6 +33,7 @@ public class RecipeInstrument implements Serializable {
         this.sourceName = sourceName;
         this.sourceUrl = sourceUrl;
         this.spoonacularSourceUrl = spoonacularSourceUrl;
+        this.Userid = Userid;
     }
 
     public int getId() {

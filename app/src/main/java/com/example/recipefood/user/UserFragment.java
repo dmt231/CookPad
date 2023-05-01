@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -74,7 +75,12 @@ public class UserFragment extends Fragment {
     public void onChangedToCreate(){
         Fragment create = new CreateRecipe();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_user, create);
+        Bundle bundle = new Bundle();
+        bundle.putInt("Userid", (int)id);
+        create.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragment_container, create);
+        fragmentTransaction.addToBackStack(create.getTag());
         fragmentTransaction.commit();
     }
+
 }

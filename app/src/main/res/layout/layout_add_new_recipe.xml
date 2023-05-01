@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/scrollview_createNew"
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="60dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -22,7 +27,7 @@
                 android:scaleType="fitXY"/>
 
             <ImageButton
-                android:id="@+id/recipe_back"
+                android:id="@+id/recipe_back_from_create"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
@@ -52,7 +57,7 @@
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="10dp"
             android:hint="Enter your link url photo recipe"
@@ -74,7 +79,7 @@
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:hint="Enter recipe name"
             android:padding="5dp"
             android:background="@drawable/background_edit_new_recipe"/>
@@ -100,7 +105,7 @@
             android:gravity="start"
             android:hint="Enter ingredients"
             android:padding="5dp"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -119,7 +124,7 @@
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:gravity="start"
             android:hint="Tell a little about your recipe"
             android:background="@drawable/background_description"
@@ -141,7 +146,7 @@
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:gravity=""
             android:hint="Enter time cook (minutes)"
             android:padding="5dp"
@@ -163,7 +168,7 @@
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:gravity=""
             android:hint="Enter your serving"
             android:padding="5dp"

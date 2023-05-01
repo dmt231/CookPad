@@ -33,6 +33,6 @@ public class SearchFragmentViewModel extends ViewModel {
                 }
             }
         });
-        database.getDataByIngredients(i1, i2, ingredient);
+        database.getFoodByIngredients(i1, i2, ingredient);
     }
 }

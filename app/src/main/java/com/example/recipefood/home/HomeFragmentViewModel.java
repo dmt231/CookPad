@@ -34,6 +34,6 @@ public class HomeFragmentViewModel extends ViewModel {
                 }
             }
         });
-        database.getDataFromFirestore(i1, i2);
+        database.getFoodFromFirestore(i1, i2);
     }
 }
