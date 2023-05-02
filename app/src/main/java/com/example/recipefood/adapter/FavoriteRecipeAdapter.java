@@ -23,9 +23,9 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
     private List<RecipeFavorite> recipeList;
     private Detail_ClickListener_Favorite detail_clickListener_favorite;
 
-    public FavoriteRecipeAdapter(Activity mContext, List<RecipeFavorite> recipeList, Detail_ClickListener_Favorite detail_clickListener_favorite){
+    public FavoriteRecipeAdapter(Activity mContext, List<RecipeFavorite> foods, Detail_ClickListener_Favorite detail_clickListener_favorite) {
         this.mContext = mContext;
-        this.recipeList = recipeList;
+        this.recipeList = foods;
         this.detail_clickListener_favorite = detail_clickListener_favorite;
     }
 
@@ -43,7 +43,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
         holder.Ryc_textfavorite.setText(dataModel.getLikes() + " Likes");
         holder.time_cooking.setText(dataModel.getTime() + " Min");
         holder.Ryc_serving.setText(dataModel.getServing() + " Servings");
-        Picasso.get().load(dataModel.getImage()).into(holder.Ryc_Image_food);
+        Picasso.get().load(dataModel.getImages()).into(holder.Ryc_Image_food);
         holder.Ryc_Image_food.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,14 +56,17 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
     public int getItemCount() {
         return recipeList.size();
     }
-    public interface  Detail_ClickListener_Favorite{
+
+    public interface Detail_ClickListener_Favorite {
         void OnClickRecipe(RecipeFavorite recipeFavorite);
     }
 }
-class ViewHolderFavorite extends RecyclerView.ViewHolder{
+
+class ViewHolderFavorite extends RecyclerView.ViewHolder {
     CardView Ryc_CardView;
     TextView Ryc_TextView_title, Ryc_textfavorite, time_cooking, Ryc_serving;
     ImageView Ryc_Image_food;
+
     public ViewHolderFavorite(@NonNull View itemView) {
         super(itemView);
         Ryc_CardView = itemView.findViewById(R.id.Ryc_CardView);

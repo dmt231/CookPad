@@ -35,16 +35,6 @@
                     android:textColor="#ff9f43"
                     android:textSize="24sp"
                     android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnlogout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/foodtitle"
-                    android:layout_marginLeft="282dp"
-                    android:text="Logout"
-                    android:textAllCaps="false"/>
-
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 

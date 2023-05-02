@@ -1,10 +1,10 @@
 package com.example.recipefood.home;
+
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,20 +29,20 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
-    private Button btnLogout;
-    static int count = 0 ;
+    static int count = 0;
     RecyclerView recyclerView;
     private RandomRecipeRycAdapter randomRecipeRycAdapter;
     private List<RecipeInstrument> recipeList; //List các món ăn
 
-    //private Spinner spinner;
     ProgressDialog progressDialog;
 
     //khai bao homefragmentviewmodel
     private HomeFragmentViewModel homeFragmentViewModel;
+
     public HomeFragment() {
         // Required empty public constructor
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,58 +50,46 @@ public class HomeFragment extends Fragment {
 
         View views = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = views.findViewById(R.id.recyclerView);
-        btnLogout = views.findViewById(R.id.btnlogout);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
-        homeFragmentViewModel=new ViewModelProvider(this).get(HomeFragmentViewModel.class);
+        homeFragmentViewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         homeFragmentViewModel.getRecipeListLiveData(count, count + 10).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
             @Override
             public void onChanged(ArrayList<RecipeInstrument> listrecipe) {
-                if(listrecipe != null){
+                if (listrecipe != null) {
                     recipeList = listrecipe;
                     onSetUpRecyclerView();
                     progressDialog.dismiss();
-                }
-                else{
+                } else {
                     Toast.makeText(getActivity(), "Error connect", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
 
-
         recyclerView.addOnScrollListener(addRecipeToRyc);
-        btnLogout.setOnClickListener(evenLogout);
-
         return views;
 
     }
 
-    private final View.OnClickListener evenLogout = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            new Repository().deleteUser(getContext());
-            Toast.makeText(getContext(), "Logout user ", Toast.LENGTH_SHORT).show();
-        }
-    };
-    public void onSetUpRecyclerView(){
+    public void onSetUpRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         randomRecipeRycAdapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
-                        @Override
-                        public void OnClickRecipe(RecipeInstrument recipe) {
-                            Fragment detail_recipe = new DetailRecipe();
-                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+            @Override
+            public void OnClickRecipe(RecipeInstrument recipe) {
+                Fragment detail_recipe = new DetailRecipe();
+                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
 
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("recipe", recipe);
-                            detail_recipe.setArguments(bundle);
-                            fragmentTransaction.replace(R.id.fragment_home, detail_recipe);
-                            fragmentTransaction.addToBackStack(detail_recipe.getTag());
-                            fragmentTransaction.commit();
-                        }
-                    });
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("recipe", recipe);
+                detail_recipe.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_home, detail_recipe);
+                fragmentTransaction.addToBackStack(detail_recipe.getTag());
+                fragmentTransaction.commit();
+            }
+        });
         recyclerView.setAdapter(randomRecipeRycAdapter);
     }
 
@@ -114,12 +102,12 @@ public class HomeFragment extends Fragment {
                 int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 if (lastVisibleItemPosition == itemCount - 1) {
-                    if(count<=90){
-                        count+=10;
-                        homeFragmentViewModel.getRecipeListLiveData(count, count+10).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
+                    if (count <= 90) {
+                        count += 10;
+                        homeFragmentViewModel.getRecipeListLiveData(count, count + 10).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
                             @Override
                             public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
-                                if(recipeInstruments != null){
+                                if (recipeInstruments != null) {
                                     recipeList.addAll(recipeInstruments);
                                     randomRecipeRycAdapter.notifyDataSetChanged();
                                 }

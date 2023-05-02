@@ -1,6 +1,12 @@
 package com.example.recipefood.views;
 
+import static android.content.ContentValues.TAG;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +38,7 @@ public class DetailDownload extends Fragment {
 
     //Khai báo layout
     private ScrollView scrollView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,17 +52,17 @@ public class DetailDownload extends Fragment {
         ingredient = views.findViewById(R.id.recipe_ingredients_favorite);
         instructions = views.findViewById(R.id.recipe_instruction_favorite);
         scrollView = views.findViewById(R.id.layout_scrollview);
-        Bundle bundle  = getArguments();
-        if(bundle != null){
+        Bundle bundle = getArguments();
+        if (bundle != null) {
             recipe_favorite = (RecipeFavorite) bundle.get("recipe_favorite");
-            if(recipe_favorite != null){
-                Picasso.get().load(recipe_favorite.getImage()).into(img_recipe);
+            if (recipe_favorite != null) {
+                Picasso.get().load(recipe_favorite.getImages()).into(img_recipe);
                 title.setText(recipe_favorite.getName());
                 time_cooking.setText(String.valueOf(recipe_favorite.getTime()));
                 like.setText(String.valueOf(recipe_favorite.getLikes()));
                 serving.setText(String.valueOf(recipe_favorite.getServing()));
                 ingredient.setText(recipe_favorite.getIngredients());
-                instructions.setText(recipe_favorite.getInstruction());
+                instructions.setText(recipe_favorite.getInstructions());
             }
         }
         scrollView.setOnClickListener(new View.OnClickListener() {

@@ -2,7 +2,6 @@ package com.example.recipefood.login;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,7 @@ import com.example.recipefood.model.User;
 import java.util.ArrayList;
 
 public class SignUpFragment extends Fragment {
-    private EditText email,pass, username;
+    private EditText email, pass, username;
     private Button btnSignup;
 
     private Repository repository;
@@ -44,7 +43,7 @@ public class SignUpFragment extends Fragment {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkEmail() && checkUsername() && checkPassword()){
+                if (checkEmail() && checkUsername() && checkPassword()) {
                     progressDialog.show();
                     signUp();
                 }
@@ -52,90 +51,91 @@ public class SignUpFragment extends Fragment {
         });
         return view;
     }
-    public void signUp(){
 
-                progressDialog.show();
-                String usernameValue = username.getText().toString();
-                String emailValue = email.getText().toString();
-                String password = pass.getText().toString();
+    public void signUp() {
 
-                repository.checkUserExist(new Repository.OnUserExistListener() {
-                    @Override
-                    public void onUserExist(boolean exists) {
-                        if(!exists){
-                            progressDialog.dismiss();
-                            repository.Register(usernameValue, emailValue, password);
-                            customToast("Thêm Thành Công");
-                        }
-                        else if(exists){
+        progressDialog.show();
+        String usernameValue = username.getText().toString();
+        String emailValue = email.getText().toString();
+        String password = pass.getText().toString();
 
+        repository.checkUserExist(new Repository.OnUserExistListener() {
+            @Override
+            public void onUserExist(boolean exists) {
+                if (!exists) {
+                    progressDialog.dismiss();
+                    repository.Register(usernameValue, emailValue, password);
+                    customToast("Thêm Thành Công");
+                } else if (exists) {
+
+                }
+            }
+        });
+
+
+        viewModelSignUpLogin.getListUser().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
+            @Override
+            public void onChanged(ArrayList<User> users) {
+                if (users != null) {
+                    progressDialog.dismiss();
+                    boolean exists = false;
+                    for (User user : users) {
+                        if (user.getUsername().equals(usernameValue) || user.getEmail().equals(emailValue)) {
+                            exists = true;
+                            customToast("Người dùng đã tồn tại");
+                            break;
                         }
                     }
-                });
-
-
-                viewModelSignUpLogin.getListUser().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
-                    @Override
-                    public void onChanged(ArrayList<User> users) {
-                        if (users != null) {
-                                progressDialog.dismiss();
-                                boolean exists = false;
-                                for (User user : users) {
-                                    if (user.getUsername().equals(usernameValue) || user.getEmail().equals(emailValue)) {
-                                        exists = true;
-                                        customToast("Người dùng đã tồn tại");
-                                        break;
-                                    }
-                                }
-                                if (!exists) {
-                                    repository.Register(usernameValue, emailValue, password);
-                                    customToast("Thêm Thành Công");
-                                }
-                            }
+                    if (!exists) {
+                        repository.Register(usernameValue, emailValue, password);
+                        customToast("Thêm Thành Công");
                     }
-                });
+                }
+            }
+        });
     }
-    public void customToast(String message){
+
+    public void customToast(String message) {
         Toast toast = new Toast(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View view_inflate = inflater.inflate(R.layout.layout_custom_toast, getActivity().findViewById(R.id.custom_toast));
         TextView text_message = view_inflate.findViewById(R.id.text_toast);
         text_message.setText(message);
         toast.setView(view_inflate);
-        toast.setGravity(Gravity.BOTTOM, 0,25);
+        toast.setGravity(Gravity.BOTTOM, 0, 25);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
     }
-    public boolean checkUsername(){
+
+    public boolean checkUsername() {
         boolean check = true;
-        if(username.getText().toString().length() == 0){
+        if (username.getText().toString().length() == 0) {
             username.setError("Vui lòng điền tên đăng nhập");
             check = false;
-        }
-        else if(username.getText().length()<6){
+        } else if (username.getText().length() < 6) {
             username.setError("Tên đăng nhập phải có tối thiểu 6 ký tự");
-            check =false;
+            check = false;
         }
         return check;
     }
-    public boolean checkPassword(){
+
+    public boolean checkPassword() {
         boolean check = true;
-        if(pass.getText().toString().length() == 0){
+        if (pass.getText().toString().length() == 0) {
             pass.setError("Vui lòng nhập mật khẩu");
             check = false;
-        }
-        else if(pass.getText().length() < 6 || !pass.getText().toString().matches(".*[A-Z].*")){
+        } else if (pass.getText().length() < 6 || !pass.getText().toString().matches(".*[A-Z].*")) {
             pass.setError("Mật khẩu phải có ít nhất 6 ký tự, bao gồm ít nhất 1 chữ cái viết hoa");
             check = false;
         }
         return check;
     }
-    public boolean checkEmail(){
+
+    public boolean checkEmail() {
         boolean check = true;
-        if(email.getText().toString().length() == 0) {
+        if (email.getText().toString().length() == 0) {
             email.setError("Vui lòng nhập địa chỉ email");
-        }
-        else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches()){
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches()) {
             email.setError("Địa chỉ email không hợp lệ");
             check = false;
         }

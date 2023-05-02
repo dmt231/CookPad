@@ -12,6 +12,7 @@ import com.example.recipefood.model.Repository;
 
 public class splash extends AppCompatActivity {
     private final int DELAY_TIME = 1500;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,10 +20,10 @@ public class splash extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             int id = new Repository().checkLogged(this);
-            if (id == -1){
+            if (id == -1) {
                 Intent intent = new Intent(splash.this, MainActivity.class);
                 startActivity(intent);
-            }else {
+            } else {
                 Intent intent = new Intent(splash.this, MainActivity.class);
                 intent.putExtra("UserId", id);
                 startActivity(intent);

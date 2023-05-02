@@ -1,6 +1,5 @@
 package com.example.recipefood.adapter;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +16,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class RandomRecipeRycAdapter extends RecyclerView.Adapter<ViewHolder>{
+public class RandomRecipeRycAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<RecipeInstrument> recipeList;
 
     private Detail_ClickListener DetailClickListener;
 
 
-    public interface  Detail_ClickListener{
+    public interface Detail_ClickListener {
         void OnClickRecipe(RecipeInstrument recipe);
     }
+
     public RandomRecipeRycAdapter(List<RecipeInstrument> recipeList, Detail_ClickListener detail_clickListener) {
         this.recipeList = recipeList;
         this.DetailClickListener = detail_clickListener;
@@ -63,10 +63,11 @@ public class RandomRecipeRycAdapter extends RecyclerView.Adapter<ViewHolder>{
     }
 }
 
-class ViewHolder extends RecyclerView.ViewHolder{
+class ViewHolder extends RecyclerView.ViewHolder {
     CardView Ryc_CardView;
     TextView Ryc_TextView_title, Ryc_textFavorite, time_cooking, Ryc_serving;
     ImageView Ryc_Image_food;
+
     public ViewHolder(@NonNull View itemView) {
         super(itemView);
         Ryc_CardView = itemView.findViewById(R.id.Ryc_CardView);

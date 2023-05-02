@@ -15,22 +15,23 @@ public class FragmentAdapterViews extends FragmentStatePagerAdapter {
 
     String username;
     long id;
+
     public FragmentAdapterViews(@NonNull FragmentManager fm, int behavior, long id) {
         super(fm, behavior);
-        this.id =id;
+        this.id = id;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return new HomeFragment();
             case 1:
                 return new SearchFragment();
             case 2:
                 return new RecipeFragment();
-            case 3 :
+            case 3:
                 return new UserFragment(id);
         }
         return new HomeFragment();

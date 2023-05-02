@@ -14,11 +14,6 @@ public class RecipeInstrument implements Serializable {
     private String sourceName;
     private String sourceUrl;
     private String spoonacularSourceUrl;
-
-    public int getUserid() {
-        return Userid;
-    }
-
     private int Userid;
 
     public RecipeInstrument(int id, String name, String ingredients, String instructions, String images, int likes, int serving, int time, String sourceName, String sourceUrl, String spoonacularSourceUrl, int Userid) {
@@ -122,5 +117,13 @@ public class RecipeInstrument implements Serializable {
 
     public void setSpoonacularSourceUrl(String spoonacularSourceUrl) {
         this.spoonacularSourceUrl = spoonacularSourceUrl;
+    }
+
+    public int getUserid() {
+        return Userid;
+    }
+
+    public void setUserid(int userid) {
+        this.Userid = userid;
     }
 }

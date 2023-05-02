@@ -36,6 +36,7 @@ public class CreateRecipe extends Fragment {
     private int id;
 
     private Repository repository;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View views = inflater.inflate(R.layout.layout_add_new_recipe, container, false);
@@ -59,7 +60,7 @@ public class CreateRecipe extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getFragmentManager() != null){
+                if (getFragmentManager() != null) {
                     getFragmentManager().popBackStack();
                 }
             }
@@ -72,14 +73,16 @@ public class CreateRecipe extends Fragment {
         });
         return views;
     }
-    public void getUserId(){
+
+    public void getUserId() {
         Bundle bundle = getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             id = (int) bundle.get("Userid");
             Log.d("Id Create : ", id + "");
         }
     }
-    public void addNewRecipe(){
+
+    public void addNewRecipe() {
         String image = linkImage.getText().toString();
         String name = recipeName.getText().toString();
         String ingredientsValue = ingredients.getText().toString();
@@ -87,7 +90,7 @@ public class CreateRecipe extends Fragment {
         int timeValue = Integer.parseInt(time.getText().toString());
         int servingValue = Integer.parseInt(serving.getText().toString());
         RecipeInstrument recipeInstrument = new RecipeInstrument(-1, name, ingredientsValue, instructionsValue, image, 0, servingValue,
-                                                                    timeValue, "" , "", "",id );
+                timeValue, "", "", "", id);
         repository.addRecipe(recipeInstrument, new Repository.onAddSuccess() {
             @Override
             public void onSuccess() {
@@ -95,6 +98,7 @@ public class CreateRecipe extends Fragment {
             }
         });
     }
+
     public void customToast(String message) {
         Toast toast = new Toast(getActivity());
         LayoutInflater inflater = getLayoutInflater();

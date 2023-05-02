@@ -26,9 +26,10 @@ public class MainFragment extends Fragment {
     private long id;
 
 
-    public MainFragment(long id){
+    public MainFragment(long id) {
         this.id = id;
     }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -42,11 +43,13 @@ public class MainFragment extends Fragment {
         Init();
         return view;
     }
-    public void Init(){
+
+    public void Init() {
         setupViewPager();
 
     }
-    public void setupViewPager(){
+
+    public void setupViewPager() {
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -55,7 +58,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         bottomBar.getMenu().findItem(R.id.home_recipe).setChecked(true);
                         break;
@@ -65,7 +68,7 @@ public class MainFragment extends Fragment {
                     case 2:
                         bottomBar.getMenu().findItem(R.id.recipe).setChecked(true);
                         break;
-                    case 3 :
+                    case 3:
                         bottomBar.getMenu().findItem(R.id.user).setChecked(true);
                 }
             }
@@ -79,7 +82,7 @@ public class MainFragment extends Fragment {
         bottomBar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.home_recipe:
                         viewpager.setCurrentItem(0);
                         return true;

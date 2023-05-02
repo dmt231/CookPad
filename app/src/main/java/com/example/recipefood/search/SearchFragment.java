@@ -2,7 +2,6 @@ package com.example.recipefood.search;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +17,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.recipefood.MainActivity;
 import com.example.recipefood.R;
 import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.model.RecipeInstrument;
-import com.example.recipefood.model.Repository;
 import com.example.recipefood.views.DetailRecipe;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchFragment extends Fragment {
     private static int count = 0;
@@ -42,6 +38,7 @@ public class SearchFragment extends Fragment {
     public SearchFragment() {
         // Required empty public constructor
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,22 +52,22 @@ public class SearchFragment extends Fragment {
         recyclerView.addOnScrollListener(addRecipeToRyc);
         return view;
     }
-    public void getSearch(){
+
+    public void getSearch() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 progressDialog.show();
                 ingredient = query;
-                searchFragmentViewModel.getRecipeListLiveData(count, count +10, ingredient).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
+                searchFragmentViewModel.getRecipeListLiveData(count, count + 10, ingredient).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
                     @Override
                     public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
-                        if(recipeInstruments != null){
+                        if (recipeInstruments != null) {
                             progressDialog.dismiss();
                             recipeList = recipeInstruments;
                             onSetUpRecyclerView();
 
-                        }
-                        else{
+                        } else {
                             Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -84,7 +81,8 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-    public void onSetUpRecyclerView(){
+
+    public void onSetUpRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
         randomRecipeRycAdapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
@@ -104,6 +102,7 @@ public class SearchFragment extends Fragment {
         });
         recyclerView.setAdapter(randomRecipeRycAdapter);
     }
+
     private RecyclerView.OnScrollListener addRecipeToRyc = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -113,12 +112,12 @@ public class SearchFragment extends Fragment {
                 int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 if (lastVisibleItemPosition == itemCount - 1) {
-                    if(count<=90){
-                        count+=10;
-                        searchFragmentViewModel.getRecipeListLiveData(count, count+10, ingredient ).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
+                    if (count <= 90) {
+                        count += 10;
+                        searchFragmentViewModel.getRecipeListLiveData(count, count + 10, ingredient).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
                             @Override
                             public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
-                                if(recipeInstruments != null){
+                                if (recipeInstruments != null) {
                                     recipeList.addAll(recipeInstruments);
                                     randomRecipeRycAdapter.notifyDataSetChanged();
                                 }

@@ -116,7 +116,8 @@ public class Repository {
                     }
                 });
     }
-    public void addRecipe(RecipeInstrument recipe, onAddSuccess addSuccess){
+
+    public void addRecipe(RecipeInstrument recipe, onAddSuccess addSuccess) {
         CollectionReference ref = firestore.collection("foods");
         Map<String, Object> food = new HashMap<>();
         food.put("foodImage", recipe.getImages());
@@ -125,7 +126,7 @@ public class Repository {
         food.put("ingredients", recipe.getIngredients());
         food.put("instructions", recipe.getInstructions());
         food.put("serving", recipe.getServing());
-        food.put("time",recipe.getTime());
+        food.put("time", recipe.getTime());
         food.put("sourcefoodName", recipe.getSourceName());
         food.put("sourcefoodUrl", recipe.getSourceUrl());
         food.put("spoonacularSourceUrl", recipe.getSpoonacularSourceUrl());
@@ -135,7 +136,7 @@ public class Repository {
             if (!queryDocumentSnapshots.isEmpty()) {
                 // Nếu có tài liệu, tìm giá trị UserId lớn nhất
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    int foodId =  documentSnapshot.get("foodId", Integer.class);
+                    int foodId = documentSnapshot.get("foodId", Integer.class);
                     if (foodId > newFoodId) {
                         newFoodId = foodId;
                     }
@@ -154,11 +155,10 @@ public class Repository {
         });
 
     }
-    public interface onAddSuccess{
+
+    public interface onAddSuccess {
         void onSuccess();
     }
-
-
 
 
     //User
@@ -219,7 +219,8 @@ public class Repository {
                     }
                 });
     }
-    public void getUserLogin(long id){
+
+    public void getUserLogin(long id) {
         firestore.collection("User")
                 .orderBy("userId")
                 .get()
@@ -233,7 +234,7 @@ public class Repository {
                                 String email = documentSnapshot.getString("email");
                                 String password = documentSnapshot.getString("password");
                                 long idUser = documentSnapshot.get("userId", Long.class);
-                                if(idUser == id) {
+                                if (idUser == id) {
                                     User user = new User(username, password, email, idUser);
                                     Log.d("User", user.getUsername() + user.getEmail() + user.getUserId());
                                     listUser.add(user);
@@ -266,7 +267,6 @@ public class Repository {
     }
 
 
-
     // remember user and delete user
     public int checkLogged(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("login", Context.MODE_PRIVATE);
@@ -286,5 +286,4 @@ public class Repository {
         editor.putInt("userId", id);
         editor.apply();
     }
-
 }
