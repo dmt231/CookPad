@@ -21,6 +21,7 @@ import com.example.recipefood.R;
 import com.example.recipefood.login.ViewModelSignUpLogin;
 import com.example.recipefood.model.User;
 import com.example.recipefood.user.create.CreateRecipe;
+import com.example.recipefood.user.userrecipe.myFood;
 
 import java.util.ArrayList;
 
@@ -55,6 +56,12 @@ public class UserFragment extends Fragment {
                 onChangedToCreate();
             }
         });
+        myFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onChangedToMyFood();
+            }
+        });
         return view;
     }
     public void setDataAccount(){
@@ -82,5 +89,14 @@ public class UserFragment extends Fragment {
         fragmentTransaction.addToBackStack(create.getTag());
         fragmentTransaction.commit();
     }
-
+    public void onChangedToMyFood(){
+        Fragment myFood = new myFood();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putInt("Userid", (int)id);
+        myFood.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragment_container, myFood);
+        fragmentTransaction.addToBackStack(myFood.getTag());
+        fragmentTransaction.commit();
+    }
 }

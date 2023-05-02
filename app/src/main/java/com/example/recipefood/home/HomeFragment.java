@@ -68,8 +68,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-
         recyclerView.addOnScrollListener(addRecipeToRyc);
         btnLogout.setOnClickListener(evenLogout);
 

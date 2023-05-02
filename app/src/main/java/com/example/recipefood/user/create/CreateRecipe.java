@@ -16,13 +16,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.recipefood.R;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
+import com.example.recipefood.user.userrecipe.myFood;
 
 public class CreateRecipe extends Fragment {
-
     private ScrollView scrollView;
     private ImageButton back;
     private EditText linkImage;
@@ -36,6 +37,8 @@ public class CreateRecipe extends Fragment {
     private int id;
 
     private Repository repository;
+    private RecipeInstrument foodRecipe;
+    private int state = 0;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View views = inflater.inflate(R.layout.layout_add_new_recipe, container, false);
@@ -67,7 +70,11 @@ public class CreateRecipe extends Fragment {
         Post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNewRecipe();
+                if(state == 0){
+                    addNewRecipe();
+                }else{
+                    updateRecipe();
+                }
             }
         });
         return views;
@@ -77,6 +84,17 @@ public class CreateRecipe extends Fragment {
         if(bundle != null){
             id = (int) bundle.get("Userid");
             Log.d("Id Create : ", id + "");
+            foodRecipe = (RecipeInstrument) bundle.get("recipeEdit");
+            if(foodRecipe != null){
+                state = 1;
+                Log.d("Food Exists :",foodRecipe.getId() + foodRecipe.getName() + foodRecipe.getIngredients() + foodRecipe.getInstructions());
+                recipeName.setText(foodRecipe.getName());
+                linkImage.setText(foodRecipe.getImages());
+                ingredients.setText(foodRecipe.getIngredients());
+                instructions.setText(foodRecipe.getInstructions());
+                time.setText(String.valueOf(foodRecipe.getTime()));
+                serving.setText(String.valueOf(foodRecipe.getServing()));
+            }
         }
     }
     public void addNewRecipe(){
@@ -88,10 +106,34 @@ public class CreateRecipe extends Fragment {
         int servingValue = Integer.parseInt(serving.getText().toString());
         RecipeInstrument recipeInstrument = new RecipeInstrument(-1, name, ingredientsValue, instructionsValue, image, 0, servingValue,
                                                                     timeValue, "" , "", "",id );
-        repository.addRecipe(recipeInstrument, new Repository.onAddSuccess() {
+        repository.addRecipe(recipeInstrument, new Repository.onSuccess() {
             @Override
-            public void onSuccess() {
+            public void onAddSuccess() {
                 customToast("Add Successfully ! ");
+            }
+
+            @Override
+            public void onUpdateSuccess() {
+
+            }
+        });
+    }
+    public void updateRecipe(){
+        String image = linkImage.getText().toString();
+        String name = recipeName.getText().toString();
+        String ingredientsValue = ingredients.getText().toString();
+        String instructionsValue = instructions.getText().toString();
+        int timeValue = Integer.parseInt(time.getText().toString());
+        int servingValue = Integer.parseInt(serving.getText().toString());
+        repository.updateRecipe(foodRecipe.getId(), image, name, ingredientsValue, instructionsValue, timeValue, servingValue, new Repository.onSuccess() {
+            @Override
+            public void onAddSuccess() {
+
+            }
+
+            @Override
+            public void onUpdateSuccess() {
+                customToast("Update Successfully !");
             }
         });
     }
