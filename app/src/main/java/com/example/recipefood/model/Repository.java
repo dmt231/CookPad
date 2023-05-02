@@ -8,9 +8,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -117,7 +121,45 @@ public class Repository {
                 });
     }
 
-    public void addRecipe(RecipeInstrument recipe, onAddSuccess addSuccess) {
+    public void getFoodByUser(int userid){
+        firestore.collection("foods")
+                .whereEqualTo("userId",userid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<RecipeInstrument> listRecipe = new ArrayList<>();
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                int id = documentSnapshot.get("foodId", Integer.class);
+                                String name = documentSnapshot.getString("foodName");
+                                String ingredients = documentSnapshot.getString("ingredients");
+                                String instructions = documentSnapshot.getString("instructions");
+                                String image = documentSnapshot.getString("foodImage");
+                                int times = documentSnapshot.get("time", Integer.class);
+                                int likes = documentSnapshot.get("foodLikes", Integer.class);
+                                int serving = documentSnapshot.get("serving", Integer.class);
+                                String sourceName = documentSnapshot.getString("sourcefoodName");
+                                String sourceUrl = documentSnapshot.getString("sourcefoodUrl");
+                                String spoon = documentSnapshot.getString("spoonacularSourceUrl");
+                                int Userid = documentSnapshot.get("userId", Integer.class);
+
+                                Log.d("Object : ", name + String.valueOf(id));
+                                RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon, Userid);
+                                listRecipe.add(recipeInstrument);
+                            }
+                            recipeListLiveData.setValue(listRecipe);
+
+                        } else {
+                            recipeListLiveData.setValue(new ArrayList<>());
+                            Log.d("Info : ", "Error getting documents: ", task.getException());
+                        }
+
+                    }
+                });
+    }
+
+    public void addRecipe(RecipeInstrument recipe, onSuccess addSuccess){
         CollectionReference ref = firestore.collection("foods");
         Map<String, Object> food = new HashMap<>();
         food.put("foodImage", recipe.getImages());
@@ -126,7 +168,7 @@ public class Repository {
         food.put("ingredients", recipe.getIngredients());
         food.put("instructions", recipe.getInstructions());
         food.put("serving", recipe.getServing());
-        food.put("time", recipe.getTime());
+        food.put("time",recipe.getTime());
         food.put("sourcefoodName", recipe.getSourceName());
         food.put("sourcefoodUrl", recipe.getSourceUrl());
         food.put("spoonacularSourceUrl", recipe.getSpoonacularSourceUrl());
@@ -136,7 +178,7 @@ public class Repository {
             if (!queryDocumentSnapshots.isEmpty()) {
                 // Nếu có tài liệu, tìm giá trị UserId lớn nhất
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    int foodId = documentSnapshot.get("foodId", Integer.class);
+                    int foodId =  documentSnapshot.get("foodId", Integer.class);
                     if (foodId > newFoodId) {
                         newFoodId = foodId;
                     }
@@ -149,16 +191,60 @@ public class Repository {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     Log.d("Info : ", "Add Success");
-                    addSuccess.onSuccess();
+                    addSuccess.onAddSuccess();
                 }
             });
         });
 
     }
-
-    public interface onAddSuccess {
-        void onSuccess();
+    public interface onSuccess {
+        void onAddSuccess();
+        void onUpdateSuccess();
     }
+
+    public void updateRecipe(int foodId, String image, String name, String ingredients, String instructions,
+                             int time, int serving, onSuccess success){
+        CollectionReference ref = firestore.collection("foods");
+        Query query = ref.whereEqualTo("foodId", foodId);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                    documentSnapshot.getReference().update("foodImage", image);
+                    documentSnapshot.getReference().update("foodName", name);
+                    documentSnapshot.getReference().update("ingredients", ingredients);
+                    documentSnapshot.getReference().update("instructions", instructions);
+                    documentSnapshot.getReference().update("time", time);
+                    documentSnapshot.getReference().update("serving", serving);
+                }
+                success.onUpdateSuccess();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Error: ", "Fail to update");
+            }
+        });
+    }
+
+    public void deleteRecipe(int foodId){
+        CollectionReference ref = firestore.collection("foods");
+        Query query = ref.whereEqualTo("foodId", foodId);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()){
+                    documentSnapshot.getReference().delete();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Info Delete : ", "Fail to Delete");
+            }
+        });
+    }
+
 
 
     //User
@@ -219,8 +305,7 @@ public class Repository {
                     }
                 });
     }
-
-    public void getUserLogin(long id) {
+    public void getUserLogin(long id){
         firestore.collection("User")
                 .orderBy("userId")
                 .get()
@@ -234,7 +319,7 @@ public class Repository {
                                 String email = documentSnapshot.getString("email");
                                 String password = documentSnapshot.getString("password");
                                 long idUser = documentSnapshot.get("userId", Long.class);
-                                if (idUser == id) {
+                                if(idUser == id) {
                                     User user = new User(username, password, email, idUser);
                                     Log.d("User", user.getUsername() + user.getEmail() + user.getUserId());
                                     listUser.add(user);
@@ -267,6 +352,7 @@ public class Repository {
     }
 
 
+
     // remember user and delete user
     public int checkLogged(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("login", Context.MODE_PRIVATE);
@@ -286,4 +372,5 @@ public class Repository {
         editor.putInt("userId", id);
         editor.apply();
     }
+
 }

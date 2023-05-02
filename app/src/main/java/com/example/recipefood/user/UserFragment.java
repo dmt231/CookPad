@@ -26,6 +26,7 @@ import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.User;
 import com.example.recipefood.splash.splash;
 import com.example.recipefood.user.create.CreateRecipe;
+import com.example.recipefood.user.userrecipe.myFood;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -39,17 +40,15 @@ public class UserFragment extends Fragment {
     private TextView SignOut;
     private ViewModelSignUpLogin viewModel;
     private long id;
-
-    public UserFragment(long id) {
+    public UserFragment(long id){
         this.id = id;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user, container, false);
-        Log.d("ID User Fragment : ", id + "");
+        Log.d("ID User Fragment : " , id + "");
         username = view.findViewById(R.id.account_username);
         email = view.findViewById(R.id.account_email);
         favorite = view.findViewById(R.id.account_favorite);
@@ -73,17 +72,21 @@ public class UserFragment extends Fragment {
                 onChangedToCreate();
             }
         });
+        myFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onChangedToMyFood();
+            }
+        });
         return view;
-
     }
-
-    public void setDataAccount() {
+    public void setDataAccount(){
         viewModel.getUserAccount(id).observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                for (User user : users) {
+                for (User user : users ) {
                     Log.d("Info User 1 : ", user.getUsername());
-                    if (user.getUserId() == id) {
+                    if(user.getUserId()==id){
                         username.setText(user.getUsername());
                         email.setText(user.getEmail());
                         break;
@@ -92,15 +95,24 @@ public class UserFragment extends Fragment {
             }
         });
     }
-
-    public void onChangedToCreate() {
+    public void onChangedToCreate(){
         Fragment create = new CreateRecipe();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
-        bundle.putInt("Userid", (int) id);
+        bundle.putInt("Userid", (int)id);
         create.setArguments(bundle);
         fragmentTransaction.replace(R.id.fragment_container, create);
         fragmentTransaction.addToBackStack(create.getTag());
+        fragmentTransaction.commit();
+    }
+    public void onChangedToMyFood(){
+        Fragment myFood = new myFood();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putInt("Userid", (int)id);
+        myFood.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragment_container, myFood);
+        fragmentTransaction.addToBackStack(myFood.getTag());
         fragmentTransaction.commit();
     }
     // Sign Out accout

@@ -13,7 +13,29 @@ import java.util.ArrayList;
 
 public class HomeFragmentViewModel extends ViewModel {
     public MutableLiveData<ArrayList<RecipeInstrument>> recipeListLiveData;
+
+    public MutableLiveData<ArrayList<RecipeInstrument>> recipeListByUser;
     private Repository database;
+
+
+    public MutableLiveData<ArrayList<RecipeInstrument>> getRecipeListByUser(int userId) {
+        recipeListByUser = new MutableLiveData<>();
+        database = new Repository();
+        loadDataByUser(userId);
+        return recipeListByUser;
+    }
+
+    public void loadDataByUser(int userId){
+        database.getRecipeListLiveData().observeForever(new Observer<ArrayList<RecipeInstrument>>() {
+            @Override
+            public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
+                if (recipeInstruments != null && !recipeInstruments.isEmpty()) {
+                    recipeListByUser.setValue(recipeInstruments);
+                }
+            }
+        });
+        database.getFoodByUser(userId);
+    }
 
 
     public LiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData(int i1, int i2) {
@@ -36,4 +58,6 @@ public class HomeFragmentViewModel extends ViewModel {
         });
         database.getFoodFromFirestore(i1, i2);
     }
+
+
 }
