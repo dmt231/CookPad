@@ -38,9 +38,11 @@ public class HomeFragment extends Fragment {
 
     //khai bao homefragmentviewmodel
     private HomeFragmentViewModel homeFragmentViewModel;
+    private long userId;
 
-    public HomeFragment() {
+    public HomeFragment(long userId) {
         // Required empty public constructor
+        this.userId = userId;
     }
 
     @Override
@@ -84,6 +86,7 @@ public class HomeFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("recipe", recipe);
+                bundle.putInt("Userid", (int)userId);
                 detail_recipe.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_home, detail_recipe);
                 fragmentTransaction.addToBackStack(detail_recipe.getTag());

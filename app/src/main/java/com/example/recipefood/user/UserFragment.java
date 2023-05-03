@@ -26,6 +26,7 @@ import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.User;
 import com.example.recipefood.splash.splash;
 import com.example.recipefood.user.create.CreateRecipe;
+import com.example.recipefood.user.userfavorite.FavoriteRecipe;
 import com.example.recipefood.user.userrecipe.myFood;
 
 import java.util.ArrayList;
@@ -78,6 +79,12 @@ public class UserFragment extends Fragment {
                 onChangedToMyFood();
             }
         });
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onChangedToLikeFood();
+            }
+        });
         return view;
     }
     public void setDataAccount(){
@@ -123,4 +130,14 @@ public class UserFragment extends Fragment {
             Toast.makeText(getContext(), "Logout user ", Toast.LENGTH_SHORT).show();
         }
     };
+    public void onChangedToLikeFood(){
+        Fragment likeFood = new FavoriteRecipe();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putInt("Userid", (int)id);
+        likeFood.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragment_container, likeFood);
+        fragmentTransaction.addToBackStack(likeFood.getTag());
+        fragmentTransaction.commit();
+    }
 }

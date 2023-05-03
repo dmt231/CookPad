@@ -15,7 +15,28 @@ public class HomeFragmentViewModel extends ViewModel {
     public MutableLiveData<ArrayList<RecipeInstrument>> recipeListLiveData;
 
     public MutableLiveData<ArrayList<RecipeInstrument>> recipeListByUser;
+
+    public MutableLiveData<ArrayList<RecipeInstrument>> favoriteList;
     private Repository database;
+
+    public MutableLiveData<ArrayList<RecipeInstrument>> getFavoriteList(int userId) {
+        favoriteList = new MutableLiveData<>();
+        database = new Repository();
+        loadFavorite(userId);
+        return favoriteList;
+    }
+    public void loadFavorite(int userId){
+        database.getRecipeListLiveData().observeForever(new Observer<ArrayList<RecipeInstrument>>() {
+            @Override
+            public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
+                if(!recipeInstruments.isEmpty() && recipeInstruments != null){
+                    favoriteList.setValue(recipeInstruments);
+                }
+            }
+        });
+        database.getAllFoodFavorite(userId);
+    }
+
 
 
     public MutableLiveData<ArrayList<RecipeInstrument>> getRecipeListByUser(int userId) {

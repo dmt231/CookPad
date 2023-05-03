@@ -67,7 +67,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
                             FoodsDatabase.getInstance(v.getContext()).recipeDao().deleteFavorite(dataModel);
                             recipeList.remove(dataModel);
                             notifyDataSetChanged();
-                            Toast.makeText(mContext, "Delete Successfully", Toast.LENGTH_SHORT).show();
+                            customToast("Delete Successfully");
                         })
                         .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.cancel())
                         .show();
@@ -83,6 +83,17 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
 
     public interface Detail_ClickListener_Favorite {
         void OnClickRecipe(RecipeFavorite recipeFavorite);
+    }
+    public void customToast(String message) {
+        Toast toast = new Toast(mContext);
+        LayoutInflater inflater = mContext.getLayoutInflater();
+        View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mContext.findViewById(R.id.custom_toast));
+        TextView text_message = view_inflate.findViewById(R.id.text_toast);
+        text_message.setText(message);
+        toast.setView(view_inflate);
+        toast.setGravity(Gravity.BOTTOM, 0, 25);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.show();
     }
 }
 
