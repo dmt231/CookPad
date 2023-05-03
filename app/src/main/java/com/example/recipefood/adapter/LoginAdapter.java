@@ -11,17 +11,19 @@ import com.example.recipefood.login.SignUpFragment;
 
 public class LoginAdapter extends FragmentStateAdapter {
     private static final int NUM_PAGES = 2;
-    public LoginAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle ) {
-        super(fragmentManager,lifecycle);
+
+    public LoginAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+        super(fragmentManager, lifecycle);
 
     }
+
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch(position){
-            case 0 :
+        switch (position) {
+            case 0:
                 return new LoginPageFragment();
-            case 1 :
+            case 1:
                 return new SignUpFragment();
         }
 

@@ -1,7 +1,9 @@
 package com.example.recipefood.adapter;
 
 import android.app.Activity;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -61,9 +63,13 @@ public class RandomRecipeRycAdapter extends RecyclerView.Adapter<ViewHolder>{
 
         return recipeList.size();
     }
+    public void removeItem(int position){
+        recipeList.remove(position);
+        notifyDataSetChanged();
+    }
 }
 
-class ViewHolder extends RecyclerView.ViewHolder{
+class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
     CardView Ryc_CardView;
     TextView Ryc_TextView_title, Ryc_textFavorite, time_cooking, Ryc_serving;
     ImageView Ryc_Image_food;
@@ -75,5 +81,13 @@ class ViewHolder extends RecyclerView.ViewHolder{
         Ryc_Image_food = itemView.findViewById(R.id.Ryc_Image_food);
         time_cooking = itemView.findViewById(R.id.time_cooking);
         Ryc_serving = itemView.findViewById(R.id.Ryc_serving);
+        Ryc_CardView.setOnCreateContextMenuListener(this);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+        contextMenu.setHeaderTitle("Select Option");
+        contextMenu.add(getAdapterPosition(), 101,0,"Edit");
+        contextMenu.add(getAdapterPosition(), 102, 1, "Delete");
     }
 }

@@ -15,7 +15,7 @@ public class SearchFragmentViewModel extends ViewModel {
     private Repository database;
 
 
-    public LiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData(int i1, int i2 , String ingredient) {
+    public LiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData(int i1, int i2, String ingredient) {
 
         recipeListLiveData = new MutableLiveData<>();
         database = new Repository();
@@ -24,7 +24,7 @@ public class SearchFragmentViewModel extends ViewModel {
     }
 
 
-    private void loadData(int i1, int i2, String ingredient ) {
+    private void loadData(int i1, int i2, String ingredient) {
         database.getRecipeListLiveData().observeForever(new Observer<ArrayList<RecipeInstrument>>() {
             @Override
             public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
@@ -33,6 +33,6 @@ public class SearchFragmentViewModel extends ViewModel {
                 }
             }
         });
-        database.getDataByIngredients(i1, i2, ingredient);
+        database.getFoodByIngredients(i1, i2, ingredient);
     }
 }

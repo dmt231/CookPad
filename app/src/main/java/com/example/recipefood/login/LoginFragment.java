@@ -15,20 +15,19 @@ import com.google.android.material.tabs.TabLayout;
 public class LoginFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
-    float v =0;
+    float v = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmentlogin, container, false);
         tabLayout = view.findViewById(R.id.tabLayoutLogin);
-        viewPager2 =(ViewPager2) view.findViewById(R.id.viewPagerLogin);
+        viewPager2 = (ViewPager2) view.findViewById(R.id.viewPagerLogin);
 
         tabLayout.addTab(tabLayout.newTab().setText("LOGIN"));
         tabLayout.addTab(tabLayout.newTab().setText("SIGN UP"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         LoginAdapter adapter = new LoginAdapter(getActivity().getSupportFragmentManager(), getLifecycle());
         viewPager2.setAdapter(adapter);
-
 
 
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
