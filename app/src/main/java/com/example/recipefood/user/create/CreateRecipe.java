@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.roomDatabase.FoodsDatabase;
 import com.example.recipefood.user.userrecipe.myFood;
+import com.squareup.picasso.Picasso;
 
 public class CreateRecipe extends Fragment {
     private ScrollView scrollView;
@@ -35,6 +37,8 @@ public class CreateRecipe extends Fragment {
     private EditText serving;
 
     private Button Post;
+
+    private ImageView imageView;
     private int id;
 
     private Repository repository;
@@ -46,6 +50,7 @@ public class CreateRecipe extends Fragment {
         scrollView = views.findViewById(R.id.scrollview_createNew);
         back = views.findViewById(R.id.recipe_back_from_create);
         linkImage = views.findViewById(R.id.image_url);
+        imageView = views.findViewById(R.id.image_newFoods);
         recipeName = views.findViewById(R.id.post_recipe_name);
         ingredients = views.findViewById(R.id.post_ingredient);
         instructions = views.findViewById(R.id.post_instructions);
@@ -54,6 +59,18 @@ public class CreateRecipe extends Fragment {
         serving = views.findViewById(R.id.post_serving);
         Post = views.findViewById(R.id.btnPost);
         getUserId();
+
+        linkImage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String imageUrl = linkImage.getText().toString();
+                    if (!imageUrl.isEmpty()) {
+                        Picasso.get().load(imageUrl).into(imageView);
+                    }
+                }
+            }
+        });
         scrollView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,4 +166,5 @@ public class CreateRecipe extends Fragment {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
     }
+
 }

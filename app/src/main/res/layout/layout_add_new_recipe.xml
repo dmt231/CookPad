@@ -1,196 +1,249 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_create"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white">
+    android:background="#dcdde1">
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:id="@+id/scrollview_createNew"
-    >
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollview_createNew"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="60dp">
-        <RelativeLayout
+        android:layout_height="match_parent"
+        android:background="#dcdde1">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/image_recipe"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="60dp">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Your New Recipe"
-                android:textColor="@color/white"
-                android:fontFamily="@font/nunito_bold"
-                android:textSize="25dp"
-                android:gravity="center"
-                android:background="@color/purple_500"
-                android:scaleType="fitXY"/>
+                android:layout_height="wrap_content"
+                android:elevation="4dp">
 
-            <ImageButton
-                android:id="@+id/recipe_back_from_create"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
+                <TextView
+                    android:id="@+id/image_recipe"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/purple_500"
+                    android:fontFamily="@font/nunito_bold"
+                    android:gravity="center"
+                    android:scaleType="fitXY"
+                    android:text="Your New Recipe"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+
+                <ImageButton
+                    android:id="@+id/recipe_back_from_create"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/shape_custom_circle_trans"
+                    android:contentDescription=""
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/back" />
+            </RelativeLayout>
+            <!--Description include image and name for food-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/shape_custom_circle_trans"
-                android:contentDescription=""
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/back" />
-        </RelativeLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:text="Link Url Photo"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/nunito_bold"
-            />
-        <EditText
-            android:id="@+id/image_url"
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:hint="Enter your link url photo recipe"
-            android:padding="5dp"
-            android:background="@drawable/background_edit_new_recipe"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:text="Recipe Name"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/nunito_bold"
-            />
-        <EditText
-            android:id="@+id/post_recipe_name"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:hint="Enter recipe name"
-            android:padding="5dp"
-            android:background="@drawable/background_edit_new_recipe"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:text="Ingredients"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/nunito_bold"
-            />
+                android:background="@color/backgroud_createfoods"
+                android:orientation="vertical"
+                android:paddingBottom="5dp">
 
-        <EditText
-            android:id="@+id/post_ingredient"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/background_description"
-            android:gravity="start"
-            android:hint="Enter ingredients"
-            android:padding="5dp"
-            android:textSize="18sp" />
+                <ImageView
+                    android:id="@+id/image_newFoods"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/recipe_book__3_"
+                    android:scaleType="fitXY" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:text="Instructions"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/nunito_bold"
-            />
-        <EditText
-            android:id="@+id/post_instructions"
-            android:layout_marginTop="5dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:gravity="start"
-            android:hint="Tell a little about your recipe"
-            android:background="@drawable/background_description"
-            android:padding="5dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:text="Time"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/nunito_bold"
-            />
-        <EditText
-            android:id="@+id/post_time"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:gravity=""
-            android:hint="Enter time cook (minutes)"
-            android:padding="5dp"
-            android:background="@drawable/background_edit_new_recipe"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:text="Serving"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/nunito_bold"
-            />
-        <EditText
-            android:id="@+id/post_serving"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:gravity=""
-            android:hint="Enter your serving"
-            android:padding="5dp"
-            android:background="@drawable/background_edit_new_recipe"/>
-        <Button
-            android:id="@+id/btnPost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/button_bg"
-            android:text="Post"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/image_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/background_edit_new_recipe"
+                    android:elevation="8dp"
+                    android:gravity="center"
+                    android:hint="Enter your link url photo recipe"
+                    android:padding="5dp"
+                    android:textColorHint="@color/textColorHint"
+                    android:textSize="18sp" />
 
+                <EditText
+                    android:id="@+id/post_recipe_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/background_edit_new_recipe"
+                    android:elevation="8dp"
+                    android:gravity="center"
+                    android:hint="Food Name: your dish name"
+                    android:minHeight="80dp"
+                    android:padding="5dp"
+                    android:scrollbars="vertical"
+                    android:textColorHint="@color/textColorHint"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
-</ScrollView>
+            <!-- time cook and serving-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroud_createfoods"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="7dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Time"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/post_time"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
+                        android:background="@drawable/background_edit_new_recipe"
+                        android:hint="Time cook (minutes)"
+                        android:textColorHint="@color/textColorHint"
+                        android:textSize="18sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Serving"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/post_serving"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
+                        android:background="@drawable/background_edit_new_recipe"
+                        android:hint="Enter your serving"
+                        android:textColorHint="@color/textColorHint"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--Ingredients-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@color/backgroud_createfoods"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Ingredients"
+                    android:textColor="@color/black"
+                    android:textSize="23dp" />
+
+                <EditText
+                    android:id="@+id/post_ingredient"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/background_edit_new_recipe"
+                    android:elevation="5dp"
+                    android:gravity="start"
+                    android:hint="Enter ingredients"
+                    android:minHeight="80dp"
+                    android:textColorHint="@color/textColorHint"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!--Instructions-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@color/backgroud_createfoods"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Instructions"
+                    android:textColor="@color/black"
+                    android:textSize="23dp" />
+
+                <EditText
+                    android:id="@+id/post_instructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/background_edit_new_recipe"
+                    android:elevation="5dp"
+                    android:gravity="start"
+                    android:hint="Tell a little about your recipe"
+                    android:minHeight="80dp"
+                    android:textColorHint="@color/textColorHint"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/btnPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/button_bg"
+                    android:text="Post"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
