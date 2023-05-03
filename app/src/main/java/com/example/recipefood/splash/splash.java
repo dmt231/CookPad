@@ -9,6 +9,7 @@ import android.os.Handler;
 import com.example.recipefood.MainActivity;
 import com.example.recipefood.R;
 import com.example.recipefood.model.Repository;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class splash extends AppCompatActivity {
     private final int DELAY_TIME = 1500;
@@ -17,6 +18,7 @@ public class splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        FirebaseMessaging.getInstance().subscribeToTopic("new_recipe");
 
         new Handler().postDelayed(() -> {
             int id = new Repository().checkLogged(this);

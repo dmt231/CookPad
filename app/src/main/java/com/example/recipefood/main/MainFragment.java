@@ -16,6 +16,7 @@ import com.example.recipefood.R;
 import com.example.recipefood.adapter.FragmentAdapterViews;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainFragment extends Fragment {
     ViewPager viewpager;
@@ -43,6 +44,7 @@ public class MainFragment extends Fragment {
         Init();
         return view;
     }
+
 
     public void Init() {
         setupViewPager();

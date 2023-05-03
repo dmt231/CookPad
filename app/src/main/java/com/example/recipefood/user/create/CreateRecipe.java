@@ -16,13 +16,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.recipefood.R;
+import com.example.recipefood.fcm.SendNotificationTask;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
-import com.example.recipefood.model.roomDatabase.FoodsDatabase;
-import com.example.recipefood.user.userrecipe.myFood;
 
 public class CreateRecipe extends Fragment {
     private ScrollView scrollView;
@@ -54,6 +52,8 @@ public class CreateRecipe extends Fragment {
         serving = views.findViewById(R.id.post_serving);
         Post = views.findViewById(R.id.btnPost);
         getUserId();
+
+
         scrollView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +71,7 @@ public class CreateRecipe extends Fragment {
         Post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(state == 0){
                     addNewRecipe();
                 }else{
@@ -111,6 +112,8 @@ public class CreateRecipe extends Fragment {
             @Override
             public void onAddSuccess() {
                 customToast("Add Successfully ! ");
+                SendNotificationTask sender = new SendNotificationTask("new_recipe","New recipe", "Let's cook " + name);
+                sender.execute();
             }
 
             @Override
