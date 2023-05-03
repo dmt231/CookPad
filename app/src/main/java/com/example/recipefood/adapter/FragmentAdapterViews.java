@@ -7,30 +7,32 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 
 import com.example.recipefood.home.HomeFragment;
+import com.example.recipefood.search.SearchFragment;
 import com.example.recipefood.user.UserFragment;
 import com.example.recipefood.views.RecipeFragment;
-import com.example.recipefood.views.SearchFragment;
 
 public class FragmentAdapterViews extends FragmentStatePagerAdapter {
 
+    String username;
+    long id;
 
-    public FragmentAdapterViews(@NonNull FragmentManager fm, int behavior) {
+    public FragmentAdapterViews(@NonNull FragmentManager fm, int behavior, long id) {
         super(fm, behavior);
+        this.id = id;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return new HomeFragment();
-
             case 1:
                 return new SearchFragment();
             case 2:
                 return new RecipeFragment();
-            case 3 :
-                return new UserFragment();
+            case 3:
+                return new UserFragment(id);
         }
         return new HomeFragment();
     }

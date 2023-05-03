@@ -1,10 +1,14 @@
 package com.example.recipefood.views;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +19,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.recipefood.model.DatabaseHelper;
+import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
+import com.example.recipefood.model.roomDatabase.FoodsDatabase;
 import com.squareup.picasso.Picasso;
 
 public class DetailRecipe extends Fragment {
@@ -44,7 +49,6 @@ public class DetailRecipe extends Fragment {
     private ScrollView layout_contraint;
 
     //Khai báo Database để lưu trữ dữ liệu
-    DatabaseHelper database_helper;
 
 
     @Override
@@ -52,8 +56,6 @@ public class DetailRecipe extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View views = inflater.inflate(R.layout.fragment_detail__recipe, container, false);
-        //Database.
-        database_helper = new DatabaseHelper(this.getContext());
         //Ánh xạ
         mactivity = getActivity();
         layout_contraint = views.findViewById(R.id.layout_constraint);
@@ -80,12 +82,12 @@ public class DetailRecipe extends Fragment {
         if (bundle != null) {
             recipe = (RecipeInstrument) bundle.get("recipe");
             if (recipe != null) {
-                Picasso.get().load(recipe.getImages()).into(img_recipe);;
+                Picasso.get().load(recipe.getImages()).into(img_recipe);
                 title.setText(recipe.getName());
                 time_cooking.setText(String.valueOf(recipe.getTime()));
                 like.setText(String.valueOf(recipe.getLikes()));
                 serving.setText(String.valueOf(recipe.getServing()));
-                result+= replaceString(recipe.getIngredients());
+                result += replaceString(recipe.getIngredients());
                 ingredient.setText(result);
                 result_2 += recipe.getInstructions();
                 instructions.setText(result_2);
@@ -100,26 +102,29 @@ public class DetailRecipe extends Fragment {
         button_Download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(database_helper.checkName(recipe.getName())){
+                RecipeFavorite foods = new RecipeFavorite();
+                foods = FoodsDatabase.getInstance(getContext()).recipeDao().getFoodsByID(recipe.getId());
+                if (foods != null) {
                     Toast toast = new Toast(mactivity);
                     LayoutInflater inflater = getLayoutInflater();
                     View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));
                     TextView text_message = view_inflate.findViewById(R.id.text_toast);
-                    text_message.setText("This Recipe has already exits");
+                    text_message.setText("This Recipe has already exist"); // đã tồn tại
                     toast.setView(view_inflate);
-                    toast.setGravity(Gravity.BOTTOM, 0,25);
+                    toast.setGravity(Gravity.BOTTOM, 0, 25);
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.show();
-                }else {
-                    database_helper.insertData(recipe.getName(), recipe.getImages(), recipe.getTime(), recipe.getLikes(), recipe.getServing(),
-                            result, result_2);
+                } else {
+                    RecipeFavorite food = new RecipeFavorite(recipe.getId(), recipe.getName(), recipe.getIngredients(), recipe.getInstructions(),
+                            recipe.getImages(), recipe.getLikes(), recipe.getServing(), recipe.getTime(), recipe.getSourceName(), recipe.getSourceUrl(), recipe.getSpoonacularSourceUrl());
+                    FoodsDatabase.getInstance(mactivity).recipeDao().insertFavorite(food);
                     Toast toast = new Toast(mactivity);
                     LayoutInflater inflater = getLayoutInflater();
                     View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));
                     TextView text_message = view_inflate.findViewById(R.id.text_toast);
                     text_message.setText("Add to Favorite Successfully");
                     toast.setView(view_inflate);
-                    toast.setGravity(Gravity.BOTTOM, 0,25);
+                    toast.setGravity(Gravity.BOTTOM, 0, 25);
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -127,7 +132,8 @@ public class DetailRecipe extends Fragment {
         });
         return views;
     }
-    public String replaceString(String input){
+
+    public String replaceString(String input) {
         String s = input.replace(";", "\n");
         return s;
     }
