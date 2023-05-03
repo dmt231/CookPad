@@ -93,6 +93,7 @@ public class myFood extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("recipe", recipe);
+                bundle.putInt("Userid", (int)id);
                 detail_recipe.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_myFood, detail_recipe);
                 fragmentTransaction.addToBackStack(detail_recipe.getTag());

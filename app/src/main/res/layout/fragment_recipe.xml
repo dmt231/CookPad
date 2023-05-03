@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp"
-        android:text="Recipe Favorite"
+        android:text="Download Recipe"
         android:textColor="#ff9f43"
         android:textSize="24sp"
         android:textStyle="bold"
