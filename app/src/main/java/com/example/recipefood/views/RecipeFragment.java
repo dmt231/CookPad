@@ -81,45 +81,13 @@ public class RecipeFragment extends Fragment {
         list = FoodsDatabase.getInstance(mActivity).recipeDao().getFoods();
     }
 
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = new MenuInflater(mActivity);
-        inflater.inflate(R.menu.context_menu, menu);
-    }
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         RecipeFavorite recipe_favorite = list.get(selectedID);
         switch (item.getItemId()) {
             case R.id.delete:
-                dialog_builder = new AlertDialog.Builder(mActivity);
-                dialog_builder.setMessage("Do you want to remove this recipe")
-                        .setTitle("Alert!")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                FoodsDatabase.getInstance(getContext()).recipeDao().deleteFavorite(recipe_favorite);
-                                list.remove(recipe_favorite);
-                                favoriteRecipeAdapter.notifyDataSetChanged();
-                                Toast toast = new Toast(mActivity);
-                                LayoutInflater inflater = getLayoutInflater();
-                                View view = inflater.inflate(R.layout.layout_custom_toast, (ViewGroup) mActivity.findViewById(R.id.custom_toast));
-                                TextView text_message = view.findViewById(R.id.text_toast);
-                                text_message.setText("Delete Successfully");
-                                toast.setView(view);
-                                toast.setGravity(Gravity.BOTTOM, 0, 25);
-                                toast.setDuration(Toast.LENGTH_SHORT);
-                                toast.show();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        })
-                        .show();
+
         }
         return super.onContextItemSelected(item);
     }

@@ -1,11 +1,15 @@
 package com.example.recipefood.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -13,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
+import com.example.recipefood.model.roomDatabase.FoodsDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,6 +27,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
     private Activity mContext;
     private List<RecipeFavorite> recipeList;
     private Detail_ClickListener_Favorite detail_clickListener_favorite;
+    AlertDialog.Builder dialog_builder;
 
     public FavoriteRecipeAdapter(Activity mContext, List<RecipeFavorite> foods, Detail_ClickListener_Favorite detail_clickListener_favorite) {
         this.mContext = mContext;
@@ -48,6 +54,24 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
             @Override
             public void onClick(View view) {
                 detail_clickListener_favorite.OnClickRecipe(dataModel);
+            }
+        });
+
+        holder.Ryc_CardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                dialog_builder = new AlertDialog.Builder(v.getContext());
+                dialog_builder.setMessage("Do you want to remove this recipe")
+                        .setTitle("Alert!")
+                        .setPositiveButton("Yes", (dialogInterface, i) -> {
+                            FoodsDatabase.getInstance(v.getContext()).recipeDao().deleteFavorite(dataModel);
+                            recipeList.remove(dataModel);
+                            notifyDataSetChanged();
+                            Toast.makeText(mContext, "Delete Successfully", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.cancel())
+                        .show();
+                return false;
             }
         });
     }
