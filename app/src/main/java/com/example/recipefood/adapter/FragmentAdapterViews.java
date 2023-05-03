@@ -26,7 +26,7 @@ public class FragmentAdapterViews extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new HomeFragment();
+                return new HomeFragment(id);
             case 1:
                 return new SearchFragment();
             case 2:
@@ -34,7 +34,7 @@ public class FragmentAdapterViews extends FragmentStatePagerAdapter {
             case 3:
                 return new UserFragment(id);
         }
-        return new HomeFragment();
+        return new HomeFragment(id);
     }
 
     @Override

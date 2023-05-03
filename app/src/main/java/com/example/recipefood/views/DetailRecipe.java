@@ -1,9 +1,6 @@
 package com.example.recipefood.views;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -22,6 +19,7 @@ import android.widget.Toast;
 import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
+import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.roomDatabase.FoodsDatabase;
 import com.squareup.picasso.Picasso;
 
@@ -33,6 +31,8 @@ public class DetailRecipe extends Fragment {
     ImageButton button;
 
     ImageView button_Download;
+    ImageView button_favorite;
+
     ImageView img_recipe;
     TextView title;
     TextView time_cooking;
@@ -45,10 +45,13 @@ public class DetailRecipe extends Fragment {
     //Khai báo listString để lưu danh sách nguyên liệu
     String result = "";
     String result_2 = "";
+
+    private int Userid;
+    private int state;
     //Khai báo layout
     private ScrollView layout_contraint;
+    private Repository repository;
 
-    //Khai báo Database để lưu trữ dữ liệu
 
 
     @Override
@@ -58,6 +61,7 @@ public class DetailRecipe extends Fragment {
         View views = inflater.inflate(R.layout.fragment_detail__recipe, container, false);
         //Ánh xạ
         mactivity = getActivity();
+        repository = new Repository();
         layout_contraint = views.findViewById(R.id.layout_constraint);
         img_recipe = views.findViewById(R.id.image_recipe);
         title = views.findViewById(R.id.title_name);
@@ -68,6 +72,7 @@ public class DetailRecipe extends Fragment {
         ingredient = views.findViewById(R.id.recipe_ingredients);
         instructions = views.findViewById(R.id.recipe_instruction);
         button = (ImageButton) views.findViewById(R.id.recipe_back);
+        button_favorite = (ImageButton) views.findViewById(R.id.favorite_recipe);
         button_Download = (ImageButton) views.findViewById(R.id.download_recipe);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +86,7 @@ public class DetailRecipe extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             recipe = (RecipeInstrument) bundle.get("recipe");
+            Userid = (int)bundle.get("Userid");
             if (recipe != null) {
                 Picasso.get().load(recipe.getImages()).into(img_recipe);
                 title.setText(recipe.getName());
@@ -91,6 +97,21 @@ public class DetailRecipe extends Fragment {
                 ingredient.setText(result);
                 result_2 += recipe.getInstructions();
                 instructions.setText(result_2);
+                Log.d("Food Id : " , recipe.getId() + "");
+                Log.d("Food Id : " , Userid + "");
+                repository.checkFavoriteExist(Userid, recipe.getId(), new Repository.OnExistListener() {
+                    @Override
+                    public void onExist(boolean exists) {
+                        if(exists){
+                            button_favorite.setImageResource(R.drawable.baseline_favorite_24);
+                            state = 1;
+
+                        }else {
+                            button_favorite.setImageResource(R.drawable.baseline_unfavorite);
+                            state = 0;
+                        }
+                    }
+                });
             }
         }
         layout_contraint.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +151,22 @@ public class DetailRecipe extends Fragment {
                 }
             }
         });
+        button_favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(state == 0){
+                    addToFavorite();
+                    state = 1;
+                    button_favorite.setImageResource(R.drawable.baseline_favorite_24);
+                    customToast("Add To Favorite Successfully");
+                }else if(state == 1){
+                    removeFromFavorite();
+                    state = 0;
+                    button_favorite.setImageResource(R.drawable.baseline_unfavorite);
+                    customToast("Remove From Favorite Successfully");
+                }
+            }
+        });
         return views;
     }
 
@@ -137,5 +174,21 @@ public class DetailRecipe extends Fragment {
         String s = input.replace(";", "\n");
         return s;
     }
-
+    public void addToFavorite(){
+        repository.addFavoriteForUser(Userid, recipe.getId());
+    }
+    public void removeFromFavorite(){
+        repository.removeFavoriteForUser(Userid, recipe.getId());
+    }
+    public void customToast(String message) {
+        Toast toast = new Toast(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View view_inflate = inflater.inflate(R.layout.layout_custom_toast, getActivity().findViewById(R.id.custom_toast));
+        TextView text_message = view_inflate.findViewById(R.id.text_toast);
+        text_message.setText(message);
+        toast.setView(view_inflate);
+        toast.setGravity(Gravity.BOTTOM, 0, 25);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.show();
+    }
 }

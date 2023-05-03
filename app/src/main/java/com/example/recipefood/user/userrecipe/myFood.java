@@ -4,11 +4,13 @@ package com.example.recipefood.user.userrecipe;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,12 +45,14 @@ public class myFood extends Fragment {
     private HomeFragmentViewModel viewModel;
     private ArrayList<RecipeInstrument> recipeList;
     private Repository repository;
+    private ProgressDialog progressDialog;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.myfood, container, false);
         repository = new Repository();
         recyclerView = view.findViewById(R.id.recyclerView_myFood);
+        progressDialog = new ProgressDialog(getActivity());
         back = view.findViewById(R.id.recipe_back_from_myFood);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +64,22 @@ public class myFood extends Fragment {
         });
         viewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         getUserId();
-        onObserveData();
+        getData();
         recyclerView.addOnScrollListener(addRecipeToRyc);
         return view;
+    }
+    public void getData(){
+        repository.haveAnyRecipe(id, new Repository.OnExistListener() {
+            @Override
+            public void onExist(boolean exists) {
+                if(exists){
+                    progressDialog.show();
+                    onObserveData();
+                }else{
+                    customToast("This user haven't any recipe. Please add !");
+                }
+            }
+        });
     }
     public void onSetUpRecyclerView(){
         recyclerView.setHasFixedSize(true);
@@ -89,8 +106,10 @@ public class myFood extends Fragment {
         viewModel.getRecipeListByUser(id).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
             @Override
             public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
+                progressDialog.dismiss();
                 recipeList = recipeInstruments;
                 onSetUpRecyclerView();
+
             }
         });
     }
@@ -148,4 +167,15 @@ public class myFood extends Fragment {
             }
         }
     };
+    public void customToast(String message) {
+        Toast toast = new Toast(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View view_inflate = inflater.inflate(R.layout.layout_custom_toast, getActivity().findViewById(R.id.custom_toast));
+        TextView text_message = view_inflate.findViewById(R.id.text_toast);
+        text_message.setText(message);
+        toast.setView(view_inflate);
+        toast.setGravity(Gravity.BOTTOM, 0, 25);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.show();
+    }
 }

@@ -59,9 +59,9 @@ public class SignUpFragment extends Fragment {
         String emailValue = email.getText().toString();
         String password = pass.getText().toString();
 
-        repository.checkUserExist(new Repository.OnUserExistListener() {
+        repository.checkUserExist(new Repository.OnExistListener() {
             @Override
-            public void onUserExist(boolean exists) {
+            public void onExist(boolean exists) {
                 if (!exists) {
                     progressDialog.dismiss();
                     repository.Register(usernameValue, emailValue, password);

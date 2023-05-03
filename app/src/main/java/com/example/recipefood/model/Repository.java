@@ -7,13 +7,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.recipefood.model.roomDatabase.FoodsDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Repository {
@@ -121,6 +122,25 @@ public class Repository {
                     }
                 });
     }
+
+
+    //User's Recipe
+    public void haveAnyRecipe(int userid, OnExistListener listener){
+        firestore.collection("foods")
+                .whereEqualTo("userId", userid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful() && !task.getResult().isEmpty()){
+                            listener.onExist(true);
+                        }else{
+                            listener.onExist(false);
+                        }
+                    }
+                });
+    }
+
 
     public void getFoodByUser(int userid){
         firestore.collection("foods")
@@ -271,6 +291,8 @@ public class Repository {
                 newUserId++;
             }
             userMap.put("userId", newUserId);
+            List<Integer> favorite = new ArrayList<>();
+            userMap.put("favorite", favorite);
             ref.document(username).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -279,6 +301,150 @@ public class Repository {
             });
         });
     }
+
+
+
+
+    //Favorite food for User
+    public void addFavoriteForUser(int Userid, int foodId){
+        CollectionReference reference = firestore.collection("User");
+        Query query = reference.whereEqualTo("userId", Userid);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                    documentSnapshot.getReference().update("favorite", FieldValue.arrayUnion(foodId)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("Update : ", "Update Successfully");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("Fail : ", "Update Failed");
+                        }
+                    });
+                }
+            }
+        });
+    }
+    public void removeFavoriteForUser(int userId, int foodId) {
+        CollectionReference reference = firestore.collection("User");
+        Query query = reference.whereEqualTo("userId", userId);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    documentSnapshot.getReference().update("favorite", FieldValue.arrayRemove(Integer.valueOf(foodId)))
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("Remove", "Removed foodId " + foodId + " from favorite");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("Remove", "Error removing foodId " + foodId + " from favorite", e);
+                                }
+                            });
+                }
+            }
+        });
+    }
+    public void checkFavoriteExist(int userId, int foodId , OnExistListener listener){
+        CollectionReference usersRef = firestore.collection("User");
+        Query query = usersRef.whereEqualTo("userId", userId).whereArrayContains("favorite", foodId);
+
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                   listener.onExist(true);
+                   Log.d("Exists : ", "True");
+                } else {
+                    listener.onExist(false);
+                    Log.d("Exists : ", "False");
+                }
+            }
+        });
+    }
+    public void haveAnyFavorite(int userId, OnExistListener existListener){
+        firestore.collection("User")
+                .whereEqualTo("userId", userId)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                List<Integer> favorite = (List<Integer>) documentSnapshot.get("favorite");
+                                Log.d("Size: ", favorite.size()+"");
+                                if(favorite.size() != 0){
+                                    existListener.onExist(true);
+                                    Log.d("Exists : ", "true");
+                                }
+                                else if(favorite.size() == 0) {
+                                    existListener.onExist(false);
+                                    Log.d("Exists : ", "false");
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+
+    public void getAllFoodFavorite(int userId){
+        CollectionReference foodRef = firestore.collection("foods");
+        firestore.collection("User")
+                .whereEqualTo("userId", userId)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful() && !task.getResult().isEmpty()){
+                            for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                List<Integer> favorite = (List<Integer>) documentSnapshot.get("favorite");
+                                foodRef.whereIn("foodId", favorite).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            ArrayList<RecipeInstrument> listRecipe = new ArrayList<>();
+                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                                int id = documentSnapshot.get("foodId", Integer.class);
+                                                String name = documentSnapshot.getString("foodName");
+                                                String ingredients = documentSnapshot.getString("ingredients");
+                                                String instructions = documentSnapshot.getString("instructions");
+                                                String image = documentSnapshot.getString("foodImage");
+                                                int times = documentSnapshot.get("time", Integer.class);
+                                                int likes = documentSnapshot.get("foodLikes", Integer.class);
+                                                int serving = documentSnapshot.get("serving", Integer.class);
+                                                String sourceName = documentSnapshot.getString("sourcefoodName");
+                                                String sourceUrl = documentSnapshot.getString("sourcefoodUrl");
+                                                String spoon = documentSnapshot.getString("spoonacularSourceUrl");
+                                                int Userid = documentSnapshot.get("userId", Integer.class);
+
+                                                Log.d("Object : ", name + String.valueOf(id));
+                                                RecipeInstrument recipeInstrument = new RecipeInstrument(id, name, ingredients, instructions, image, likes, serving, times, sourceName, sourceUrl, spoon, Userid);
+                                                listRecipe.add(recipeInstrument);
+                                            }
+                                            recipeListLiveData.setValue(listRecipe);
+
+                                        } else {
+                                            recipeListLiveData.setValue(new ArrayList<>());
+                                            Log.d("Info : ", "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+    }
+
+
+
+
+
+    //Login.
 
     public void checkUser() {
         firestore.collection("User")
@@ -306,7 +472,7 @@ public class Repository {
                     }
                 });
     }
-    public void getUserLogin(long id){
+    public void getUserLogin(long id){ //For UserAccount
         firestore.collection("User")
                 .orderBy("userId")
                 .get()
@@ -336,18 +502,18 @@ public class Repository {
     }
 
 
-    public interface OnUserExistListener {
-        void onUserExist(boolean exists);
+    public interface OnExistListener {
+        void onExist(boolean exists);
     }
 
-    public void checkUserExist(OnUserExistListener listener) {
+    public void checkUserExist(OnExistListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("User");
         usersRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                listener.onUserExist(true);
+                listener.onExist(true);
             } else {
-                listener.onUserExist(false);
+                listener.onExist(false);
             }
         });
     }
