@@ -1,7 +1,9 @@
 package com.example.recipefood.user.userrecipe;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -46,6 +48,7 @@ public class myFood extends Fragment {
     private ArrayList<RecipeInstrument> recipeList;
     private Repository repository;
     private ProgressDialog progressDialog;
+    private AlertDialog.Builder alertDialog;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,9 +131,23 @@ public class myFood extends Fragment {
                 onChangedToEdit(recipeList.get(item.getGroupId()));
                 return true;
             case 102 :
-                int id = recipeList.get(item.getGroupId()).getId();
-                repository.deleteRecipe(id);
-                adapter.removeItem(item.getGroupId());
+                alertDialog = new AlertDialog.Builder(getActivity());
+                alertDialog.setMessage("Do you want to remove this recipe ? ")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                int id = recipeList.get(item.getGroupId()).getId();
+                                repository.deleteRecipe(id);
+                                adapter.removeItem(item.getGroupId());
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        })
+                        .show();
                 return true;
         }
         return super.onContextItemSelected(item);

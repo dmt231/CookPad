@@ -32,6 +32,7 @@ public class CreateRecipe extends Fragment {
     private EditText time;
     private EditText serving;
 
+    private TextView txtRecipe;
     private Button Post;
     private int id;
 
@@ -47,6 +48,7 @@ public class CreateRecipe extends Fragment {
         recipeName = views.findViewById(R.id.post_recipe_name);
         ingredients = views.findViewById(R.id.post_ingredient);
         instructions = views.findViewById(R.id.post_instructions);
+        txtRecipe = views.findViewById(R.id.txt_recipe);
         repository = new Repository();
         time = views.findViewById(R.id.post_time);
         serving = views.findViewById(R.id.post_serving);
@@ -96,6 +98,8 @@ public class CreateRecipe extends Fragment {
                 instructions.setText(foodRecipe.getInstructions());
                 time.setText(String.valueOf(foodRecipe.getTime()));
                 serving.setText(String.valueOf(foodRecipe.getServing()));
+                txtRecipe.setText("Update Your Recipe");
+                Post.setText("Update");
             }
         }
     }

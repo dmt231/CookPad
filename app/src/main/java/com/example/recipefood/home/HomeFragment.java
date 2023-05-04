@@ -1,6 +1,8 @@
 package com.example.recipefood.home;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +45,7 @@ public class HomeFragment extends Fragment {
     private HomeFragmentViewModel homeFragmentViewModel;
     private long userId;
     private Repository repository;
+    private AlertDialog.Builder alertDialog;
     public HomeFragment(long userId) {
         // Required empty public constructor
         this.userId = userId;
@@ -151,9 +154,22 @@ public class HomeFragment extends Fragment {
             case 102 :
                 int useridDelete = recipeList.get(item.getGroupId()).getUserid();
                 if(useridDelete== userId){
-                    int id = recipeList.get(item.getGroupId()).getId();
-                    repository.deleteRecipe(id);
-                    randomRecipeRycAdapter.removeItem(item.getGroupId());
+                    alertDialog = new AlertDialog.Builder(getContext());
+                    alertDialog.setMessage("Do you want to remove this recipe ? ")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    int id = recipeList.get(item.getGroupId()).getId();
+                                    repository.deleteRecipe(id);
+                                    randomRecipeRycAdapter.removeItem(item.getGroupId());
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            }).show();
                 }else{
                     customToast("You don't have the permission");
                 }

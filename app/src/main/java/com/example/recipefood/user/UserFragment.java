@@ -1,5 +1,7 @@
 package com.example.recipefood.user;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ public class UserFragment extends Fragment {
     private TextView SignOut;
     private ViewModelSignUpLogin viewModel;
     private long id;
+    private AlertDialog.Builder alertDialog;
     public UserFragment(long id){
         this.id = id;
     }
@@ -59,10 +62,24 @@ public class UserFragment extends Fragment {
         SignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Repository().deleteUser(getContext());
-                Toast.makeText(getContext(), "Logout user ", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext().getApplicationContext(), splash.class);
-                startActivity(intent);
+                alertDialog = new AlertDialog.Builder(getActivity());
+                alertDialog.setMessage("Do you want to sign out ?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new Repository().deleteUser(getContext());
+                                Toast.makeText(getContext(), "Logout user ", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getContext().getApplicationContext(), splash.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                alertDialog.show();
             }
         });
         viewModel = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
@@ -123,13 +140,6 @@ public class UserFragment extends Fragment {
         fragmentTransaction.commit();
     }
     // Sign Out accout
-    private final View.OnClickListener evenLogout = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            new Repository().deleteUser(getContext());
-            Toast.makeText(getContext(), "Logout user ", Toast.LENGTH_SHORT).show();
-        }
-    };
     public void onChangedToLikeFood(){
         Fragment likeFood = new FavoriteRecipe();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
