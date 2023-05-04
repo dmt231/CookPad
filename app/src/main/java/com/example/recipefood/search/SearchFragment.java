@@ -35,8 +35,10 @@ public class SearchFragment extends Fragment {
     private ArrayList<RecipeInstrument> recipeList;
     private ArrayList<String> tags = new ArrayList<>();
 
-    public SearchFragment() {
+    private int userId;
+    public SearchFragment(long id) {
         // Required empty public constructor
+        this.userId = (int) id;
     }
 
     @Override
@@ -94,6 +96,7 @@ public class SearchFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("recipe", recipe);
+                bundle.putInt("Userid", (int)userId);
                 detail_recipe.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_search, detail_recipe);
                 fragmentTransaction.addToBackStack(detail_recipe.getTag());

@@ -28,7 +28,7 @@ public class FragmentAdapterViews extends FragmentStatePagerAdapter {
             case 0:
                 return new HomeFragment(id);
             case 1:
-                return new SearchFragment();
+                return new SearchFragment(id);
             case 2:
                 return new RecipeFragment();
             case 3:
