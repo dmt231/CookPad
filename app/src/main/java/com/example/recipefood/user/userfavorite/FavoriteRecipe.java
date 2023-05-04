@@ -159,16 +159,7 @@ public class FavoriteRecipe extends Fragment {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 if (firstCompletelyVisibleItemPosition == 0) {
-                    ProgressDialog progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.show();
-                    viewModel.getRecipeListByUser(id).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
-                        @Override
-                        public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
-                            recipeList = recipeInstruments;
-                            onSetUpRecyclerView();
-                            progressDialog.dismiss();
-                        }
-                    });
+                    getData();
                 }
             }
         }
