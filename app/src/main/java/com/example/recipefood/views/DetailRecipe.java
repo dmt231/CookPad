@@ -143,7 +143,7 @@ public class DetailRecipe extends Fragment {
                     LayoutInflater inflater = getLayoutInflater();
                     View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));
                     TextView text_message = view_inflate.findViewById(R.id.text_toast);
-                    text_message.setText("Add to Favorite Successfully");
+                    text_message.setText("Add to Download Successfully");
                     toast.setView(view_inflate);
                     toast.setGravity(Gravity.BOTTOM, 0, 25);
                     toast.setDuration(Toast.LENGTH_LONG);
