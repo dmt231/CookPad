@@ -11,6 +11,7 @@ import com.example.recipefood.model.DataBase.Models.RepositoryRoom;
 import java.util.List;
 
 public class RecipeFavoriteDownloadViewModel extends AndroidViewModel {
+    //b
     private LiveData<List<RecipeFavoriteDownload>> mListLiveData;
     RepositoryRoom repositoryRoom;
     public RecipeFavoriteDownloadViewModel(@NonNull Application application) {

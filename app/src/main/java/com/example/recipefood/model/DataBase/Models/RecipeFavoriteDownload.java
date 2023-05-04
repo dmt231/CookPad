@@ -7,6 +7,7 @@ import com.example.recipefood.model.RecipeFavorite;
 
 @Entity(tableName ="RecipeFavoriteDownload" )
 public class RecipeFavoriteDownload extends RecipeFavorite {
+    //co sua nay
     @PrimaryKey
     private int ID;
     private String sourceUrl;

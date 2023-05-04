@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RecipeFragment extends Fragment {
+       
     private RecipeDownloadsAdapter favoriteRecipeAdapter;//Recycle Adapter
     private RecyclerView recyclerView;
     private Activity mActivity ;
