@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +22,10 @@ import com.example.recipefood.R;
 import com.example.recipefood.fcm.SendNotificationTask;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
+import com.squareup.picasso.Picasso;
 
 public class CreateRecipe extends Fragment {
+    private ImageView imageView;
     private ScrollView scrollView;
     private ImageButton back;
     private EditText linkImage;
@@ -53,8 +56,19 @@ public class CreateRecipe extends Fragment {
         time = views.findViewById(R.id.post_time);
         serving = views.findViewById(R.id.post_serving);
         Post = views.findViewById(R.id.btnPost);
+        imageView = views.findViewById(R.id.image_newFoods);
         getUserId();
-
+        linkImage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String imageUrl = linkImage.getText().toString();
+                    if (!imageUrl.isEmpty()) {
+                        Picasso.get().load(imageUrl).into(imageView);
+                    }
+                }
+            }
+        });
 
         scrollView.setOnClickListener(new View.OnClickListener() {
             @Override
