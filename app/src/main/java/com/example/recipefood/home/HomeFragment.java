@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment {
     static int count = 0;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private RandomRecipeRycAdapter randomRecipeRycAdapter;
     private List<RecipeInstrument> recipeList; //List các món ăn
 
@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment {
     private long userId;
     private Repository repository;
     private AlertDialog.Builder alertDialog;
+    private  LinearLayoutManager layoutManager;
     public HomeFragment(long userId) {
         // Required empty public constructor
         this.userId = userId;
@@ -109,7 +110,7 @@ public class HomeFragment extends Fragment {
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 if (lastVisibleItemPosition == itemCount - 1) {

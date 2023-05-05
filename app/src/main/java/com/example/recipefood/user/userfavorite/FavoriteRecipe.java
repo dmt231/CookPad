@@ -41,6 +41,7 @@ public class FavoriteRecipe extends Fragment {
     private ArrayList<RecipeInstrument> recipeList;
     private Repository repository;
     private ProgressDialog progressDialog;
+    private LinearLayoutManager layoutManager;
 
     @Nullable
     @Override
@@ -100,7 +101,7 @@ public class FavoriteRecipe extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("recipe", recipe);
-                bundle.putInt("Userid", (int)id);
+                bundle.putInt("Userid", id);
                 detail_recipe.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_like_recipe, detail_recipe);
                 fragmentTransaction.addToBackStack(detail_recipe.getTag());
@@ -156,7 +157,7 @@ public class FavoriteRecipe extends Fragment {
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 if (firstCompletelyVisibleItemPosition == 0) {
                     getData();

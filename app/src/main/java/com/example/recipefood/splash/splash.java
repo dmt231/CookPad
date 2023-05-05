@@ -22,14 +22,11 @@ public class splash extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             int id = new Repository().checkLogged(this);
-            if (id == -1) {
-                Intent intent = new Intent(splash.this, MainActivity.class);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(splash.this, MainActivity.class);
+            Intent intent = new Intent(splash.this, MainActivity.class);
+            if (id != -1) {
                 intent.putExtra("UserId", id);
-                startActivity(intent);
             }
+            startActivity(intent);
             finish();
         }, DELAY_TIME);
     }
