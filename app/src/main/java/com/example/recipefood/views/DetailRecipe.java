@@ -39,7 +39,6 @@ public class DetailRecipe extends Fragment {
     private TextView instructions;
 
 
-    //Khai báo listString để lưu danh sách nguyên liệu
     String result = "";
     String result_2 = "";
 
@@ -153,14 +152,10 @@ public class DetailRecipe extends Fragment {
             public void onClick(View view) {
                 if(state == 0){
                     addToFavorite();
-                    state = 1;
                     button_favorite.setImageResource(R.drawable.baseline_favorite_24);
-                    customToast("Add To Favorite Successfully");
                 }else if(state == 1){
                     removeFromFavorite();
-                    state = 0;
                     button_favorite.setImageResource(R.drawable.baseline_unfavorite);
-                    customToast("Remove From Favorite Successfully");
                 }
             }
         });
@@ -172,10 +167,30 @@ public class DetailRecipe extends Fragment {
         return s;
     }
     public void addToFavorite(){
-        mRepository.addFavoriteForUser(Userid, recipe.getId());
+        mRepository.addFavoriteForUser(Userid, recipe.getId(), new Repository.OnExistListener() {
+            @Override
+            public void onExist(boolean exists) {
+                if(exists){
+                    customToast("Add To Favorite Successfully");
+                    state = 1;
+                }else{
+                    customToast("Failed to Add !");
+                }
+            }
+        });
     }
     public void removeFromFavorite(){
-        mRepository.removeFavoriteForUser(Userid, recipe.getId());
+        mRepository.removeFavoriteForUser(Userid, recipe.getId(), new Repository.OnExistListener() {
+            @Override
+            public void onExist(boolean exists) {
+                if(exists){
+                    customToast("Remove From Favorite Successfully");
+                    state = 0;
+                }else{
+                    customToast("Failed To Remove !");
+                }
+            }
+        });
     }
     public void customToast(String message) {
         Toast toast = new Toast(getActivity());

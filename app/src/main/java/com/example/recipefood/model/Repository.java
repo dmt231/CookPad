@@ -306,7 +306,7 @@ public class Repository {
 
 
     //Favorite food for User
-    public void addFavoriteForUser(int Userid, int foodId){
+    public void addFavoriteForUser(int Userid, int foodId, OnExistListener listener){
         CollectionReference reference = fireStore.collection("User");
         Query query = reference.whereEqualTo("userId", Userid);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -316,11 +316,13 @@ public class Repository {
                     documentSnapshot.getReference().update("favorite", FieldValue.arrayUnion(foodId)).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
+                            listener.onExist(true);
                             Log.d("Update : ", "Update Successfully");
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            listener.onExist(false);
                             Log.d("Fail : ", "Update Failed");
                         }
                     });
@@ -328,7 +330,7 @@ public class Repository {
             }
         });
     }
-    public void removeFavoriteForUser(int userId, int foodId) {
+    public void removeFavoriteForUser(int userId, int foodId, OnExistListener listener) {
         CollectionReference reference = fireStore.collection("User");
         Query query = reference.whereEqualTo("userId", userId);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -339,11 +341,13 @@ public class Repository {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    listener.onExist(true);
                                     Log.d("Remove", "Removed foodId " + foodId + " from favorite");
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    listener.onExist(false);
                                     Log.e("Remove", "Error removing foodId " + foodId + " from favorite", e);
                                 }
                             });
@@ -402,7 +406,7 @@ public class Repository {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful() && !task.getResult().isEmpty()){
                             for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                List<Integer> favorite = (List<Integer>) documentSnapshot.get("favorite");
+                                List<Integer> favorite = (List<Integer>) documentSnapshot.get("favorite"); // 2 79 7 4 10
                                 foodRef.whereIn("foodId", favorite).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
