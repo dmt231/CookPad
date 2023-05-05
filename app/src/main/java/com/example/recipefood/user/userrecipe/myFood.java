@@ -49,6 +49,7 @@ public class myFood extends Fragment {
     private Repository repository;
     private ProgressDialog progressDialog;
     private AlertDialog.Builder alertDialog;
+    private LinearLayoutManager layoutManager;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -168,19 +169,10 @@ public class myFood extends Fragment {
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
                 if (firstCompletelyVisibleItemPosition == 0) {
-                    ProgressDialog progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.show();
-                    viewModel.getRecipeListByUser(id).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
-                        @Override
-                        public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
-                            recipeList = recipeInstruments;
-                            onSetUpRecyclerView();
-                            progressDialog.dismiss();
-                        }
-                    });
+                    getData();
                 }
             }
         }

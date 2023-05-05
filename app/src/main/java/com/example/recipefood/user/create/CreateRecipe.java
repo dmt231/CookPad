@@ -88,10 +88,12 @@ public class CreateRecipe extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(state == 0){
-                    addNewRecipe();
+                if(state == 0 ){
+                    if(validateInput())
+                        {addNewRecipe();}
                 }else{
-                    updateRecipe();
+                    if(validateInput())
+                        {updateRecipe();}
                 }
             }
         });
@@ -169,5 +171,33 @@ public class CreateRecipe extends Fragment {
         toast.setGravity(Gravity.BOTTOM, 0, 25);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
+    }
+    public boolean validateInput(){
+        boolean check = true;
+        if(linkImage.getText().toString().equals("")){
+            linkImage.setError("Please enter your link image");
+            check = false;
+        }
+        if(recipeName.getText().toString().equals("")){
+            recipeName.setError("Please enter your recipe name");
+            check = false;
+        }
+        if(ingredients.getText().toString().equals("")){
+            ingredients.setError("Please enter your ingredients");
+            check = false;
+        }
+        if(instructions.getText().toString().equals("")){
+            instructions.setError("Please enter your instructions");
+            check = false;
+        }
+        if(time.getText().toString().equals("")){
+            time.setError("Please enter the time for your recipe");
+            check = false;
+        }
+        if(serving.getText().toString().equals("")){
+            serving.setError("Please enter your serving");
+            check = false;
+        }
+        return check;
     }
 }

@@ -33,8 +33,8 @@ public class SearchFragment extends Fragment {
     SearchFragmentViewModel searchFragmentViewModel;
     ProgressDialog progressDialog;
     private ArrayList<RecipeInstrument> recipeList;
-    private ArrayList<String> tags = new ArrayList<>();
 
+    LinearLayoutManager layoutManager;
     private int userId;
     public SearchFragment(long id) {
         // Required empty public constructor
@@ -111,7 +111,7 @@ public class SearchFragment extends Fragment {
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
                 int itemCount = recyclerView.getAdapter().getItemCount();
                 if (lastVisibleItemPosition == itemCount - 1) {
