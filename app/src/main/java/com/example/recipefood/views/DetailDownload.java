@@ -1,12 +1,6 @@
 package com.example.recipefood.views;
 
-import static android.content.ContentValues.TAG;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +18,15 @@ import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
 
 public class DetailDownload extends Fragment {
-    RecipeFavorite recipe_favorite;
-    //Khai báo các view
-    ImageButton button;
-
-    ImageView img_recipe;
-    TextView title;
-    TextView time_cooking;
-    TextView like;
-    TextView serving;
-    TextView ingredient;
-    TextView instructions;
+    private RecipeFavorite recipe_favorite;
+    private ImageButton iBtnBack;
+    private ImageView img_recipe;
+    private TextView title;
+    private TextView time_cooking;
+    private TextView like;
+    private TextView serving;
+    private TextView ingredient;
+    private TextView instructions;
 
     //Khai báo layout
     private ScrollView scrollView;
@@ -43,7 +35,7 @@ public class DetailDownload extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View views = inflater.inflate(R.layout.fragment_favorite_recipe, null, false);
-        button = views.findViewById(R.id.recipe_back_favorite);
+        iBtnBack = views.findViewById(R.id.recipe_back_favorite);
         img_recipe = views.findViewById(R.id.image_recipe_favorite);
         title = views.findViewById(R.id.title_name_favorite);
         time_cooking = views.findViewById(R.id.time_cooking_favorite);
@@ -71,7 +63,7 @@ public class DetailDownload extends Fragment {
 
             }
         });
-        button.setOnClickListener(new View.OnClickListener() {
+        iBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (getFragmentManager() != null) {

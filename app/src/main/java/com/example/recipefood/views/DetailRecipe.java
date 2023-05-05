@@ -25,21 +25,18 @@ import com.squareup.picasso.Picasso;
 
 public class DetailRecipe extends Fragment {
 
-    Activity mactivity;
-    RecipeInstrument recipe;
-    //Khai báo các view
-    ImageButton button;
-
-    ImageView button_Download;
-    ImageView button_favorite;
-
-    ImageView img_recipe;
-    TextView title;
-    TextView time_cooking;
-    TextView like;
-    TextView serving;
-    TextView ingredient;
-    TextView instructions;
+    private Activity mActivity;
+    private RecipeInstrument recipe;
+    private ImageButton buttonBack;
+    private ImageView buttonDownload;
+    private ImageView button_favorite;
+    private ImageView img_recipe;
+    private TextView title;
+    private TextView time_cooking;
+    private TextView like;
+    private TextView serving;
+    private TextView ingredient;
+    private TextView instructions;
 
 
     //Khai báo listString để lưu danh sách nguyên liệu
@@ -49,8 +46,8 @@ public class DetailRecipe extends Fragment {
     private int Userid;
     private int state;
     //Khai báo layout
-    private ScrollView layout_contraint;
-    private Repository repository;
+    private ScrollView layoutConstraint;
+    private Repository mRepository;
 
 
 
@@ -60,9 +57,9 @@ public class DetailRecipe extends Fragment {
         // Inflate the layout for this fragment
         View views = inflater.inflate(R.layout.fragment_detail__recipe, container, false);
         //Ánh xạ
-        mactivity = getActivity();
-        repository = new Repository();
-        layout_contraint = views.findViewById(R.id.layout_constraint);
+        mActivity = getActivity();
+        mRepository = new Repository();
+        layoutConstraint = views.findViewById(R.id.layout_constraint);
         img_recipe = views.findViewById(R.id.image_recipe);
         title = views.findViewById(R.id.title_name);
         time_cooking = views.findViewById(R.id.time_cooking);
@@ -71,10 +68,10 @@ public class DetailRecipe extends Fragment {
         title = views.findViewById(R.id.title_name);
         ingredient = views.findViewById(R.id.recipe_ingredients);
         instructions = views.findViewById(R.id.recipe_instruction);
-        button = (ImageButton) views.findViewById(R.id.recipe_back);
+        buttonBack = (ImageButton) views.findViewById(R.id.recipe_back);
         button_favorite = (ImageButton) views.findViewById(R.id.favorite_recipe);
-        button_Download = (ImageButton) views.findViewById(R.id.download_recipe);
-        button.setOnClickListener(new View.OnClickListener() {
+        buttonDownload = (ImageButton) views.findViewById(R.id.download_recipe);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (getFragmentManager() != null) {
@@ -99,7 +96,7 @@ public class DetailRecipe extends Fragment {
                 instructions.setText(result_2);
                 Log.d("Food Id : " , recipe.getId() + "");
                 Log.d("Food Id : " , Userid + "");
-                repository.checkFavoriteExist(Userid, recipe.getId(), new Repository.OnExistListener() {
+                mRepository.checkFavoriteExist(Userid, recipe.getId(), new Repository.OnExistListener() {
                     @Override
                     public void onExist(boolean exists) {
                         if(exists){
@@ -114,21 +111,21 @@ public class DetailRecipe extends Fragment {
                 });
             }
         }
-        layout_contraint.setOnClickListener(new View.OnClickListener() {
+        layoutConstraint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        button_Download.setOnClickListener(new View.OnClickListener() {
+        buttonDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RecipeFavorite foods = new RecipeFavorite();
                 foods = FoodsDatabase.getInstance(getContext()).recipeDao().getFoodsByID(recipe.getId());
                 if (foods != null) {
-                    Toast toast = new Toast(mactivity);
+                    Toast toast = new Toast(mActivity);
                     LayoutInflater inflater = getLayoutInflater();
-                    View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));
+                    View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mActivity.findViewById(R.id.custom_toast));
                     TextView text_message = view_inflate.findViewById(R.id.text_toast);
                     text_message.setText("This Recipe has already exist"); // đã tồn tại
                     toast.setView(view_inflate);
@@ -138,10 +135,10 @@ public class DetailRecipe extends Fragment {
                 } else {
                     RecipeFavorite food = new RecipeFavorite(recipe.getId(), recipe.getName(), recipe.getIngredients(), recipe.getInstructions(),
                             recipe.getImages(), recipe.getLikes(), recipe.getServing(), recipe.getTime(), recipe.getSourceName(), recipe.getSourceUrl(), recipe.getSpoonacularSourceUrl());
-                    FoodsDatabase.getInstance(mactivity).recipeDao().insertFavorite(food);
-                    Toast toast = new Toast(mactivity);
+                    FoodsDatabase.getInstance(mActivity).recipeDao().insertFavorite(food);
+                    Toast toast = new Toast(mActivity);
                     LayoutInflater inflater = getLayoutInflater();
-                    View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mactivity.findViewById(R.id.custom_toast));
+                    View view_inflate = inflater.inflate(R.layout.layout_custom_toast, mActivity.findViewById(R.id.custom_toast));
                     TextView text_message = view_inflate.findViewById(R.id.text_toast);
                     text_message.setText("Add to Download Successfully");
                     toast.setView(view_inflate);
@@ -175,10 +172,10 @@ public class DetailRecipe extends Fragment {
         return s;
     }
     public void addToFavorite(){
-        repository.addFavoriteForUser(Userid, recipe.getId());
+        mRepository.addFavoriteForUser(Userid, recipe.getId());
     }
     public void removeFromFavorite(){
-        repository.removeFavoriteForUser(Userid, recipe.getId());
+        mRepository.removeFavoriteForUser(Userid, recipe.getId());
     }
     public void customToast(String message) {
         Toast toast = new Toast(getActivity());

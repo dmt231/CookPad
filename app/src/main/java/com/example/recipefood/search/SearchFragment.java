@@ -89,7 +89,7 @@ public class SearchFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
         randomRecipeRycAdapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
-            public void OnClickRecipe(RecipeInstrument recipe) {
+            public void onClickRecipe(RecipeInstrument recipe) {
                 Fragment detail_recipe = new DetailRecipe();
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 

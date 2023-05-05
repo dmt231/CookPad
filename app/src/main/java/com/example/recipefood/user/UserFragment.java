@@ -3,7 +3,6 @@ package com.example.recipefood.user;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,24 +14,21 @@ import android.widget.Toast;
 
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
-import com.example.recipefood.MainActivity;
 import com.example.recipefood.R;
 import com.example.recipefood.login.ViewModelSignUpLogin;
 import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.User;
-import com.example.recipefood.splash.splash;
+import com.example.recipefood.splash.Splash;
 import com.example.recipefood.user.create.CreateRecipe;
 import com.example.recipefood.user.userfavorite.FavoriteRecipe;
 import com.example.recipefood.user.userrecipe.myFood;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class UserFragment extends Fragment {
     private ImageView favorite;
@@ -69,7 +65,7 @@ public class UserFragment extends Fragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 new Repository().deleteUser(getContext());
                                 Toast.makeText(getContext(), "Logout user ", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getContext().getApplicationContext(), splash.class);
+                                Intent intent = new Intent(getContext().getApplicationContext(), Splash.class);
                                 startActivity(intent);
                             }
                         })

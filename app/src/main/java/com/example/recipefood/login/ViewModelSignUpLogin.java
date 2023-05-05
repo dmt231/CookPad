@@ -13,41 +13,41 @@ public class ViewModelSignUpLogin extends ViewModel {
     public MutableLiveData<ArrayList<User>> listUser;
 
     private MutableLiveData<ArrayList<User>> userAccount;
-    private Repository repository;
+    private Repository mRepository;
 
     public MutableLiveData<ArrayList<User>> getListUser() {
         listUser = new MutableLiveData<>();
-        repository = new Repository();
+        mRepository = new Repository();
         loadData();
         return listUser;
     }
 
     public MutableLiveData<ArrayList<User>> getUserAccount(long id) {
         userAccount = new MutableLiveData<>();
-        repository = new Repository();
+        mRepository = new Repository();
         loadAccount(id);
         return userAccount;
     }
 
     public void loadData() {
-        repository.getUserLiveData().observeForever(new Observer<ArrayList<User>>() {
+        mRepository.getUserLiveData().observeForever(new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 if (users != null && !users.isEmpty())
                     listUser.setValue(users);
             }
         });
-        repository.checkUser();
+        mRepository.checkUser();
     }
 
     public void loadAccount(long id) {
-        repository.getUserLiveData().observeForever(new Observer<ArrayList<User>>() {
+        mRepository.getUserLiveData().observeForever(new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
                 if (users != null && !users.isEmpty())
                     userAccount.setValue(users);
             }
         });
-        repository.getUserLogin(id);
+        mRepository.getUserLogin(id);
     }
 }

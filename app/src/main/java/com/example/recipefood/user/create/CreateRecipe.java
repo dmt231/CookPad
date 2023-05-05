@@ -39,7 +39,7 @@ public class CreateRecipe extends Fragment {
     private Button Post;
     private int id;
 
-    private Repository repository;
+    private Repository mRepository;
     private RecipeInstrument foodRecipe;
     private int state = 0;
     @Override
@@ -52,7 +52,7 @@ public class CreateRecipe extends Fragment {
         ingredients = views.findViewById(R.id.post_ingredient);
         instructions = views.findViewById(R.id.post_instructions);
         txtRecipe = views.findViewById(R.id.txt_recipe);
-        repository = new Repository();
+        mRepository = new Repository();
         time = views.findViewById(R.id.post_time);
         serving = views.findViewById(R.id.post_serving);
         Post = views.findViewById(R.id.btnPost);
@@ -128,7 +128,7 @@ public class CreateRecipe extends Fragment {
         int servingValue = Integer.parseInt(serving.getText().toString());
         RecipeInstrument recipeInstrument = new RecipeInstrument(-1, name, ingredientsValue, instructionsValue, image, 0, servingValue,
                                                                     timeValue, "" , "", "",id );
-        repository.addRecipe(recipeInstrument, new Repository.onSuccess() {
+        mRepository.addRecipe(recipeInstrument, new Repository.onSuccess() {
             @Override
             public void onAddSuccess() {
                 customToast("Add Successfully ! ");
@@ -149,7 +149,7 @@ public class CreateRecipe extends Fragment {
         String instructionsValue = instructions.getText().toString();
         int timeValue = Integer.parseInt(time.getText().toString());
         int servingValue = Integer.parseInt(serving.getText().toString());
-        repository.updateRecipe(foodRecipe.getId(), image, name, ingredientsValue, instructionsValue, timeValue, servingValue, new Repository.onSuccess() {
+        mRepository.updateRecipe(foodRecipe.getId(), image, name, ingredientsValue, instructionsValue, timeValue, servingValue, new Repository.onSuccess() {
             @Override
             public void onAddSuccess() {
 

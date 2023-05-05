@@ -77,7 +77,7 @@ public class HomeFragmentViewModel extends ViewModel {
                 }
             }
         });
-        database.getFoodFromFirestore(i1, i2);
+        database.getFoodFromFireStore(i1, i2);
     }
 
 

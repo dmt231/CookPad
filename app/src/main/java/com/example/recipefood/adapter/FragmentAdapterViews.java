@@ -13,7 +13,6 @@ import com.example.recipefood.views.RecipeFragment;
 
 public class FragmentAdapterViews extends FragmentStatePagerAdapter {
 
-    String username;
     long id;
 
     public FragmentAdapterViews(@NonNull FragmentManager fm, int behavior, long id) {

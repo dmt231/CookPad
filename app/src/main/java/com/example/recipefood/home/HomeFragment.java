@@ -44,9 +44,10 @@ public class HomeFragment extends Fragment {
 
     private HomeFragmentViewModel homeFragmentViewModel;
     private long userId;
-    private Repository repository;
+    private Repository mRepository;
     private AlertDialog.Builder alertDialog;
-    private  LinearLayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
+
     public HomeFragment(long userId) {
         // Required empty public constructor
         this.userId = userId;
@@ -59,7 +60,7 @@ public class HomeFragment extends Fragment {
 
         View views = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = views.findViewById(R.id.recyclerView);
-        repository = new Repository();
+        mRepository = new Repository();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
         homeFragmentViewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
@@ -86,14 +87,12 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         randomRecipeRycAdapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
-            public void OnClickRecipe(RecipeInstrument recipe) {
+            public void onClickRecipe(RecipeInstrument recipe) {
                 Fragment detail_recipe = new DetailRecipe();
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("recipe", recipe);
-                bundle.putInt("Userid", (int)userId);
+                bundle.putInt("Userid", (int) userId);
                 detail_recipe.setArguments(bundle);
                 fragmentTransaction.replace(R.id.fragment_home, detail_recipe);
                 fragmentTransaction.addToBackStack(detail_recipe.getTag());
@@ -102,7 +101,6 @@ public class HomeFragment extends Fragment {
         });
         recyclerView.setAdapter(randomRecipeRycAdapter);
     }
-
 
 
     private RecyclerView.OnScrollListener addRecipeToRyc = new RecyclerView.OnScrollListener() {
@@ -130,6 +128,7 @@ public class HomeFragment extends Fragment {
             }
         }
     };
+
     public void customToast(String message) {
         Toast toast = new Toast(getActivity());
         LayoutInflater inflater = getLayoutInflater();
@@ -141,27 +140,28 @@ public class HomeFragment extends Fragment {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
     }
+
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
-            case 101 :
+        switch (item.getItemId()) {
+            case 101:
                 int userid = recipeList.get(item.getGroupId()).getUserid();
-                if(userid == userId){
+                if (userid == userId) {
                     onChangedToEdit(recipeList.get(item.getGroupId()));
-                }else{
+                } else {
                     customToast("You don't have the permission");
                 }
                 return true;
-            case 102 :
+            case 102:
                 int useridDelete = recipeList.get(item.getGroupId()).getUserid();
-                if(useridDelete== userId){
+                if (useridDelete == userId) {
                     alertDialog = new AlertDialog.Builder(getContext());
                     alertDialog.setMessage("Do you want to remove this recipe ? ")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     int id = recipeList.get(item.getGroupId()).getId();
-                                    repository.deleteRecipe(id);
+                                    mRepository.deleteRecipe(id);
                                     randomRecipeRycAdapter.removeItem(item.getGroupId());
                                 }
                             })
@@ -171,18 +171,19 @@ public class HomeFragment extends Fragment {
                                     dialogInterface.cancel();
                                 }
                             }).show();
-                }else{
+                } else {
                     customToast("You don't have the permission");
                 }
                 return true;
         }
         return super.onContextItemSelected(item);
     }
-    public void onChangedToEdit(RecipeInstrument recipeInstrument){
+
+    public void onChangedToEdit(RecipeInstrument recipeInstrument) {
         Fragment create = new CreateRecipe();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
-        bundle.putInt("Userid", (int)userId);
+        bundle.putInt("Userid", (int) userId);
         bundle.putSerializable("recipeEdit", recipeInstrument);
         create.setArguments(bundle);
         fragmentTransaction.replace(R.id.fragment_like_recipe, create);

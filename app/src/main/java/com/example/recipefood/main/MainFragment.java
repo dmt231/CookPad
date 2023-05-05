@@ -16,16 +16,12 @@ import com.example.recipefood.R;
 import com.example.recipefood.adapter.FragmentAdapterViews;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainFragment extends Fragment {
-    ViewPager viewpager;
-    FragmentAdapterViews fragmentAdapterViews;
-
-    BottomNavigationView bottomBar;
-
+    private ViewPager viewPager;
+    private FragmentAdapterViews fragmentAdapterViews;
+    private BottomNavigationView bottomBar;
     private long id;
-
 
     public MainFragment(long id) {
         this.id = id;
@@ -36,10 +32,10 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         bottomBar = view.findViewById(R.id.bottombar);
-        viewpager = view.findViewById(R.id.recyclerView_Random);
+        viewPager = view.findViewById(R.id.recyclerView_Random);
         //getData();
         fragmentAdapterViews = new FragmentAdapterViews(getActivity().getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, id);
-        viewpager.setAdapter(fragmentAdapterViews);
+        viewPager.setAdapter(fragmentAdapterViews);
         Log.d("Id: ", id + "");
         Init();
         return view;
@@ -48,11 +44,10 @@ public class MainFragment extends Fragment {
 
     public void Init() {
         setupViewPager();
-
     }
 
     public void setupViewPager() {
-        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -86,16 +81,16 @@ public class MainFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home_recipe:
-                        viewpager.setCurrentItem(0);
+                        viewPager.setCurrentItem(0);
                         return true;
                     case R.id.search_recipe:
-                        viewpager.setCurrentItem(1);
+                        viewPager.setCurrentItem(1);
                         return true;
                     case R.id.recipe:
-                        viewpager.setCurrentItem(2);
+                        viewPager.setCurrentItem(2);
                         return true;
                     case R.id.user:
-                        viewpager.setCurrentItem(3);
+                        viewPager.setCurrentItem(3);
                 }
                 return false;
             }

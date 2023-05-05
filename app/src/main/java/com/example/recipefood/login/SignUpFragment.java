@@ -25,7 +25,7 @@ public class SignUpFragment extends Fragment {
     private EditText email, pass, username;
     private Button btnSignup;
 
-    private Repository repository;
+    private Repository mRepository;
     private ViewModelSignUpLogin viewModelSignUpLogin;
     private ProgressDialog progressDialog;
 
@@ -38,7 +38,7 @@ public class SignUpFragment extends Fragment {
         username = view.findViewById(R.id.signUpUsername);
         btnSignup = view.findViewById(R.id.btnSignUp);
         progressDialog = new ProgressDialog(getActivity());
-        repository = new Repository();
+        mRepository = new Repository();
         viewModelSignUpLogin = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,12 +59,12 @@ public class SignUpFragment extends Fragment {
         String emailValue = email.getText().toString();
         String password = pass.getText().toString();
 
-        repository.checkUserExist(new Repository.OnExistListener() {
+        mRepository.checkUserExist(new Repository.OnExistListener() {
             @Override
             public void onExist(boolean exists) {
                 if (!exists) {
                     progressDialog.dismiss();
-                    repository.Register(usernameValue, emailValue, password);
+                    mRepository.Register(usernameValue, emailValue, password);
                     customToast("Thêm Thành Công");
                 } else if (exists) {
 
@@ -87,7 +87,7 @@ public class SignUpFragment extends Fragment {
                         }
                     }
                     if (!exists) {
-                        repository.Register(usernameValue, emailValue, password);
+                        mRepository.Register(usernameValue, emailValue, password);
                         customToast("Thêm Thành Công");
                     }
                 }

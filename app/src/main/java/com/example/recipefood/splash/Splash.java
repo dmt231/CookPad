@@ -11,7 +11,7 @@ import com.example.recipefood.R;
 import com.example.recipefood.model.Repository;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-public class splash extends AppCompatActivity {
+public class Splash extends AppCompatActivity {
     private final int DELAY_TIME = 1500;
 
     @Override
@@ -22,7 +22,7 @@ public class splash extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             int id = new Repository().checkLogged(this);
-            Intent intent = new Intent(splash.this, MainActivity.class);
+            Intent intent = new Intent(Splash.this, MainActivity.class);
             if (id != -1) {
                 intent.putExtra("UserId", id);
             }

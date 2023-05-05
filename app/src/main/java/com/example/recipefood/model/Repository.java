@@ -36,15 +36,15 @@ public class Repository {
         return recipeListLiveData;
     }
 
-    FirebaseFirestore firestore;
+    FirebaseFirestore fireStore;
 
     public Repository() {
-        firestore = FirebaseFirestore.getInstance();
+        fireStore = FirebaseFirestore.getInstance();
     }
 
 
-    public void getFoodFromFirestore(int i1, int i2) { //(0,10)
-        firestore.collection("foods")
+    public void getFoodFromFireStore(int i1, int i2) { //(0,10)
+        fireStore.collection("foods")
                 .orderBy("foodId")
                 .whereGreaterThanOrEqualTo("foodId", i1)
                 .whereLessThan("foodId", i2)
@@ -83,7 +83,7 @@ public class Repository {
     }
 
     public void getFoodByIngredients(int i1, int i2, String ingredient) {
-        firestore.collection("foods")
+        fireStore.collection("foods")
                 .orderBy("foodId")
                 .whereGreaterThanOrEqualTo("foodId", i1)
                 .whereLessThan("foodId", i2)
@@ -126,7 +126,7 @@ public class Repository {
 
     //User's Recipe
     public void haveAnyRecipe(int userid, OnExistListener listener){
-        firestore.collection("foods")
+        fireStore.collection("foods")
                 .whereEqualTo("userId", userid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -143,7 +143,7 @@ public class Repository {
 
 
     public void getFoodByUser(int userid){
-        firestore.collection("foods")
+        fireStore.collection("foods")
                 .whereEqualTo("userId",userid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -181,7 +181,7 @@ public class Repository {
     }
 
     public void addRecipe(RecipeInstrument recipe, onSuccess addSuccess){
-        CollectionReference ref = firestore.collection("foods");
+        CollectionReference ref = fireStore.collection("foods");
         Map<String, Object> food = new HashMap<>();
         food.put("foodImage", recipe.getImages());
         food.put("foodLikes", recipe.getLikes());
@@ -225,7 +225,7 @@ public class Repository {
 
     public void updateRecipe(int foodId, String image, String name, String ingredients, String instructions,
                              int time, int serving, onSuccess success){
-        CollectionReference ref = firestore.collection("foods");
+        CollectionReference ref = fireStore.collection("foods");
         Query query = ref.whereEqualTo("foodId", foodId);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -249,7 +249,7 @@ public class Repository {
     }
 
     public void deleteRecipe(int foodId){
-        CollectionReference ref = firestore.collection("foods");
+        CollectionReference ref = fireStore.collection("foods");
         Query query = ref.whereEqualTo("foodId", foodId);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -270,7 +270,7 @@ public class Repository {
 
     //User
     public void Register(String username, String email, String pasword) {
-        CollectionReference ref = firestore.collection("User");
+        CollectionReference ref = fireStore.collection("User");
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("username", username);
         userMap.put("email", email);
@@ -307,7 +307,7 @@ public class Repository {
 
     //Favorite food for User
     public void addFavoriteForUser(int Userid, int foodId){
-        CollectionReference reference = firestore.collection("User");
+        CollectionReference reference = fireStore.collection("User");
         Query query = reference.whereEqualTo("userId", Userid);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -329,7 +329,7 @@ public class Repository {
         });
     }
     public void removeFavoriteForUser(int userId, int foodId) {
-        CollectionReference reference = firestore.collection("User");
+        CollectionReference reference = fireStore.collection("User");
         Query query = reference.whereEqualTo("userId", userId);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -352,7 +352,7 @@ public class Repository {
         });
     }
     public void checkFavoriteExist(int userId, int foodId , OnExistListener listener){
-        CollectionReference usersRef = firestore.collection("User");
+        CollectionReference usersRef = fireStore.collection("User");
         Query query = usersRef.whereEqualTo("userId", userId).whereArrayContains("favorite", foodId);
 
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -369,7 +369,7 @@ public class Repository {
         });
     }
     public void haveAnyFavorite(int userId, OnExistListener existListener){
-        firestore.collection("User")
+        fireStore.collection("User")
                 .whereEqualTo("userId", userId)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -394,8 +394,8 @@ public class Repository {
 
 
     public void getAllFoodFavorite(int userId){
-        CollectionReference foodRef = firestore.collection("foods");
-        firestore.collection("User")
+        CollectionReference foodRef = fireStore.collection("foods");
+        fireStore.collection("User")
                 .whereEqualTo("userId", userId)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -447,7 +447,7 @@ public class Repository {
     //Login.
 
     public void checkUser() {
-        firestore.collection("User")
+        fireStore.collection("User")
                 .orderBy("userId")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -473,7 +473,7 @@ public class Repository {
                 });
     }
     public void getUserLogin(long id){ //For UserAccount
-        firestore.collection("User")
+        fireStore.collection("User")
                 .orderBy("userId")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

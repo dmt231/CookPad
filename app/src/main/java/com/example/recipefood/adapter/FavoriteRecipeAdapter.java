@@ -2,7 +2,6 @@ package com.example.recipefood.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,14 +45,14 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
         RecipeFavorite dataModel = recipeList.get(position);
         holder.Ryc_TextView_title.setText(dataModel.getName());
         holder.Ryc_TextView_title.setSelected(true);
-        holder.Ryc_textfavorite.setText(dataModel.getLikes() + " Likes");
-        holder.time_cooking.setText(dataModel.getTime() + " Min");
+        holder.Ryc_text_favorite.setText(dataModel.getLikes() + " Likes");
+        holder.Ryc_time_cooking.setText(dataModel.getTime() + " Min");
         holder.Ryc_serving.setText(dataModel.getServing() + " Servings");
         Picasso.get().load(dataModel.getImages()).into(holder.Ryc_Image_food);
         holder.Ryc_Image_food.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                detail_clickListener_favorite.OnClickRecipe(dataModel);
+                detail_clickListener_favorite.onClickRecipe(dataModel);
             }
         });
 
@@ -82,7 +81,7 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
     }
 
     public interface Detail_ClickListener_Favorite {
-        void OnClickRecipe(RecipeFavorite recipeFavorite);
+        void onClickRecipe(RecipeFavorite recipeFavorite);
     }
     public void customToast(String message) {
         Toast toast = new Toast(mContext);
@@ -99,16 +98,16 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
 
 class ViewHolderFavorite extends RecyclerView.ViewHolder {
     CardView Ryc_CardView;
-    TextView Ryc_TextView_title, Ryc_textfavorite, time_cooking, Ryc_serving;
+    TextView Ryc_TextView_title, Ryc_text_favorite, Ryc_time_cooking, Ryc_serving;
     ImageView Ryc_Image_food;
 
     public ViewHolderFavorite(@NonNull View itemView) {
         super(itemView);
         Ryc_CardView = itemView.findViewById(R.id.Ryc_CardView);
         Ryc_TextView_title = itemView.findViewById(R.id.Ryc_TextView_title);
-        Ryc_textfavorite = itemView.findViewById(R.id.Ryc_textfavorite);
+        Ryc_text_favorite = itemView.findViewById(R.id.Ryc_textfavorite);
         Ryc_Image_food = itemView.findViewById(R.id.Ryc_Image_food);
-        time_cooking = itemView.findViewById(R.id.time_cooking);
+        Ryc_time_cooking = itemView.findViewById(R.id.time_cooking);
         Ryc_serving = itemView.findViewById(R.id.Ryc_serving);
     }
 }

@@ -25,12 +25,11 @@ import java.util.ArrayList;
 
 public class LoginPageFragment extends Fragment {
 
-    onChangedScreen changedScreen;
-    EditText username, pass;
-    Button btnLogin;
-    ProgressDialog progressDialog;
-
-    ViewModelSignUpLogin viewModelSignUpLogin;
+    private onChangedScreen changedScreen;
+    private EditText username, pass;
+    private Button btnLogin;
+    private ProgressDialog progressDialog;
+    private ViewModelSignUpLogin viewModelSignUpLogin;
     float v = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

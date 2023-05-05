@@ -32,7 +32,7 @@ import com.example.recipefood.views.DetailRecipe;
 import java.util.ArrayList;
 
 public class FavoriteRecipe extends Fragment {
-    private ImageButton back;
+    private ImageButton iBtnBack;
 
     private int id;
     private RecyclerView recyclerView;
@@ -50,8 +50,8 @@ public class FavoriteRecipe extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView_like_recipe);
         repository = new Repository();
         progressDialog = new ProgressDialog(getActivity());
-        back = view.findViewById(R.id.recipe_back_from_like_recipe);
-        back.setOnClickListener(new View.OnClickListener() {
+        iBtnBack = view.findViewById(R.id.recipe_back_from_like_recipe);
+        iBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(getFragmentManager() != null){
@@ -94,7 +94,7 @@ public class FavoriteRecipe extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         adapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
-            public void OnClickRecipe(RecipeInstrument recipe) {
+            public void onClickRecipe(RecipeInstrument recipe) {
                 Fragment detail_recipe = new DetailRecipe();
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 

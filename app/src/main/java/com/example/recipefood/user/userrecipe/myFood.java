@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,16 +29,14 @@ import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.home.HomeFragmentViewModel;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
-import com.example.recipefood.user.UserFragment;
 import com.example.recipefood.user.create.CreateRecipe;
 import com.example.recipefood.views.DetailRecipe;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class myFood extends Fragment {
-    private ImageButton back;
+    private ImageButton iBtnBack;
 
     private int id;
     private RecyclerView recyclerView;
@@ -57,8 +54,8 @@ public class myFood extends Fragment {
         repository = new Repository();
         recyclerView = view.findViewById(R.id.recyclerView_myFood);
         progressDialog = new ProgressDialog(getActivity());
-        back = view.findViewById(R.id.recipe_back_from_myFood);
-        back.setOnClickListener(new View.OnClickListener() {
+        iBtnBack = view.findViewById(R.id.recipe_back_from_myFood);
+        iBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(getFragmentManager() != null){
@@ -90,7 +87,7 @@ public class myFood extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         adapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
-            public void OnClickRecipe(RecipeInstrument recipe) {
+            public void onClickRecipe(RecipeInstrument recipe) {
                 Fragment detail_recipe = new DetailRecipe();
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
