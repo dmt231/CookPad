@@ -25,18 +25,18 @@ public class HomeFragmentViewModel extends ViewModel {
         loadFavorite(userId);
         return favoriteList;
     }
-    public void loadFavorite(int userId){
+
+    public void loadFavorite(int userId) {
         database.getRecipeListLiveData().observeForever(new Observer<ArrayList<RecipeInstrument>>() {
             @Override
             public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
-                if(!recipeInstruments.isEmpty() && recipeInstruments != null){
+                if (!recipeInstruments.isEmpty() && recipeInstruments != null) {
                     favoriteList.setValue(recipeInstruments);
                 }
             }
         });
         database.getAllFoodFavorite(userId);
     }
-
 
 
     public MutableLiveData<ArrayList<RecipeInstrument>> getRecipeListByUser(int userId) {
@@ -46,7 +46,7 @@ public class HomeFragmentViewModel extends ViewModel {
         return recipeListByUser;
     }
 
-    public void loadDataByUser(int userId){
+    public void loadDataByUser(int userId) {
         database.getRecipeListLiveData().observeForever(new Observer<ArrayList<RecipeInstrument>>() {
             @Override
             public void onChanged(ArrayList<RecipeInstrument> recipeInstruments) {
