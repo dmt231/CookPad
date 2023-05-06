@@ -513,7 +513,7 @@ public class Repository {
     public void checkUserExist(OnExistListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("User");
-        usersRef.get().addOnCompleteListener(task -> {
+        usersRef.get().addOnCompleteListener((Task<QuerySnapshot> task) -> {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
                 listener.onExist(true);
             } else {

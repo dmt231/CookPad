@@ -73,6 +73,8 @@ public class FavoriteRecipe extends Fragment {
                     progressDialog.show();
                     onObserve();
                 }else{
+                    recipeList.clear();
+                    adapter.notifyDataSetChanged();
                     customToast("This user haven't favorite recipe");
                 }
             }
