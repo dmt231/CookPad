@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recipefood.databinding.FragmentDetailRecipeBinding;
 import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
@@ -25,18 +26,9 @@ import com.squareup.picasso.Picasso;
 
 public class DetailRecipe extends Fragment {
 
+    private FragmentDetailRecipeBinding binding;
     private Activity mActivity;
     private RecipeInstrument recipe;
-    private ImageButton buttonBack;
-    private ImageView buttonDownload;
-    private ImageView button_favorite;
-    private ImageView img_recipe;
-    private TextView title;
-    private TextView time_cooking;
-    private TextView like;
-    private TextView serving;
-    private TextView ingredient;
-    private TextView instructions;
 
 
     String result = "";
@@ -45,7 +37,6 @@ public class DetailRecipe extends Fragment {
     private int Userid;
     private int state;
     //Khai báo layout
-    private ScrollView layoutConstraint;
     private Repository mRepository;
 
 
@@ -54,23 +45,12 @@ public class DetailRecipe extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View views = inflater.inflate(R.layout.fragment_detail__recipe, container, false);
+        binding = FragmentDetailRecipeBinding.inflate(inflater, container, false);
+        View views = binding.getRoot();
         //Ánh xạ
         mActivity = getActivity();
         mRepository = new Repository();
-        layoutConstraint = views.findViewById(R.id.layout_constraint);
-        img_recipe = views.findViewById(R.id.image_recipe);
-        title = views.findViewById(R.id.title_name);
-        time_cooking = views.findViewById(R.id.time_cooking);
-        like = views.findViewById(R.id.textfavorite);
-        serving = views.findViewById(R.id.serving);
-        title = views.findViewById(R.id.title_name);
-        ingredient = views.findViewById(R.id.recipe_ingredients);
-        instructions = views.findViewById(R.id.recipe_instruction);
-        buttonBack = (ImageButton) views.findViewById(R.id.recipe_back);
-        button_favorite = (ImageButton) views.findViewById(R.id.favorite_recipe);
-        buttonDownload = (ImageButton) views.findViewById(R.id.download_recipe);
-        buttonBack.setOnClickListener(new View.OnClickListener() {
+        binding.recipeBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (getFragmentManager() != null) {
@@ -84,39 +64,39 @@ public class DetailRecipe extends Fragment {
             recipe = (RecipeInstrument) bundle.get("recipe");
             Userid = (int)bundle.get("Userid");
             if (recipe != null) {
-                Picasso.get().load(recipe.getImages()).into(img_recipe);
-                title.setText(recipe.getName());
-                time_cooking.setText(String.valueOf(recipe.getTime()));
-                like.setText(String.valueOf(recipe.getLikes()));
-                serving.setText(String.valueOf(recipe.getServing()));
+                Picasso.get().load(recipe.getImages()).into(binding.imageRecipe);
+                binding.titleName.setText(recipe.getName());
+                binding.timeCooking.setText(String.valueOf(recipe.getTime()));
+                binding.textfavorite.setText(String.valueOf(recipe.getLikes()));
+                binding.serving.setText(String.valueOf(recipe.getServing()));
                 result += replaceString(recipe.getIngredients());
-                ingredient.setText(result);
+                binding.recipeIngredients.setText(result);
                 result_2 += recipe.getInstructions();
-                instructions.setText(result_2);
+                binding.recipeInstruction.setText(result_2);
                 Log.d("Food Id : " , recipe.getId() + "");
                 Log.d("Food Id : " , Userid + "");
                 mRepository.checkFavoriteExist(Userid, recipe.getId(), new Repository.OnExistListener() {
                     @Override
                     public void onExist(boolean exists) {
                         if(exists){
-                            button_favorite.setImageResource(R.drawable.baseline_favorite_24);
+                            binding.favoriteRecipe.setImageResource(R.drawable.baseline_favorite_24);
                             state = 1;
 
                         }else {
-                            button_favorite.setImageResource(R.drawable.baseline_unfavorite);
+                            binding.favoriteRecipe.setImageResource(R.drawable.baseline_unfavorite);
                             state = 0;
                         }
                     }
                 });
             }
         }
-        layoutConstraint.setOnClickListener(new View.OnClickListener() {
+        binding.layoutConstraint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        buttonDownload.setOnClickListener(new View.OnClickListener() {
+        binding.downloadRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RecipeFavorite foods = new RecipeFavorite();
@@ -147,15 +127,15 @@ public class DetailRecipe extends Fragment {
                 }
             }
         });
-        button_favorite.setOnClickListener(new View.OnClickListener() {
+        binding.favoriteRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(state == 0){
                     addToFavorite();
-                    button_favorite.setImageResource(R.drawable.baseline_favorite_24);
+                    binding.favoriteRecipe.setImageResource(R.drawable.baseline_favorite_24);
                 }else if(state == 1){
                     removeFromFavorite();
-                    button_favorite.setImageResource(R.drawable.baseline_unfavorite);
+                    binding.favoriteRecipe.setImageResource(R.drawable.baseline_unfavorite);
                 }
             }
         });

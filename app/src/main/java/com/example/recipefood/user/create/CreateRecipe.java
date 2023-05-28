@@ -19,24 +19,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.recipefood.R;
+import com.example.recipefood.databinding.LayoutAddNewRecipeBinding;
 import com.example.recipefood.fcm.SendNotificationTask;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
 import com.squareup.picasso.Picasso;
 
 public class CreateRecipe extends Fragment {
-    private ImageView imageView;
-    private ScrollView scrollView;
-    private ImageButton back;
-    private EditText linkImage;
-    private EditText recipeName;
-    private EditText ingredients;
-    private EditText instructions;
-    private EditText time;
-    private EditText serving;
 
-    private TextView txtRecipe;
-    private Button Post;
+    private LayoutAddNewRecipeBinding binding;
     private int id;
 
     private Repository mRepository;
@@ -44,39 +35,29 @@ public class CreateRecipe extends Fragment {
     private int state = 0;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View views = inflater.inflate(R.layout.layout_add_new_recipe, container, false);
-        scrollView = views.findViewById(R.id.scrollview_createNew);
-        back = views.findViewById(R.id.recipe_back_from_create);
-        linkImage = views.findViewById(R.id.image_url);
-        recipeName = views.findViewById(R.id.post_recipe_name);
-        ingredients = views.findViewById(R.id.post_ingredient);
-        instructions = views.findViewById(R.id.post_instructions);
-        txtRecipe = views.findViewById(R.id.txt_recipe);
+        binding = LayoutAddNewRecipeBinding.inflate(inflater, container, false);
+        View views = binding.getRoot();
         mRepository = new Repository();
-        time = views.findViewById(R.id.post_time);
-        serving = views.findViewById(R.id.post_serving);
-        Post = views.findViewById(R.id.btnPost);
-        imageView = views.findViewById(R.id.image_newFoods);
         getUserId();
-        linkImage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        binding.imageUrl.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    String imageUrl = linkImage.getText().toString();
+                    String imageUrl = binding.imageUrl.getText().toString();
                     if (!imageUrl.isEmpty()) {
-                        Picasso.get().load(imageUrl).into(imageView);
+                        Picasso.get().load(imageUrl).into(binding.imageNewFoods);
                     }
                 }
             }
         });
 
-        scrollView.setOnClickListener(new View.OnClickListener() {
+        binding.scrollviewCreateNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
+        binding.recipeBackFromCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(getFragmentManager() != null){
@@ -84,7 +65,7 @@ public class CreateRecipe extends Fragment {
                 }
             }
         });
-        Post.setOnClickListener(new View.OnClickListener() {
+        binding.btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -108,24 +89,24 @@ public class CreateRecipe extends Fragment {
             if(foodRecipe != null){
                 state = 1;
                 Log.d("Food Exists :",foodRecipe.getId() + foodRecipe.getName() + foodRecipe.getIngredients() + foodRecipe.getInstructions());
-                recipeName.setText(foodRecipe.getName());
-                linkImage.setText(foodRecipe.getImages());
-                ingredients.setText(foodRecipe.getIngredients());
-                instructions.setText(foodRecipe.getInstructions());
-                time.setText(String.valueOf(foodRecipe.getTime()));
-                serving.setText(String.valueOf(foodRecipe.getServing()));
-                txtRecipe.setText("Update Your Recipe");
-                Post.setText("Update");
+                binding.postRecipeName.setText(foodRecipe.getName());
+                binding.imageUrl.setText(foodRecipe.getImages());
+                binding.postIngredient.setText(foodRecipe.getIngredients());
+                binding.postInstructions.setText(foodRecipe.getInstructions());
+                binding.postTime.setText(String.valueOf(foodRecipe.getTime()));
+                binding.postServing.setText(String.valueOf(foodRecipe.getServing()));
+                binding.txtRecipe.setText("Update Your Recipe");
+                binding.btnPost.setText("Update");
             }
         }
     }
     public void addNewRecipe(){
-        String image = linkImage.getText().toString();
-        String name = recipeName.getText().toString();
-        String ingredientsValue = ingredients.getText().toString();
-        String instructionsValue = instructions.getText().toString();
-        int timeValue = Integer.parseInt(time.getText().toString());
-        int servingValue = Integer.parseInt(serving.getText().toString());
+        String image = binding.imageUrl.getText().toString();
+        String name = binding.postRecipeName.getText().toString();
+        String ingredientsValue = binding.postIngredient.getText().toString();
+        String instructionsValue = binding.postInstructions.getText().toString();
+        int timeValue = Integer.parseInt(binding.postTime.getText().toString());
+        int servingValue = Integer.parseInt(binding.postServing.getText().toString());
         RecipeInstrument recipeInstrument = new RecipeInstrument(-1, name, ingredientsValue, instructionsValue, image, 0, servingValue,
                                                                     timeValue, "" , "", "",id );
         mRepository.addRecipe(recipeInstrument, new Repository.onSuccess() {
@@ -143,12 +124,12 @@ public class CreateRecipe extends Fragment {
         });
     }
     public void updateRecipe(){
-        String image = linkImage.getText().toString();
-        String name = recipeName.getText().toString();
-        String ingredientsValue = ingredients.getText().toString();
-        String instructionsValue = instructions.getText().toString();
-        int timeValue = Integer.parseInt(time.getText().toString());
-        int servingValue = Integer.parseInt(serving.getText().toString());
+        String image = binding.imageUrl.getText().toString();
+        String name = binding.postRecipeName.getText().toString();
+        String ingredientsValue = binding.postIngredient.getText().toString();
+        String instructionsValue = binding.postInstructions.getText().toString();
+        int timeValue = Integer.parseInt(binding.postTime.getText().toString());
+        int servingValue = Integer.parseInt(binding.postServing.getText().toString());
         mRepository.updateRecipe(foodRecipe.getId(), image, name, ingredientsValue, instructionsValue, timeValue, servingValue, new Repository.onSuccess() {
             @Override
             public void onAddSuccess() {
@@ -174,28 +155,28 @@ public class CreateRecipe extends Fragment {
     }
     public boolean validateInput(){
         boolean check = true;
-        if(linkImage.getText().toString().equals("")){
-            linkImage.setError("Please enter your link image");
+        if(binding.imageUrl.getText().toString().equals("")){
+            binding.imageUrl.setError("Please enter your link image");
             check = false;
         }
-        if(recipeName.getText().toString().equals("")){
-            recipeName.setError("Please enter your recipe name");
+        if(binding.postRecipeName.getText().toString().equals("")){
+            binding.postRecipeName.setError("Please enter your recipe name");
             check = false;
         }
-        if(ingredients.getText().toString().equals("")){
-            ingredients.setError("Please enter your ingredients");
+        if(binding.postIngredient.getText().toString().equals("")){
+            binding.postIngredient.setError("Please enter your ingredients");
             check = false;
         }
-        if(instructions.getText().toString().equals("")){
-            instructions.setError("Please enter your instructions");
+        if(binding.postInstructions.getText().toString().equals("")){
+            binding.postInstructions.setError("Please enter your instructions");
             check = false;
         }
-        if(time.getText().toString().equals("")){
-            time.setError("Please enter the time for your recipe");
+        if(binding.postTime.getText().toString().equals("")){
+            binding.postTime.setError("Please enter the time for your recipe");
             check = false;
         }
-        if(serving.getText().toString().equals("")){
-            serving.setError("Please enter your serving");
+        if(binding.postServing.getText().toString().equals("")){
+            binding.postServing.setError("Please enter your serving");
             check = false;
         }
         return check;

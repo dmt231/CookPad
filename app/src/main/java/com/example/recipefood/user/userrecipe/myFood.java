@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipefood.R;
 import com.example.recipefood.adapter.RandomRecipeRycAdapter;
+import com.example.recipefood.databinding.MyfoodBinding;
 import com.example.recipefood.home.HomeFragmentViewModel;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
@@ -36,10 +37,10 @@ import java.util.ArrayList;
 
 
 public class myFood extends Fragment {
-    private ImageButton iBtnBack;
 
+    private MyfoodBinding binding;
     private int id;
-    private RecyclerView recyclerView;
+
     private RandomRecipeRycAdapter adapter;
     private HomeFragmentViewModel viewModel;
     private ArrayList<RecipeInstrument> recipeList;
@@ -50,12 +51,12 @@ public class myFood extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.myfood, container, false);
+        binding = MyfoodBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         repository = new Repository();
-        recyclerView = view.findViewById(R.id.recyclerView_myFood);
         progressDialog = new ProgressDialog(getActivity());
-        iBtnBack = view.findViewById(R.id.recipe_back_from_myFood);
-        iBtnBack.setOnClickListener(new View.OnClickListener() {
+
+        binding.recipeBackFromMyFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(getFragmentManager() != null){
@@ -66,7 +67,7 @@ public class myFood extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         getUserId();
         getData();
-        recyclerView.addOnScrollListener(addRecipeToRyc);
+        binding.recyclerViewMyFood.addOnScrollListener(addRecipeToRyc);
         return view;
     }
     public void getData(){
@@ -83,8 +84,8 @@ public class myFood extends Fragment {
         });
     }
     public void onSetUpRecyclerView(){
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        binding.recyclerViewMyFood.setHasFixedSize(true);
+        binding.recyclerViewMyFood.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         adapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
             public void onClickRecipe(RecipeInstrument recipe) {
@@ -102,7 +103,7 @@ public class myFood extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(adapter);
+        binding.recyclerViewMyFood.setAdapter(adapter);
     }
     public void onObserveData(){
         viewModel.getRecipeListByUser(id).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {

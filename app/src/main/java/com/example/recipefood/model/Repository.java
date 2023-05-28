@@ -386,7 +386,7 @@ public class Repository {
                                     existListener.onExist(true);
                                     Log.d("Exists : ", "true");
                                 }
-                                else if(favorite.size() == 0) {
+                                else {
                                     existListener.onExist(false);
                                     Log.d("Exists : ", "false");
                                 }

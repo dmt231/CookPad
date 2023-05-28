@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipefood.adapter.FavoriteRecipeAdapter;
+import com.example.recipefood.databinding.FragmentRecipeBinding;
 import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
 import com.example.recipefood.model.roomDatabase.FoodsDatabase;
@@ -34,20 +35,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeFragment extends Fragment {
+    private FragmentRecipeBinding binding;
     private FavoriteRecipeAdapter favoriteRecipeAdapter;//Recycle Adapter
-    private RecyclerView recyclerView;
     private Activity mActivity;
     //Database.
     private static int selectedID = 0;
     private List<RecipeFavorite> list = new ArrayList<>();
 
-    AlertDialog.Builder dialog_builder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        recyclerView = view.findViewById(R.id.recyclerview_favorite);
+        binding = FragmentRecipeBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         setupRecyclerview();
         return view;
     }
@@ -66,8 +66,8 @@ public class RecipeFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(favoriteRecipeAdapter);
+        binding.recyclerviewFavorite.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerviewFavorite.setAdapter(favoriteRecipeAdapter);
     }
 
     @Override

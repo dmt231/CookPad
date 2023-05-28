@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 
 import com.example.recipefood.R;
+import com.example.recipefood.databinding.FragmentUserBinding;
 import com.example.recipefood.login.ViewModelSignUpLogin;
 import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.User;
@@ -31,12 +32,7 @@ import com.example.recipefood.user.userrecipe.myFood;
 import java.util.ArrayList;
 
 public class UserFragment extends Fragment {
-    private ImageView favorite;
-    private ImageView create;
-    private ImageView myFood;
-    private TextView username;
-    private TextView email;
-    private TextView SignOut;
+    private FragmentUserBinding binding;
     private ViewModelSignUpLogin viewModel;
     private long id;
     private AlertDialog.Builder alertDialog;
@@ -47,15 +43,9 @@ public class UserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user, container, false);
-        Log.d("ID User Fragment : " , id + "");
-        username = view.findViewById(R.id.account_username);
-        email = view.findViewById(R.id.account_email);
-        favorite = view.findViewById(R.id.account_favorite);
-        create = view.findViewById(R.id.account_create);
-        myFood = view.findViewById(R.id.account_my_food);
-        SignOut = view.findViewById(R.id.sign_out);
-        SignOut.setOnClickListener(new View.OnClickListener() {
+        binding = FragmentUserBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        binding.signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog = new AlertDialog.Builder(getActivity());
@@ -80,19 +70,19 @@ public class UserFragment extends Fragment {
         });
         viewModel = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
         setDataAccount();
-        create.setOnClickListener(new View.OnClickListener() {
+        binding.accountCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onChangedToCreate();
             }
         });
-        myFood.setOnClickListener(new View.OnClickListener() {
+        binding.accountMyFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onChangedToMyFood();
             }
         });
-        favorite.setOnClickListener(new View.OnClickListener() {
+        binding.accountFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onChangedToLikeFood();
@@ -107,8 +97,8 @@ public class UserFragment extends Fragment {
                 for (User user : users ) {
                     Log.d("Info User 1 : ", user.getUsername());
                     if(user.getUserId()==id){
-                        username.setText(user.getUsername());
-                        email.setText(user.getEmail());
+                        binding.accountUsername.setText(user.getUsername());
+                        binding.accountEmail.setText(user.getEmail());
                         break;
                     }
                 }

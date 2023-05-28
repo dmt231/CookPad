@@ -18,30 +18,27 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.recipefood.R;
+import com.example.recipefood.databinding.LoginPageBinding;
 import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.User;
 
 import java.util.ArrayList;
 
 public class LoginPageFragment extends Fragment {
-
+    private LoginPageBinding binding;
     private onChangedScreen changedScreen;
-    private EditText username, pass;
-    private Button btnLogin;
     private ProgressDialog progressDialog;
     private ViewModelSignUpLogin viewModelSignUpLogin;
     float v = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.login_page, container, false);
-        username = (EditText) view.findViewById(R.id.username);
-        pass = (EditText) view.findViewById(R.id.pass);
-        btnLogin = (Button) view.findViewById(R.id.btnLogin);
+        binding = LoginPageBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         progressDialog = new ProgressDialog(getActivity());
         viewModelSignUpLogin = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
         setAnimation();
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkUsername() && checkPassword()) {
@@ -54,8 +51,8 @@ public class LoginPageFragment extends Fragment {
     }
 
     public void Login() {
-        String usernameValue = username.getText().toString();
-        String passwordValue = pass.getText().toString();
+        String usernameValue = binding.username.getText().toString();
+        String passwordValue = binding.pass.getText().toString();
         viewModelSignUpLogin.getListUser().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
@@ -96,17 +93,17 @@ public class LoginPageFragment extends Fragment {
     }
 
     public void setAnimation() {
-        username.setTranslationY(800);
-        pass.setTranslationY(800);
-        btnLogin.setTranslationY(800);
+        binding.username.setTranslationY(800);
+        binding.pass.setTranslationY(800);
+        binding.btnLogin.setTranslationY(800);
 
-        username.setAlpha(v);
-        pass.setAlpha(v);
-        btnLogin.setAlpha(v);
+        binding.username.setAlpha(v);
+        binding.pass.setAlpha(v);
+        binding.btnLogin.setAlpha(v);
 
-        username.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(300).start();
-        pass.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
-        btnLogin.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(700).start();
+        binding.username.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(300).start();
+        binding.pass.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
+        binding.btnLogin.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(700).start();
     }
 
     public boolean checkLogin(User user, String username, String password) {
@@ -131,8 +128,8 @@ public class LoginPageFragment extends Fragment {
 
     public boolean checkUsername() {
         boolean check = true;
-        if (username.getText().toString().length() == 0) {
-            username.setError("Vui lòng điền tên đăng nhập");
+        if (binding.username.getText().toString().length() == 0) {
+            binding.username.setError("Vui lòng điền tên đăng nhập");
             check = false;
         }
         return check;
@@ -140,8 +137,8 @@ public class LoginPageFragment extends Fragment {
 
     public boolean checkPassword() {
         boolean check = true;
-        if (pass.getText().toString().length() == 0) {
-            pass.setError("Vui lòng nhập mật khẩu");
+        if (binding.pass.getText().toString().length() == 0) {
+            binding.pass.setError("Vui lòng nhập mật khẩu");
             check = false;
         }
         return check;

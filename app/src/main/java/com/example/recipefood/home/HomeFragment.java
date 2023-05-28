@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipefood.R;
 import com.example.recipefood.adapter.RandomRecipeRycAdapter;
+import com.example.recipefood.databinding.FragmentHomeBinding;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
 import com.example.recipefood.user.create.CreateRecipe;
@@ -35,8 +36,8 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
+    private FragmentHomeBinding binding;
     static int count = 0;
-    private RecyclerView recyclerView;
     private RandomRecipeRycAdapter randomRecipeRycAdapter;
     private List<RecipeInstrument> recipeList; //List các món ăn
 
@@ -56,10 +57,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        View views = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = views.findViewById(R.id.recyclerView);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        View views = binding.getRoot();
         mRepository = new Repository();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
@@ -78,13 +77,13 @@ public class HomeFragment extends Fragment {
         });
 
 
-        recyclerView.addOnScrollListener(addRecipeToRyc);
+        binding.recyclerView.addOnScrollListener(addRecipeToRyc);
         return views;
     }
 
     public void onSetUpRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         randomRecipeRycAdapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
             public void onClickRecipe(RecipeInstrument recipe) {
@@ -99,7 +98,7 @@ public class HomeFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-        recyclerView.setAdapter(randomRecipeRycAdapter);
+        binding.recyclerView.setAdapter(randomRecipeRycAdapter);
     }
 
 

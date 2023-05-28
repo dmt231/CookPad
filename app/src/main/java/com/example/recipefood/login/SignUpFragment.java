@@ -16,12 +16,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.recipefood.R;
+import com.example.recipefood.databinding.SignUpBinding;
 import com.example.recipefood.model.Repository;
 import com.example.recipefood.model.User;
 
 import java.util.ArrayList;
 
 public class SignUpFragment extends Fragment {
+    private SignUpBinding binding;
     private EditText email, pass, username;
     private Button btnSignup;
 
@@ -32,15 +34,12 @@ public class SignUpFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sign_up, container, false);
-        email = view.findViewById(R.id.SignUpEmail);
-        pass = view.findViewById(R.id.signUpPassword);
-        username = view.findViewById(R.id.signUpUsername);
-        btnSignup = view.findViewById(R.id.btnSignUp);
+        binding = SignUpBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         progressDialog = new ProgressDialog(getActivity());
         mRepository = new Repository();
         viewModelSignUpLogin = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        binding.btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkEmail() && checkUsername() && checkPassword()) {
@@ -55,9 +54,9 @@ public class SignUpFragment extends Fragment {
     public void signUp() {
 
         progressDialog.show();
-        String usernameValue = username.getText().toString();
-        String emailValue = email.getText().toString();
-        String password = pass.getText().toString();
+        String usernameValue = binding.signUpUsername.getText().toString();
+        String emailValue = binding.SignUpEmail.getText().toString();
+        String password = binding.signUpPassword.getText().toString();
 
         mRepository.checkUserExist(new Repository.OnExistListener() {
             @Override
@@ -109,11 +108,11 @@ public class SignUpFragment extends Fragment {
 
     public boolean checkUsername() {
         boolean check = true;
-        if (username.getText().toString().length() == 0) {
-            username.setError("Vui lòng điền tên đăng nhập");
+        if (binding.signUpUsername.getText().toString().length() == 0) {
+            binding.signUpUsername.setError("Vui lòng điền tên đăng nhập");
             check = false;
-        } else if (username.getText().length() < 6) {
-            username.setError("Tên đăng nhập phải có tối thiểu 6 ký tự");
+        } else if (binding.signUpUsername.getText().length() < 6) {
+            binding.signUpUsername.setError("Tên đăng nhập phải có tối thiểu 6 ký tự");
             check = false;
         }
         return check;
@@ -121,11 +120,11 @@ public class SignUpFragment extends Fragment {
 
     public boolean checkPassword() {
         boolean check = true;
-        if (pass.getText().toString().length() == 0) {
-            pass.setError("Vui lòng nhập mật khẩu");
+        if (binding.signUpPassword.getText().toString().length() == 0) {
+            binding.signUpPassword.setError("Vui lòng nhập mật khẩu");
             check = false;
-        } else if (pass.getText().length() < 6 || !pass.getText().toString().matches(".*[A-Z].*")) {
-            pass.setError("Mật khẩu phải có ít nhất 6 ký tự, bao gồm ít nhất 1 chữ cái viết hoa");
+        } else if (binding.signUpPassword.getText().length() < 6 || !binding.signUpPassword.getText().toString().matches(".*[A-Z].*")) {
+            binding.signUpPassword.setError("Mật khẩu phải có ít nhất 6 ký tự, bao gồm ít nhất 1 chữ cái viết hoa");
             check = false;
         }
         return check;
@@ -133,10 +132,10 @@ public class SignUpFragment extends Fragment {
 
     public boolean checkEmail() {
         boolean check = true;
-        if (email.getText().toString().length() == 0) {
-            email.setError("Vui lòng nhập địa chỉ email");
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches()) {
-            email.setError("Địa chỉ email không hợp lệ");
+        if (binding.SignUpEmail.getText().toString().length() == 0) {
+            binding.SignUpEmail.setError("Vui lòng nhập địa chỉ email");
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(binding.SignUpEmail.getText().toString()).matches()) {
+            binding.SignUpEmail.setError("Địa chỉ email không hợp lệ");
             check = false;
         }
         return check;

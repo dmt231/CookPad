@@ -2,6 +2,7 @@ package com.example.recipefood.user.userfavorite;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipefood.R;
 import com.example.recipefood.adapter.RandomRecipeRycAdapter;
+import com.example.recipefood.databinding.FavoriteRecipeBinding;
 import com.example.recipefood.home.HomeFragmentViewModel;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.model.Repository;
@@ -32,10 +34,9 @@ import com.example.recipefood.views.DetailRecipe;
 import java.util.ArrayList;
 
 public class FavoriteRecipe extends Fragment {
-    private ImageButton iBtnBack;
+    private FavoriteRecipeBinding binding;
 
     private int id;
-    private RecyclerView recyclerView;
     private RandomRecipeRycAdapter adapter;
     private HomeFragmentViewModel viewModel;
     private ArrayList<RecipeInstrument> recipeList;
@@ -46,12 +47,11 @@ public class FavoriteRecipe extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.favorite_recipe, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView_like_recipe);
+        binding = FavoriteRecipeBinding.inflate(inflater,container,false);
+        View view = binding.getRoot();
         repository = new Repository();
         progressDialog = new ProgressDialog(getActivity());
-        iBtnBack = view.findViewById(R.id.recipe_back_from_like_recipe);
-        iBtnBack.setOnClickListener(new View.OnClickListener() {
+        binding.recipeBackFromLikeRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(getFragmentManager() != null){
@@ -62,7 +62,7 @@ public class FavoriteRecipe extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         getUserId();
         getData();
-        recyclerView.addOnScrollListener(addRecipeToRyc);
+        binding.recyclerViewLikeRecipe.addOnScrollListener(addRecipeToRyc);
         return view;
     }
     public void getData(){
@@ -73,9 +73,11 @@ public class FavoriteRecipe extends Fragment {
                     progressDialog.show();
                     onObserve();
                 }else{
-                    recipeList.clear();
-                    adapter.notifyDataSetChanged();
-                    customToast("This user haven't favorite recipe");
+                    if(recipeList != null) {
+                        recipeList.clear();
+                        adapter.notifyDataSetChanged();
+                    }
+                    customToast("This user hasn't any favorite recipe");
                 }
             }
         });
@@ -92,8 +94,8 @@ public class FavoriteRecipe extends Fragment {
         });
     }
     public void onSetUpRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        binding.recyclerViewLikeRecipe.setHasFixedSize(true);
+        binding.recyclerViewLikeRecipe.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         adapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
             public void onClickRecipe(RecipeInstrument recipe) {
@@ -111,7 +113,7 @@ public class FavoriteRecipe extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(adapter);
+        binding.recyclerViewLikeRecipe.setAdapter(adapter);
     }
     public void getUserId(){
         Bundle bundle = getArguments();

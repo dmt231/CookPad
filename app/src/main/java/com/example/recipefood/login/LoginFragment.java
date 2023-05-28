@@ -10,37 +10,37 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.recipefood.R;
 import com.example.recipefood.adapter.LoginAdapter;
+import com.example.recipefood.databinding.FragmentloginBinding;
 import com.google.android.material.tabs.TabLayout;
 
 public class LoginFragment extends Fragment {
-    private TabLayout mTabLayout;
-    private ViewPager2 mViewPager2;
+    private FragmentloginBinding binding;
     float v = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragmentlogin, container, false);
-        mTabLayout = view.findViewById(R.id.tabLayoutLogin);
-        mViewPager2 = (ViewPager2) view.findViewById(R.id.viewPagerLogin);
+        binding = FragmentloginBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        mTabLayout.addTab(mTabLayout.newTab().setText("LOGIN"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("SIGN UP"));
-        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        binding.tabLayoutLogin.addTab(binding.tabLayoutLogin.newTab().setText("LOGIN"));
+        binding.tabLayoutLogin.addTab(binding.tabLayoutLogin.newTab().setText("SIGN UP"));
+        binding.tabLayoutLogin.setTabGravity(TabLayout.GRAVITY_FILL);
         LoginAdapter adapter = new LoginAdapter(getActivity().getSupportFragmentManager(), getLifecycle());
-        mViewPager2.setAdapter(adapter);
+        binding.viewPagerLogin.setAdapter(adapter);
 
 
-        mViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.viewPagerLogin.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                mTabLayout.selectTab(mTabLayout.getTabAt(position));
+                binding.tabLayoutLogin.selectTab(binding.tabLayoutLogin.getTabAt(position));
             }
         });
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        binding.tabLayoutLogin.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager2.setCurrentItem(tab.getPosition());
+                binding.viewPagerLogin.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -55,9 +55,9 @@ public class LoginFragment extends Fragment {
         });
 
 
-        mTabLayout.setTranslationY(300);
-        mTabLayout.setAlpha(v);
-        mTabLayout.animate().translationY(v).alpha(1).setDuration(1000).setStartDelay(100).start();
+        binding.tabLayoutLogin.setTranslationY(300);
+        binding.tabLayoutLogin.setAlpha(v);
+        binding.tabLayoutLogin.animate().translationY(v).alpha(1).setDuration(1000).setStartDelay(100).start();
 
         return view;
     }
