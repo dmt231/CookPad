@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.recipefood.databinding.LayoutRecyclerCustomRowItemBinding;
+import com.example.recipefood.databinding.CustomLayoutBinding;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
 import com.squareup.picasso.Picasso;
@@ -34,7 +34,7 @@ public class RandomRecipeRycAdapter extends RecyclerView.Adapter<ViewHolder>{
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutRecyclerCustomRowItemBinding binding = LayoutRecyclerCustomRowItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        CustomLayoutBinding binding = CustomLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
@@ -43,11 +43,7 @@ public class RandomRecipeRycAdapter extends RecyclerView.Adapter<ViewHolder>{
         // Nap du lieu
 
         RecipeInstrument dataModel = recipeList.get(position);
-        holder.binding.RycTextViewTitle.setText(dataModel.getName());
-        holder.binding.RycTextViewTitle.setSelected(true);
-        holder.binding.RycTextfavorite.setText(dataModel.getLikes() + " Likes");
-        holder.binding.timeCooking.setText(dataModel.getTime() + " Min");
-        holder.binding.RycServing.setText(dataModel.getServing() + " Servings");
+        holder.binding.setRecipeInstrument(dataModel);
         Picasso.get().load(dataModel.getImages()).into(holder.binding.RycImageFood);
         holder.binding.RycImageFood.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +66,8 @@ public class RandomRecipeRycAdapter extends RecyclerView.Adapter<ViewHolder>{
 
 class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
-    public LayoutRecyclerCustomRowItemBinding binding;
-    public ViewHolder(@NonNull LayoutRecyclerCustomRowItemBinding itemView) {
+    public CustomLayoutBinding binding;
+    public ViewHolder(@NonNull CustomLayoutBinding itemView) {
         super(itemView.getRoot());
         this.binding = itemView;
     }

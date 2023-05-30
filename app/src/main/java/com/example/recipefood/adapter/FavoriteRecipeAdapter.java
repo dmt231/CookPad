@@ -14,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.recipefood.databinding.LayoutRecyclerCustomRowItemBinding;
+
+import com.example.recipefood.databinding.CustomFavoriteBinding;
+import com.example.recipefood.databinding.CustomLayoutBinding;
 import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.R;
 import com.example.recipefood.model.roomDatabase.FoodsDatabase;
@@ -38,27 +40,23 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
     @NonNull
     @Override
     public ViewHolderFavorite onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       LayoutRecyclerCustomRowItemBinding layoutBinding = LayoutRecyclerCustomRowItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+       CustomFavoriteBinding layoutBinding = CustomFavoriteBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
        return new ViewHolderFavorite(layoutBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderFavorite holder, int position) {
         RecipeFavorite dataModel = recipeList.get(position);
-        holder.binding.RycTextViewTitle.setText(dataModel.getName());
-        holder.binding.RycTextViewTitle.setSelected(true);
-        holder.binding.RycTextfavorite.setText(dataModel.getLikes() + " Likes");
-        holder.binding.timeCooking.setText(dataModel.getTime() + " Min");
-        holder.binding.RycServing.setText(dataModel.getServing() + " Servings");
-        Picasso.get().load(dataModel.getImages()).into(holder.binding.RycImageFood);
-        holder.binding.RycImageFood.setOnClickListener(new View.OnClickListener() {
+        holder.binding.setRecipeFavorite(dataModel);
+        Picasso.get().load(dataModel.getImages()).into(holder.binding.ImageFavorite);
+        holder.binding.ImageFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 detail_clickListener_favorite.onClickRecipe(dataModel);
             }
         });
 
-        holder.binding.RycCardView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.binding.cardViewFavorite.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 dialog_builder = new AlertDialog.Builder(v.getContext());
@@ -99,9 +97,9 @@ public class FavoriteRecipeAdapter extends RecyclerView.Adapter<ViewHolderFavori
 }
 
 class ViewHolderFavorite extends RecyclerView.ViewHolder {
-    public LayoutRecyclerCustomRowItemBinding binding;
+    public CustomFavoriteBinding binding;
 
-    public ViewHolderFavorite(@NonNull LayoutRecyclerCustomRowItemBinding itemView) {
+    public ViewHolderFavorite(@NonNull CustomFavoriteBinding itemView) {
         super(itemView.getRoot());
         this.binding = itemView;
     }

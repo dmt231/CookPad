@@ -1,108 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/Favorite_CardView"
-    app:cardBackgroundColor="@color/white"
-    app:cardElevation="8dp"
-    android:layout_margin="16dp"
-    app:cardCornerRadius="10dp">
-
-
-    <LinearLayout
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="RecipeFavorite"
+            type="com.example.recipefood.model.RecipeFavorite" />
+    </data>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:id="@+id/cardViewFavorite"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="8dp"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="10dp">
 
-        <ImageView
-            android:id="@+id/Image_favorite"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="fitXY"
-            android:focusable="false"
-            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/Title_Favorite"
+            <ImageView
+                android:id="@+id/ImageFavorite"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:textStyle="bold"
-                android:textColor="#576574"
-                android:textSize="22sp"
-                android:paddingLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:focusable="false"/>
-
+                android:layout_height="150dp"
+                android:scaleType="fitXY" />
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:layout_marginBottom="10dp">
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginTop="1dp"
-                    android:src="@drawable/three_o_clock_clock"
-                    android:focusable="false"
-                    />
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/time_cooking_favorite"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/NameFavorite"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:paddingLeft="5dp"
-                    android:focusable="false"
-                    android:text="15 min"/>
+                    android:text="@{RecipeFavorite.name}"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:textStyle="bold"
+                    android:textColor="#576574"
+                    android:textSize="22sp"
+                    android:paddingLeft="20dp"
+                    android:layout_marginBottom="10dp"/>
 
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:src="@drawable/like"
-                    />
-
-                <TextView
-                    android:id="@+id/text_favorite"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:paddingLeft="5dp"
-                    android:text="15 min"/>
+                    android:paddingLeft="20dp"
+                    android:layout_marginBottom="10dp">
 
-                <ImageView
-                    android:layout_width="17dp"
-                    android:layout_height="15dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginLeft="15dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/restaurant"
-                    />
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="1dp"
+                        android:src="@drawable/three_o_clock_clock"
+                        />
 
-                <TextView
-                    android:id="@+id/serving_favorite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:paddingLeft="5dp"
-                    android:text="15 min"/>
+                    <TextView
+                        android:id="@+id/TimeFavorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:paddingLeft="5dp"
+                        android:text="@{String.valueOf(RecipeFavorite.time)}"/>
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginLeft="15dp"
+                        android:src="@drawable/like"
+                        />
+
+                    <TextView
+                        android:id="@+id/LikeFavorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:paddingLeft="5dp"
+                        android:text="@{String.valueOf(RecipeFavorite.likes)}"/>
+
+                    <ImageView
+                        android:layout_width="17dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginLeft="15dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/restaurant"
+                        />
+
+                    <TextView
+                        android:id="@+id/ServingFavorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:paddingLeft="5dp"
+                        android:text="@{String.valueOf(RecipeFavorite.serving)}"/>
+                </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>
