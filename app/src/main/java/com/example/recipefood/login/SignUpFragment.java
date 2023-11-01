@@ -17,17 +17,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.recipefood.R;
 import com.example.recipefood.databinding.SignUpBinding;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
 import com.example.recipefood.model.User;
+import com.example.recipefood.model.UserRepository;
 
 import java.util.ArrayList;
 
 public class SignUpFragment extends Fragment {
     private SignUpBinding binding;
-    private EditText email, pass, username;
-    private Button btnSignup;
 
-    private Repository mRepository;
+    private UserRepository userRepository;
     private ViewModelSignUpLogin viewModelSignUpLogin;
     private ProgressDialog progressDialog;
 
@@ -37,7 +36,7 @@ public class SignUpFragment extends Fragment {
         binding = SignUpBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         progressDialog = new ProgressDialog(getActivity());
-        mRepository = new Repository();
+        userRepository = new UserRepository();
         viewModelSignUpLogin = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
         binding.btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,12 +57,12 @@ public class SignUpFragment extends Fragment {
         String emailValue = binding.SignUpEmail.getText().toString();
         String password = binding.signUpPassword.getText().toString();
 
-        mRepository.checkUserExist(new Repository.OnExistListener() {
+        userRepository.checkUserExist(new FoodRepository.OnExistListener() {
             @Override
             public void onExist(boolean exists) {
                 if (!exists) {
                     progressDialog.dismiss();
-                    mRepository.Register(usernameValue, emailValue, password);
+                    userRepository.Register(usernameValue, emailValue, password);
                     customToast("Thêm Thành Công");
                 } else if (exists) {
 
@@ -86,7 +85,7 @@ public class SignUpFragment extends Fragment {
                         }
                     }
                     if (!exists) {
-                        mRepository.Register(usernameValue, emailValue, password);
+                        userRepository.Register(usernameValue, emailValue, password);
                         customToast("Thêm Thành Công");
                     }
                 }

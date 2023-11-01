@@ -14,33 +14,33 @@ import com.example.recipefood.databinding.FragmentloginBinding;
 import com.google.android.material.tabs.TabLayout;
 
 public class LoginFragment extends Fragment {
-    private FragmentloginBinding binding;
+    private FragmentloginBinding viewBinding;
     float v = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentloginBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        viewBinding = FragmentloginBinding.inflate(inflater, container, false);
+        View view = viewBinding.getRoot();
 
 
-        binding.tabLayoutLogin.addTab(binding.tabLayoutLogin.newTab().setText("LOGIN"));
-        binding.tabLayoutLogin.addTab(binding.tabLayoutLogin.newTab().setText("SIGN UP"));
-        binding.tabLayoutLogin.setTabGravity(TabLayout.GRAVITY_FILL);
+        viewBinding.tabLayoutLogin.addTab(viewBinding.tabLayoutLogin.newTab().setText("LOGIN"));
+        viewBinding.tabLayoutLogin.addTab(viewBinding.tabLayoutLogin.newTab().setText("SIGN UP"));
+        viewBinding.tabLayoutLogin.setTabGravity(TabLayout.GRAVITY_FILL);
         LoginAdapter adapter = new LoginAdapter(getActivity().getSupportFragmentManager(), getLifecycle());
-        binding.viewPagerLogin.setAdapter(adapter);
+        viewBinding.viewPagerLogin.setAdapter(adapter);
 
 
-        binding.viewPagerLogin.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        viewBinding.viewPagerLogin.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                binding.tabLayoutLogin.selectTab(binding.tabLayoutLogin.getTabAt(position));
+                viewBinding.tabLayoutLogin.selectTab(viewBinding.tabLayoutLogin.getTabAt(position));
             }
         });
-        binding.tabLayoutLogin.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewBinding.tabLayoutLogin.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                binding.viewPagerLogin.setCurrentItem(tab.getPosition());
+                viewBinding.viewPagerLogin.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -55,9 +55,9 @@ public class LoginFragment extends Fragment {
         });
 
 
-        binding.tabLayoutLogin.setTranslationY(300);
-        binding.tabLayoutLogin.setAlpha(v);
-        binding.tabLayoutLogin.animate().translationY(v).alpha(1).setDuration(1000).setStartDelay(100).start();
+        viewBinding.tabLayoutLogin.setTranslationY(300);
+        viewBinding.tabLayoutLogin.setAlpha(v);
+        viewBinding.tabLayoutLogin.animate().translationY(v).alpha(1).setDuration(1000).setStartDelay(100).start();
 
         return view;
     }

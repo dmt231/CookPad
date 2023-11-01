@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -22,8 +20,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.recipefood.R;
 import com.example.recipefood.databinding.FragmentUserBinding;
 import com.example.recipefood.login.ViewModelSignUpLogin;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
 import com.example.recipefood.model.User;
+import com.example.recipefood.preference.SharedPreference;
 import com.example.recipefood.splash.Splash;
 import com.example.recipefood.user.create.CreateRecipe;
 import com.example.recipefood.user.userfavorite.FavoriteRecipe;
@@ -32,7 +31,7 @@ import com.example.recipefood.user.userrecipe.myFood;
 import java.util.ArrayList;
 
 public class UserFragment extends Fragment {
-    private FragmentUserBinding binding;
+    private FragmentUserBinding viewBinding;
     private ViewModelSignUpLogin viewModel;
     private long id;
     private AlertDialog.Builder alertDialog;
@@ -43,9 +42,9 @@ public class UserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentUserBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        binding.signOut.setOnClickListener(new View.OnClickListener() {
+        viewBinding = FragmentUserBinding.inflate(inflater, container, false);
+        View view = viewBinding.getRoot();
+        viewBinding.signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog = new AlertDialog.Builder(getActivity());
@@ -53,7 +52,7 @@ public class UserFragment extends Fragment {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                new Repository().deleteUser(getContext());
+                                new SharedPreference().deleteUser(getContext());
                                 Toast.makeText(getContext(), "Logout user ", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getContext().getApplicationContext(), Splash.class);
                                 startActivity(intent);
@@ -70,19 +69,19 @@ public class UserFragment extends Fragment {
         });
         viewModel = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
         setDataAccount();
-        binding.accountCreate.setOnClickListener(new View.OnClickListener() {
+        viewBinding.accountCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onChangedToCreate();
             }
         });
-        binding.accountMyFood.setOnClickListener(new View.OnClickListener() {
+        viewBinding.accountMyFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onChangedToMyFood();
             }
         });
-        binding.accountFavorite.setOnClickListener(new View.OnClickListener() {
+        viewBinding.accountFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onChangedToLikeFood();
@@ -97,8 +96,8 @@ public class UserFragment extends Fragment {
                 for (User user : users ) {
                     Log.d("Info User 1 : ", user.getUsername());
                     if(user.getUserId()==id){
-                        binding.accountUsername.setText(user.getUsername());
-                        binding.accountEmail.setText(user.getEmail());
+                        viewBinding.accountUsername.setText(user.getUsername());
+                        viewBinding.accountEmail.setText(user.getEmail());
                         break;
                     }
                 }

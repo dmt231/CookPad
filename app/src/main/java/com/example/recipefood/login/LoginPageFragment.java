@@ -7,8 +7,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.recipefood.R;
 import com.example.recipefood.databinding.LoginPageBinding;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
 import com.example.recipefood.model.User;
+import com.example.recipefood.preference.SharedPreference;
 
 import java.util.ArrayList;
 
 public class LoginPageFragment extends Fragment {
-    private LoginPageBinding binding;
+    private LoginPageBinding viewBinding;
     private onChangedScreen changedScreen;
     private ProgressDialog progressDialog;
     private ViewModelSignUpLogin viewModelSignUpLogin;
@@ -33,12 +32,12 @@ public class LoginPageFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = LoginPageBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        viewBinding = LoginPageBinding.inflate(inflater, container, false);
+        View view = viewBinding.getRoot();
         progressDialog = new ProgressDialog(getActivity());
         viewModelSignUpLogin = new ViewModelProvider(this).get(ViewModelSignUpLogin.class);
         setAnimation();
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+        viewBinding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkUsername() && checkPassword()) {
@@ -51,8 +50,8 @@ public class LoginPageFragment extends Fragment {
     }
 
     public void Login() {
-        String usernameValue = binding.username.getText().toString();
-        String passwordValue = binding.pass.getText().toString();
+        String usernameValue = viewBinding.username.getText().toString();
+        String passwordValue = viewBinding.pass.getText().toString();
         viewModelSignUpLogin.getListUser().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
@@ -63,7 +62,7 @@ public class LoginPageFragment extends Fragment {
                     for (User user : users) {
                         if (checkLogin(user, usernameValue, passwordValue)) {
                             id = user.getUserId();
-                            new Repository().keepLoggedInUser((int) user.getUserId(), requireContext());
+                            new SharedPreference().keepLoggedInUser((int) user.getUserId(), requireContext());
                             check = true;
                             break;
                         }
@@ -93,17 +92,17 @@ public class LoginPageFragment extends Fragment {
     }
 
     public void setAnimation() {
-        binding.username.setTranslationY(800);
-        binding.pass.setTranslationY(800);
-        binding.btnLogin.setTranslationY(800);
+        viewBinding.username.setTranslationY(800);
+        viewBinding.pass.setTranslationY(800);
+        viewBinding.btnLogin.setTranslationY(800);
 
-        binding.username.setAlpha(v);
-        binding.pass.setAlpha(v);
-        binding.btnLogin.setAlpha(v);
+        viewBinding.username.setAlpha(v);
+        viewBinding.pass.setAlpha(v);
+        viewBinding.btnLogin.setAlpha(v);
 
-        binding.username.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(300).start();
-        binding.pass.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
-        binding.btnLogin.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(700).start();
+        viewBinding.username.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(300).start();
+        viewBinding.pass.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(500).start();
+        viewBinding.btnLogin.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(700).start();
     }
 
     public boolean checkLogin(User user, String username, String password) {
@@ -128,8 +127,8 @@ public class LoginPageFragment extends Fragment {
 
     public boolean checkUsername() {
         boolean check = true;
-        if (binding.username.getText().toString().length() == 0) {
-            binding.username.setError("Vui lòng điền tên đăng nhập");
+        if (viewBinding.username.getText().toString().length() == 0) {
+            viewBinding.username.setError("Vui lòng điền tên đăng nhập");
             check = false;
         }
         return check;
@@ -137,8 +136,8 @@ public class LoginPageFragment extends Fragment {
 
     public boolean checkPassword() {
         boolean check = true;
-        if (binding.pass.getText().toString().length() == 0) {
-            binding.pass.setError("Vui lòng nhập mật khẩu");
+        if (viewBinding.pass.getText().toString().length() == 0) {
+            viewBinding.pass.setError("Vui lòng nhập mật khẩu");
             check = false;
         }
         return check;

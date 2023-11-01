@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.example.recipefood.model.RecipeInstrument;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
 
 import java.util.ArrayList;
 
@@ -17,11 +17,11 @@ public class HomeFragmentViewModel extends ViewModel {
     public MutableLiveData<ArrayList<RecipeInstrument>> recipeListByUser;
 
     public MutableLiveData<ArrayList<RecipeInstrument>> favoriteList;
-    private Repository database;
+    private FoodRepository database;
 
     public MutableLiveData<ArrayList<RecipeInstrument>> getFavoriteList(int userId) {
         favoriteList = new MutableLiveData<>();
-        database = new Repository();
+        database = new FoodRepository();
         loadFavorite(userId);
         return favoriteList;
     }
@@ -41,7 +41,7 @@ public class HomeFragmentViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<RecipeInstrument>> getRecipeListByUser(int userId) {
         recipeListByUser = new MutableLiveData<>();
-        database = new Repository();
+        database = new FoodRepository();
         loadDataByUser(userId);
         return recipeListByUser;
     }
@@ -62,7 +62,7 @@ public class HomeFragmentViewModel extends ViewModel {
     public LiveData<ArrayList<RecipeInstrument>> getRecipeListLiveData(int i1, int i2) {
 
         recipeListLiveData = new MutableLiveData<>();
-        database = new Repository();
+        database = new FoodRepository();
         loadData(i1, i2);
         return recipeListLiveData;
     }

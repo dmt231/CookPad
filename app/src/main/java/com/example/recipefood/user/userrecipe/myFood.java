@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +28,7 @@ import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.databinding.MyfoodBinding;
 import com.example.recipefood.home.HomeFragmentViewModel;
 import com.example.recipefood.model.RecipeInstrument;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
 import com.example.recipefood.user.create.CreateRecipe;
 import com.example.recipefood.views.DetailRecipe;
 
@@ -38,25 +37,25 @@ import java.util.ArrayList;
 
 public class myFood extends Fragment {
 
-    private MyfoodBinding binding;
+    private MyfoodBinding viewBinding;
     private int id;
 
     private RandomRecipeRycAdapter adapter;
     private HomeFragmentViewModel viewModel;
     private ArrayList<RecipeInstrument> recipeList;
-    private Repository repository;
+    private FoodRepository foodRepository;
     private ProgressDialog progressDialog;
     private AlertDialog.Builder alertDialog;
     private LinearLayoutManager layoutManager;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = MyfoodBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        repository = new Repository();
+        viewBinding = MyfoodBinding.inflate(inflater, container, false);
+        View view = viewBinding.getRoot();
+        foodRepository = new FoodRepository();
         progressDialog = new ProgressDialog(getActivity());
 
-        binding.recipeBackFromMyFood.setOnClickListener(new View.OnClickListener() {
+        viewBinding.recipeBackFromMyFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(getFragmentManager() != null){
@@ -67,11 +66,11 @@ public class myFood extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         getUserId();
         getData();
-        binding.recyclerViewMyFood.addOnScrollListener(addRecipeToRyc);
+        viewBinding.recyclerViewMyFood.addOnScrollListener(addRecipeToRyc);
         return view;
     }
     public void getData(){
-        repository.haveAnyRecipe(id, new Repository.OnExistListener() {
+        foodRepository.haveAnyRecipe(id, new FoodRepository.OnExistListener() {
             @Override
             public void onExist(boolean exists) {
                 if(exists){
@@ -84,8 +83,8 @@ public class myFood extends Fragment {
         });
     }
     public void onSetUpRecyclerView(){
-        binding.recyclerViewMyFood.setHasFixedSize(true);
-        binding.recyclerViewMyFood.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        viewBinding.recyclerViewMyFood.setHasFixedSize(true);
+        viewBinding.recyclerViewMyFood.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         adapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
             public void onClickRecipe(RecipeInstrument recipe) {
@@ -103,7 +102,7 @@ public class myFood extends Fragment {
 
             }
         });
-        binding.recyclerViewMyFood.setAdapter(adapter);
+        viewBinding.recyclerViewMyFood.setAdapter(adapter);
     }
     public void onObserveData(){
         viewModel.getRecipeListByUser(id).observe(getViewLifecycleOwner(), new Observer<ArrayList<RecipeInstrument>>() {
@@ -136,7 +135,7 @@ public class myFood extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 int id = recipeList.get(item.getGroupId()).getId();
-                                repository.deleteRecipe(id);
+                                foodRepository.deleteRecipe(id);
                                 adapter.removeItem(item.getGroupId());
                             }
                         })

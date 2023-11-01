@@ -26,7 +26,7 @@ import com.example.recipefood.views.DetailRecipe;
 import java.util.ArrayList;
 
 public class SearchFragment extends Fragment {
-    private FragmentSearchBinding binding;
+    private FragmentSearchBinding viewBinding;
     private static int count = 0;
     private String ingredient = "";
     private RandomRecipeRycAdapter randomRecipeRycAdapter;
@@ -45,17 +45,17 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentSearchBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        viewBinding = FragmentSearchBinding.inflate(inflater, container, false);
+        View view = viewBinding.getRoot();
         progressDialog = new ProgressDialog(getActivity());
         searchFragmentViewModel = new ViewModelProvider(this).get(SearchFragmentViewModel.class);
         getSearch();
-        binding.recyclerSearchLayout.addOnScrollListener(addRecipeToRyc);
+        viewBinding.recyclerSearchLayout.addOnScrollListener(addRecipeToRyc);
         return view;
     }
 
     public void getSearch() {
-        binding.searchRecipeLayout.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        viewBinding.searchRecipeLayout.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 progressDialog.show();
@@ -84,8 +84,8 @@ public class SearchFragment extends Fragment {
     }
 
     public void onSetUpRecyclerView() {
-        binding.recyclerSearchLayout.setHasFixedSize(true);
-        binding.recyclerSearchLayout.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
+        viewBinding.recyclerSearchLayout.setHasFixedSize(true);
+        viewBinding.recyclerSearchLayout.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
         randomRecipeRycAdapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
             public void onClickRecipe(RecipeInstrument recipe) {
@@ -102,7 +102,7 @@ public class SearchFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-        binding.recyclerSearchLayout.setAdapter(randomRecipeRycAdapter);
+        viewBinding.recyclerSearchLayout.setAdapter(randomRecipeRycAdapter);
     }
 
     private RecyclerView.OnScrollListener addRecipeToRyc = new RecyclerView.OnScrollListener() {

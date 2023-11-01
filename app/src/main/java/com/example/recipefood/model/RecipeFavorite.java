@@ -19,7 +19,7 @@ public class RecipeFavorite implements Serializable {
     private int Time;
     private String sourceName;
     private String sourceUrl;
-    private String spoonacularSourceUrl;
+    private String spoonSourceUrl;
 
     public RecipeFavorite() {
     }
@@ -35,7 +35,7 @@ public class RecipeFavorite implements Serializable {
         Time = time;
         this.sourceName = sourceName;
         this.sourceUrl = sourceUrl;
-        this.spoonacularSourceUrl = spoonacularSourceUrl;
+        this.spoonSourceUrl = spoonacularSourceUrl;
     }
 
     public int getId() {
@@ -119,10 +119,10 @@ public class RecipeFavorite implements Serializable {
     }
 
     public String getSpoonacularSourceUrl() {
-        return spoonacularSourceUrl;
+        return spoonSourceUrl;
     }
 
     public void setSpoonacularSourceUrl(String spoonacularSourceUrl) {
-        this.spoonacularSourceUrl = spoonacularSourceUrl;
+        this.spoonSourceUrl = spoonacularSourceUrl;
     }
 }

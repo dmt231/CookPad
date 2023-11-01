@@ -10,9 +10,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +17,7 @@ import com.example.recipefood.databinding.FragmentDetailRecipeBinding;
 import com.example.recipefood.model.RecipeFavorite;
 import com.example.recipefood.model.RecipeInstrument;
 import com.example.recipefood.R;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
 import com.example.recipefood.model.roomDatabase.FoodsDatabase;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +34,7 @@ public class DetailRecipe extends Fragment {
     private int Userid;
     private int state;
     //Khai báo layout
-    private Repository mRepository;
+    private FoodRepository mFoodRepository;
 
 
 
@@ -49,7 +46,7 @@ public class DetailRecipe extends Fragment {
         View views = binding.getRoot();
         //Ánh xạ
         mActivity = getActivity();
-        mRepository = new Repository();
+        mFoodRepository = new FoodRepository();
         binding.recipeBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +72,7 @@ public class DetailRecipe extends Fragment {
                 binding.recipeInstruction.setText(result_2);
                 Log.d("Food Id : " , recipe.getId() + "");
                 Log.d("Food Id : " , Userid + "");
-                mRepository.checkFavoriteExist(Userid, recipe.getId(), new Repository.OnExistListener() {
+                mFoodRepository.checkFoodFavoriteExist(Userid, recipe.getId(), new FoodRepository.OnExistListener() {
                     @Override
                     public void onExist(boolean exists) {
                         if(exists){
@@ -147,7 +144,7 @@ public class DetailRecipe extends Fragment {
         return s;
     }
     public void addToFavorite(){
-        mRepository.addFavoriteForUser(Userid, recipe.getId(), new Repository.OnExistListener() {
+        mFoodRepository.addFavoriteForUser(Userid, recipe.getId(), new FoodRepository.OnExistListener() {
             @Override
             public void onExist(boolean exists) {
                 if(exists){
@@ -160,7 +157,7 @@ public class DetailRecipe extends Fragment {
         });
     }
     public void removeFromFavorite(){
-        mRepository.removeFavoriteForUser(Userid, recipe.getId(), new Repository.OnExistListener() {
+        mFoodRepository.removeFavoriteForUser(Userid, recipe.getId(), new FoodRepository.OnExistListener() {
             @Override
             public void onExist(boolean exists) {
                 if(exists){

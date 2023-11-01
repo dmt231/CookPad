@@ -25,7 +25,7 @@ import com.example.recipefood.R;
 import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.databinding.FragmentHomeBinding;
 import com.example.recipefood.model.RecipeInstrument;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
 import com.example.recipefood.user.create.CreateRecipe;
 import com.example.recipefood.views.DetailRecipe;
 
@@ -36,7 +36,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
-    private FragmentHomeBinding binding;
+    private FragmentHomeBinding viewBinding;
     static int count = 0;
     private RandomRecipeRycAdapter randomRecipeRycAdapter;
     private List<RecipeInstrument> recipeList; //List các món ăn
@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
 
     private HomeFragmentViewModel homeFragmentViewModel;
     private long userId;
-    private Repository mRepository;
+    private FoodRepository mFoodRepository;
     private AlertDialog.Builder alertDialog;
     private LinearLayoutManager layoutManager;
 
@@ -57,9 +57,9 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View views = binding.getRoot();
-        mRepository = new Repository();
+        viewBinding = FragmentHomeBinding.inflate(inflater, container, false);
+        View views = viewBinding.getRoot();
+        mFoodRepository = new FoodRepository();
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
         homeFragmentViewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
@@ -77,13 +77,13 @@ public class HomeFragment extends Fragment {
         });
 
 
-        binding.recyclerView.addOnScrollListener(addRecipeToRyc);
+        viewBinding.recyclerView.addOnScrollListener(addRecipeToRyc);
         return views;
     }
 
     public void onSetUpRecyclerView() {
-        binding.recyclerView.setHasFixedSize(true);
-        binding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        viewBinding.recyclerView.setHasFixedSize(true);
+        viewBinding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         randomRecipeRycAdapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
             public void onClickRecipe(RecipeInstrument recipe) {
@@ -98,7 +98,7 @@ public class HomeFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-        binding.recyclerView.setAdapter(randomRecipeRycAdapter);
+        viewBinding.recyclerView.setAdapter(randomRecipeRycAdapter);
     }
 
 
@@ -160,7 +160,7 @@ public class HomeFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     int id = recipeList.get(item.getGroupId()).getId();
-                                    mRepository.deleteRecipe(id);
+                                    mFoodRepository.deleteRecipe(id);
                                     randomRecipeRycAdapter.removeItem(item.getGroupId());
                                 }
                             })

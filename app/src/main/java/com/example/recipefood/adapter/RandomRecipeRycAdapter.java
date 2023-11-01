@@ -70,6 +70,7 @@ class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContext
     public ViewHolder(@NonNull CustomLayoutBinding itemView) {
         super(itemView.getRoot());
         this.binding = itemView;
+        binding.RycCardView.setOnCreateContextMenuListener(this);
     }
 
     @Override

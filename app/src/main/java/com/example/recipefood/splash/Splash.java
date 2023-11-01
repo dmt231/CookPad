@@ -8,7 +8,8 @@ import android.os.Handler;
 
 import com.example.recipefood.MainActivity;
 import com.example.recipefood.R;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
+import com.example.recipefood.preference.SharedPreference;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Splash extends AppCompatActivity {
@@ -21,7 +22,7 @@ public class Splash extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic("new_recipe");
 
         new Handler().postDelayed(() -> {
-            int id = new Repository().checkLogged(this);
+            int id = new SharedPreference().checkLogged(this);
             Intent intent = new Intent(Splash.this, MainActivity.class);
             if (id != -1) {
                 intent.putExtra("UserId", id);

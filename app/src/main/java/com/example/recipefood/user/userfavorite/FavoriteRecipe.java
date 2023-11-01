@@ -2,13 +2,11 @@ package com.example.recipefood.user.userfavorite;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,31 +25,31 @@ import com.example.recipefood.adapter.RandomRecipeRycAdapter;
 import com.example.recipefood.databinding.FavoriteRecipeBinding;
 import com.example.recipefood.home.HomeFragmentViewModel;
 import com.example.recipefood.model.RecipeInstrument;
-import com.example.recipefood.model.Repository;
+import com.example.recipefood.model.FoodRepository;
 import com.example.recipefood.user.create.CreateRecipe;
 import com.example.recipefood.views.DetailRecipe;
 
 import java.util.ArrayList;
 
 public class FavoriteRecipe extends Fragment {
-    private FavoriteRecipeBinding binding;
+    private FavoriteRecipeBinding viewBinding;
 
     private int id;
     private RandomRecipeRycAdapter adapter;
     private HomeFragmentViewModel viewModel;
     private ArrayList<RecipeInstrument> recipeList;
-    private Repository repository;
+    private FoodRepository foodRepository;
     private ProgressDialog progressDialog;
     private LinearLayoutManager layoutManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FavoriteRecipeBinding.inflate(inflater,container,false);
-        View view = binding.getRoot();
-        repository = new Repository();
+        viewBinding = FavoriteRecipeBinding.inflate(inflater,container,false);
+        View view = viewBinding.getRoot();
+        foodRepository = new FoodRepository();
         progressDialog = new ProgressDialog(getActivity());
-        binding.recipeBackFromLikeRecipe.setOnClickListener(new View.OnClickListener() {
+        viewBinding.recipeBackFromLikeRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(getFragmentManager() != null){
@@ -62,11 +60,11 @@ public class FavoriteRecipe extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         getUserId();
         getData();
-        binding.recyclerViewLikeRecipe.addOnScrollListener(addRecipeToRyc);
+        viewBinding.recyclerViewLikeRecipe.addOnScrollListener(addRecipeToRyc);
         return view;
     }
     public void getData(){
-        repository.haveAnyFavorite(id, new Repository.OnExistListener() {
+        foodRepository.haveAnyFavorite(id, new FoodRepository.OnExistListener() {
             @Override
             public void onExist(boolean exists) {
                 if(exists){
@@ -94,8 +92,8 @@ public class FavoriteRecipe extends Fragment {
         });
     }
     public void onSetUpRecyclerView() {
-        binding.recyclerViewLikeRecipe.setHasFixedSize(true);
-        binding.recyclerViewLikeRecipe.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        viewBinding.recyclerViewLikeRecipe.setHasFixedSize(true);
+        viewBinding.recyclerViewLikeRecipe.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         adapter = new RandomRecipeRycAdapter(recipeList, new RandomRecipeRycAdapter.Detail_ClickListener() {
             @Override
             public void onClickRecipe(RecipeInstrument recipe) {
@@ -113,7 +111,7 @@ public class FavoriteRecipe extends Fragment {
 
             }
         });
-        binding.recyclerViewLikeRecipe.setAdapter(adapter);
+        viewBinding.recyclerViewLikeRecipe.setAdapter(adapter);
     }
     public void getUserId(){
         Bundle bundle = getArguments();
@@ -147,7 +145,7 @@ public class FavoriteRecipe extends Fragment {
                 int useridDelete = recipeList.get(item.getGroupId()).getUserid();
                 if(useridDelete== id){
                     int id = recipeList.get(item.getGroupId()).getId();
-                    repository.deleteRecipe(id);
+                    foodRepository.deleteRecipe(id);
                     adapter.removeItem(item.getGroupId());
                 }else{
                     customToast("You don't have the permission");
